@@ -1,614 +1,831 @@
-/* =========================================================
-   EXPLORE BHARAT — VANILLA JAVASCRIPT
-   Navigation · Destinations · Culture switch-case · Planner
-   ========================================================= */
+/* =========================================
+   EXPLORE BHARAT — JAVASCRIPT
+   ========================================= */
 
-const WIKIMEDIA = {
-  goa: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Goa-sea-beach.jpg/1280px-Goa-sea-beach.jpg",
-  ladakh: "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/08/Pangong_lake_in_Ladakh.jpg/1280px-Pangong_lake_in_Ladakh.jpg",
-  varanasi: "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/Ghats_of_Varanasi%2C_Evening.jpg/1280px-Ghats_of_Varanasi%2C_Evening.jpg",
-  thali: "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/54/Indian_food_thali.jpg/1280px-Indian_food_thali.jpg",
-  dance: "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/A_Bharatanatyam_dancer.jpg/500px-A_Bharatanatyam_dancer.jpg",
-  diwali: "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/Diwali_Diyas_Lamps.jpg/1280px-Diwali_Diyas_Lamps.jpg",
-  assam: "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Tea_garden_in_Assam.jpg/1280px-Tea_garden_in_Assam.jpg",
-  warli: "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a3/Warli_painting.jpg/1280px-Warli_painting.jpg",
-  temple: "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e4/Meenakshi_Amman_temple_in_Madurai.JPG/960px-Meenakshi_Amman_temple_in_Madurai.JPG",
-  music: "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/String_instrument_from_India.jpg/1280px-String_instrument_from_India.jpg",
-  manuscript: "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/98/Indian_manuscript%2C_Devanagari_script_on_paper.jpg/960px-Indian_manuscript%2C_Devanagari_script_on_paper.jpg",
-  textile: "https://upload.wikimedia.org/wikipedia/commons/f/f7/Vintage_photograph_of_sari_weaving_in_Maharashtra_-_1873.jpg",
-  taj: "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e9/The_Taj_Mahal%2C_Agra_Photography.jpg/1280px-The_Taj_Mahal%2C_Agra_Photography.jpg",
-  uttarakhand: "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Valley_of_flowers_Uttarakhand.jpg/1280px-Valley_of_flowers_Uttarakhand.jpg"
-};
+document.addEventListener("DOMContentLoaded", function () {
 
-const LOCAL_IMAGES = {
-  collage: "images/hero-collage.jpg",
-  kashmir: "images/kashmir.jpg",
-  rajasthan: "images/rajasthan.jpg",
-  kerala: "images/kerala.jpg",
-  maharashtra: "images/maharashtra.jpg"
-};
 
-/* ---------- MOBILE NAVIGATION ---------- */
+/* =========================================
+   1. MOBILE NAVIGATION
+   ========================================= */
+
 const menuToggle = document.getElementById("menuToggle");
 const navMenu = document.getElementById("navMenu");
-const navLinks = navMenu ? navMenu.querySelectorAll(".nav-link") : [];
+const mainLinks = navMenu.querySelectorAll(".main-link");
 
-if (menuToggle && navMenu) {
-  menuToggle.addEventListener("click", () => {
+menuToggle.addEventListener("click", function () {
     const isOpen = navMenu.classList.toggle("open");
-    menuToggle.setAttribute("aria-expanded", String(isOpen));
-    menuToggle.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
-    menuToggle.textContent = isOpen ? "×" : "☰";
-  });
 
-  navLinks.forEach((link) => {
-    link.addEventListener("click", () => {
-      navMenu.classList.remove("open");
-      menuToggle.setAttribute("aria-expanded", "false");
-      menuToggle.setAttribute("aria-label", "Open navigation");
-      menuToggle.textContent = "☰";
+    menuToggle.textContent = isOpen ? "✕" : "☰";
+    menuToggle.setAttribute("aria-expanded", isOpen);
+});
+
+mainLinks.forEach(function (link) {
+    link.addEventListener("click", function () {
+        navMenu.classList.remove("open");
+        menuToggle.textContent = "☰";
+        menuToggle.setAttribute("aria-expanded", "false");
     });
-  });
-}
+});
 
-/* Highlight the visible main section in the navigation. */
+
+/* ACTIVE NAVIGATION LINK */
+
+const pageSections = document.querySelectorAll("main section[id]");
+
 if ("IntersectionObserver" in window) {
-  const mainSections = document.querySelectorAll("main section[id]");
-  const sectionObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      navLinks.forEach((link) => {
-        link.classList.toggle("active", link.getAttribute("href") === `#${entry.target.id}`);
-      });
+    const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                mainLinks.forEach(function (link) {
+                    link.classList.toggle(
+                        "active",
+                        link.getAttribute("href") === "#" + entry.target.id
+                    );
+                });
+            }
+        });
+    }, {
+        rootMargin: "-25% 0px -60% 0px"
     });
-  }, { rootMargin: "-25% 0px -60% 0px" });
-  mainSections.forEach((section) => sectionObserver.observe(section));
+
+    pageSections.forEach(function (section) {
+        observer.observe(section);
+    });
 }
 
-/* ---------- DESTINATION DATA ---------- */
-const destinations = [
-  {
-    id: "kashmir", name: "Kashmir", tag: "VALLEYS & LAKES", image: LOCAL_IMAGES.kashmir,
-    alt: "Shikara boat on a Kashmir lake with mountains behind it", subtitle: "Paradise on Earth",
-    description: "Kashmir brings together Himalayan scenery, quiet lakes, gardens and distinctive regional traditions. It is a destination for travellers who enjoy landscapes, local craft and slow, scenic journeys.",
-    places: ["Srinagar and Dal Lake", "Mughal Gardens", "Gulmarg", "Pahalgam"],
-    experiences: ["Take a shikara ride on Dal Lake", "Explore local markets and handicrafts", "Try Kashmiri cuisine", "Enjoy a mountain excursion"],
-    tip: "Plan around the season and local travel advisories. Mountain conditions and road access can change quickly.",
-    gallery: [LOCAL_IMAGES.kashmir, WIKIMEDIA.ladakh, LOCAL_IMAGES.collage]
-  },
-  {
-    id: "rajasthan", name: "Rajasthan", tag: "ROYAL HERITAGE", image: LOCAL_IMAGES.rajasthan,
-    alt: "Amber Fort in Rajasthan", subtitle: "Where royal stories live",
-    description: "Rajasthan is known for its forts, palaces, desert landscapes, colourful markets and food traditions. Each city offers a different view of the region's layered history.",
-    places: ["Jaipur and Amber Fort", "Jaisalmer Fort", "Udaipur City Palace", "Jodhpur's Mehrangarh Fort"],
-    experiences: ["Explore historic forts and havelis", "Visit traditional craft markets", "Sample regional cuisine", "Experience folk music and performances"],
-    tip: "Daytime temperatures can be high in warmer months. Carry water and plan outdoor sightseeing for cooler hours.",
-    gallery: [LOCAL_IMAGES.rajasthan, WIKIMEDIA.taj, LOCAL_IMAGES.collage]
-  },
-  {
-    id: "kerala", name: "Kerala", tag: "BACKWATERS & NATURE", image: LOCAL_IMAGES.kerala,
-    alt: "Traditional Kerala houseboat on the backwaters", subtitle: "Where nature finds peace",
-    description: "Kerala pairs palm-lined backwaters with hill country, beaches, wildlife habitats and a rich food culture. It is suited to relaxed journeys and nature-focused exploration.",
-    places: ["Alappuzha backwaters", "Munnar tea country", "Fort Kochi", "Periyar region"],
-    experiences: ["Cruise through the backwaters", "Visit a tea estate", "Explore local markets", "Taste Kerala's regional cuisine"],
-    tip: "Monsoon rainfall can affect outdoor plans and transport. Check seasonal weather before finalising an itinerary.",
-    gallery: [LOCAL_IMAGES.kerala, WIKIMEDIA.assam, LOCAL_IMAGES.collage]
-  },
-  {
-    id: "maharashtra", name: "Maharashtra", tag: "FORTS & HERITAGE", image: LOCAL_IMAGES.maharashtra,
-    alt: "Gateway of India in Mumbai", subtitle: "Land of forts and legends",
-    description: "Maharashtra offers a mix of coastal cities, hill stations, cave complexes, forts and living cultural traditions. Its landscapes range from the Konkan coast to the Sahyadri hills.",
-    places: ["Mumbai and Gateway of India", "Ajanta and Ellora Caves", "Raigad Fort", "Mahabaleshwar"],
-    experiences: ["Explore historic hill forts", "Discover cave art and architecture", "Try Maharashtrian food", "Visit coastal towns and hill stations"],
-    tip: "Some hill forts involve steep climbs. Check route conditions and carry suitable footwear.",
-    gallery: [LOCAL_IMAGES.maharashtra, WIKIMEDIA.warli, LOCAL_IMAGES.collage]
-  },
-  {
-    id: "ladakh", name: "Ladakh", tag: "HIGH-ALTITUDE ADVENTURE", image: WIKIMEDIA.ladakh,
-    alt: "Pangong Lake in Ladakh", subtitle: "A world between mountains and sky",
-    description: "Ladakh is a high-altitude region of stark mountains, deep-blue lakes, monasteries and distinctive Himalayan culture. Travel here needs thoughtful planning and time to acclimatise.",
-    places: ["Leh", "Pangong Lake", "Nubra Valley", "Thiksey Monastery"],
-    experiences: ["Explore monasteries and local markets", "Experience high-altitude landscapes", "Visit mountain villages", "Enjoy regional Ladakhi food"],
-    tip: "Acclimatisation is essential at altitude. Follow medical and local guidance, and check permits and road access before travel.",
-    gallery: [WIKIMEDIA.ladakh, LOCAL_IMAGES.kashmir, LOCAL_IMAGES.collage]
-  },
-  {
-    id: "goa", name: "Goa", tag: "COASTAL ESCAPE", image: WIKIMEDIA.goa,
-    alt: "Beach and fishing boats in Goa", subtitle: "Sunsets, shores and heritage",
-    description: "Goa combines beaches, coastal villages, historic architecture, food and a lively arts scene. Beyond its well-known shoreline, visitors can explore quieter inland landscapes.",
-    places: ["Old Goa churches", "Panaji and Fontainhas", "Palolem", "Dona Paula"],
-    experiences: ["Explore beaches and coastal walks", "Discover heritage neighbourhoods", "Try Goan cuisine", "Visit local markets"],
-    tip: "Respect beach safety flags and local rules. Monsoon weather can affect sea conditions and some activities.",
-    gallery: [WIKIMEDIA.goa, LOCAL_IMAGES.kerala, LOCAL_IMAGES.collage]
-  },
-  {
-    id: "uttarakhand", name: "Uttarakhand", tag: "MOUNTAINS & MEADOWS", image: WIKIMEDIA.uttarakhand,
-    alt: "Valley of Flowers in Uttarakhand", subtitle: "Where the mountains open into meadows",
-    description: "Uttarakhand is home to Himalayan valleys, forests, rivers, hill towns and long-standing pilgrimage routes. It offers a range of outdoor and cultural journeys.",
-    places: ["Valley of Flowers", "Rishikesh", "Nainital", "Auli"],
-    experiences: ["Walk through Himalayan landscapes", "Explore riverfront towns", "Visit local temples and markets", "Discover regional food traditions"],
-    tip: "Trekking routes are seasonal and weather-dependent. Follow park rules and local guidance, especially in mountain areas.",
-    gallery: [WIKIMEDIA.uttarakhand, LOCAL_IMAGES.kashmir, LOCAL_IMAGES.collage]
-  },
-  {
-    id: "agra", name: "Agra", tag: "MUGHAL ARCHITECTURE", image: WIKIMEDIA.taj,
-    alt: "The Taj Mahal in Agra", subtitle: "A city shaped by monumental history",
-    description: "Agra is closely associated with Mughal-era architecture, gardens and craftsmanship. Its historic sites reveal stories of court life, design and artistic exchange.",
-    places: ["Taj Mahal", "Agra Fort", "Mehtab Bagh", "Fatehpur Sikri"],
-    experiences: ["Explore the Taj Mahal and its gardens", "Discover Mughal architecture", "Visit local craft workshops", "Taste Agra's regional sweets"],
-    tip: "Check monument opening days and ticket rules before visiting. Early morning visits can be more comfortable.",
-    gallery: [WIKIMEDIA.taj, LOCAL_IMAGES.rajasthan, WIKIMEDIA.varanasi]
-  },
-  {
-    id: "varanasi", name: "Varanasi", tag: "RIVER & HERITAGE", image: WIKIMEDIA.varanasi,
-    alt: "Historic ghats of Varanasi at evening", subtitle: "A city of living traditions",
-    description: "Varanasi is a historic city on the Ganga, known for its ghats, temples, learning traditions, music and crafts. Visitors encounter a dense and continuing cultural landscape.",
-    places: ["Dashashwamedh Ghat", "Assi Ghat", "Sarnath", "Old city lanes"],
-    experiences: ["Observe the riverfront at sunrise", "Explore local weaving and crafts", "Discover classical music traditions", "Try Banarasi food and sweets"],
-    tip: "Be respectful around places of worship and private ceremonies. Ask before photographing people or rituals.",
-    gallery: [WIKIMEDIA.varanasi, WIKIMEDIA.taj, LOCAL_IMAGES.collage]
-  },
-  {
-    id: "assam", name: "Assam", tag: "TEA GARDENS & CULTURE", image: WIKIMEDIA.assam,
-    alt: "Tea garden landscape in Assam", subtitle: "Green landscapes and river stories",
-    description: "Assam offers tea-growing landscapes, river islands, wildlife habitats and vibrant cultural traditions. Its food, music and festivals reflect a distinct regional identity.",
-    places: ["Kaziranga National Park", "Majuli", "Sivasagar", "Tea gardens around Jorhat"],
-    experiences: ["Learn about tea cultivation", "Explore Assamese weaving", "Discover Bihu traditions", "Experience river island life"],
-    tip: "Wildlife experiences should follow park rules and conservation guidance. Seasonal flooding can affect access in some areas.",
-    gallery: [WIKIMEDIA.assam, LOCAL_IMAGES.kerala, LOCAL_IMAGES.collage]
-  },
-  {
-    id: "tamil-nadu", name: "Tamil Nadu", tag: "TEMPLES & CLASSICAL ARTS", image: WIKIMEDIA.temple,
-    alt: "Meenakshi Amman Temple gopuram in Madurai", subtitle: "A heritage of art, language and devotion",
-    description: "Tamil Nadu brings together historic temple towns, classical arts, textile traditions, beaches and a rich literary heritage. Each region offers a distinctive cultural experience.",
-    places: ["Meenakshi Amman Temple", "Mahabalipuram", "Thanjavur", "Kanyakumari"],
-    experiences: ["Explore historic temple architecture", "Discover Bharatanatyam and Carnatic music", "Visit textile and craft centres", "Taste regional Tamil cuisine"],
-    tip: "Follow dress and visitor guidance at religious sites, and check photography rules before entering temple interiors.",
-    gallery: [WIKIMEDIA.temple, WIKIMEDIA.dance, LOCAL_IMAGES.collage]
-  }
-];
 
-const destinationTrack = document.getElementById("destinationTrack");
+/* =========================================
+   2. DESTINATION DATA
+   ========================================= */
+
+const destinationData = {
+
+    kashmir: {
+        name: "Kashmir",
+        tag: "VALLEYS & LAKES",
+        image: "images/Kashmir%20for%20project.jpg",
+        description: "Kashmir is celebrated for its Himalayan scenery, beautiful valleys, peaceful lakes, gardens and rich cultural traditions.",
+        places: ["Srinagar and Dal Lake", "Gulmarg", "Pahalgam", "Mughal Gardens"],
+        experiences: "Take a shikara ride, explore local markets, enjoy mountain scenery and discover traditional Kashmiri crafts.",
+        cuisine: "Rogan Josh, Kahwa, Kashmiri Pulao and traditional Wazwan dishes.",
+        duration: "4–6 days"
+    },
+
+    rajasthan: {
+        name: "Rajasthan",
+        tag: "ROYAL HERITAGE",
+        image: "images/rajasthan%20for%20project.jpg",
+        description: "Rajasthan offers magnificent forts, palaces, desert landscapes, colourful markets and distinctive folk traditions.",
+        places: ["Jaipur and Hawa Mahal", "Udaipur", "Jaisalmer Fort", "Jodhpur"],
+        experiences: "Explore royal architecture, local handicrafts, traditional music and desert experiences.",
+        cuisine: "Dal Baati Churma, Gatte ki Sabzi, Ker Sangri and Ghewar.",
+        duration: "5–7 days"
+    },
+
+    kerala: {
+        name: "Kerala",
+        tag: "BACKWATERS & NATURE",
+        image: "images/kerala%20for%20project.jpg",
+        description: "Kerala is known for its lush greenery, backwaters, coastal landscapes, hill stations and distinctive cuisine.",
+        places: ["Alleppey", "Munnar", "Kochi", "Thekkady"],
+        experiences: "Enjoy backwater cruises, tea plantations, nature walks and traditional performances.",
+        cuisine: "Appam, Puttu, Kerala Sadya and regional seafood preparations.",
+        duration: "4–6 days"
+    },
+
+    maharashtra: {
+        name: "Maharashtra",
+        tag: "FORTS & HERITAGE",
+        image: "images/Maharashtra%20for%20project.jpg",
+        description: "Maharashtra combines historic forts, coastal landscapes, cities, hill stations and a rich Marathi cultural heritage.",
+        places: ["Raigad Fort", "Ajanta and Ellora Caves", "Mahabaleshwar", "Mumbai"],
+        experiences: "Explore hill forts, heritage sites, coastal destinations and traditional cultural performances.",
+        cuisine: "Puran Poli, Misal Pav, Vada Pav, Bhakri and regional Maharashtrian thalis.",
+        duration: "4–7 days"
+    },
+
+    ladakh: {
+        name: "Ladakh",
+        tag: "HIGH MOUNTAINS",
+        image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1100&q=85",
+        description: "Ladakh is known for dramatic high-altitude landscapes, monasteries, mountain lakes and distinctive local traditions.",
+        places: ["Leh", "Pangong Lake", "Nubra Valley", "Thiksey Monastery"],
+        experiences: "Explore monasteries, mountain roads and high-altitude landscapes. Allow time for acclimatisation.",
+        cuisine: "Thukpa, Momos, Skyu and butter tea.",
+        duration: "6–8 days"
+    },
+
+    goa: {
+        name: "Goa",
+        tag: "COASTAL ESCAPE",
+        image: "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1100&q=85",
+        description: "Goa brings together beaches, Portuguese-influenced heritage, coastal scenery and local traditions.",
+        places: ["Baga Beach", "Old Goa", "Fort Aguada", "Palolem"],
+        experiences: "Explore the coast, heritage neighbourhoods, local markets and traditional architecture.",
+        cuisine: "Goan fish curry, Bebinca, Poi and other regional dishes.",
+        duration: "3–5 days"
+    },
+
+    himachal: {
+        name: "Himachal Pradesh",
+        tag: "HILL STATIONS",
+        image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=1100&q=85",
+        description: "Himachal Pradesh offers mountain towns, forests, valleys, temples and spectacular Himalayan scenery.",
+        places: ["Shimla", "Manali", "Dharamshala", "Spiti Valley"],
+        experiences: "Enjoy scenic mountain journeys, local markets, nature walks and regional cultural experiences.",
+        cuisine: "Dham, Siddu, Madra and Chha Gosht.",
+        duration: "5–7 days"
+    },
+
+    uttarakhand: {
+        name: "Uttarakhand",
+        tag: "NATURE & SPIRITUALITY",
+        image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1100&q=85",
+        description: "Uttarakhand is known for Himalayan landscapes, forests, rivers and places of spiritual significance.",
+        places: ["Rishikesh", "Mussoorie", "Nainital", "Valley of Flowers"],
+        experiences: "Explore mountain scenery, riverside areas, nature trails and cultural heritage.",
+        cuisine: "Kafuli, Aloo Ke Gutke, Mandua Roti and Bal Mithai.",
+        duration: "4–7 days"
+    },
+
+    agra: {
+        name: "Agra",
+        tag: "MONUMENTS",
+        image: "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1100&q=85",
+        description: "Agra is recognised for its Mughal architectural heritage, historic monuments and traditional crafts.",
+        places: ["Taj Mahal", "Agra Fort", "Fatehpur Sikri", "Mehtab Bagh"],
+        experiences: "Discover historic architecture, gardens, markets and local craft traditions.",
+        cuisine: "Petha, Bedai, Jalebi and Mughlai-inspired dishes.",
+        duration: "1–3 days"
+    },
+
+    varanasi: {
+        name: "Varanasi",
+        tag: "SPIRITUAL HERITAGE",
+        image: "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1100&q=85",
+        description: "Varanasi is a historic city on the Ganges, known for its ghats, temples, music and long-standing cultural traditions.",
+        places: ["Dashashwamedh Ghat", "Kashi Vishwanath Temple", "Sarnath", "Assi Ghat"],
+        experiences: "Explore historic lanes, riverfront heritage, local music and traditional crafts respectfully.",
+        cuisine: "Kachori Sabzi, Tamatar Chaat, Banarasi Paan and regional sweets.",
+        duration: "2–3 days"
+    },
+
+    assam: {
+        name: "Assam",
+        tag: "GREEN ESCAPES",
+        image: "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1100&q=85",
+        description: "Assam features tea gardens, river landscapes, wildlife habitats and distinctive Assamese cultural traditions.",
+        places: ["Kaziranga National Park", "Majuli", "Sivasagar", "Guwahati"],
+        experiences: "Visit tea estates, discover river island culture and learn about Assamese crafts and traditions.",
+        cuisine: "Assamese Thali, Khar, Masor Tenga and Pitha.",
+        duration: "4–6 days"
+    },
+
+    tamilnadu: {
+        name: "Tamil Nadu",
+        tag: "TEMPLES & TRADITIONS",
+        image: "https://images.unsplash.com/photo-1606293926075-69a00dbfde81?auto=format&fit=crop&w=1100&q=85",
+        description: "Tamil Nadu is home to celebrated temple architecture, classical music, dance traditions, historic cities and coastal scenery.",
+        places: ["Madurai", "Mahabalipuram", "Thanjavur", "Kanyakumari"],
+        experiences: "Explore temple architecture, classical performances, traditional markets and coastal destinations.",
+        cuisine: "Idli, Dosa, Pongal, Chettinad dishes and Filter Coffee.",
+        duration: "4–7 days"
+    }
+};
+
+
+/* DESTINATION CAROUSEL */
+
+const destinationGrid = document.getElementById("destinationGrid");
 const destinationViewport = document.getElementById("destinationViewport");
-const prevDestination = document.getElementById("prevDestination");
+const previousDestination = document.getElementById("previousDestination");
 const nextDestination = document.getElementById("nextDestination");
-const destinationCount = document.getElementById("destinationCount");
-const destinationDots = document.getElementById("destinationDots");
-const viewAllDestinations = document.getElementById("viewAllDestinations");
-const destinationControls = document.getElementById("destinationControls");
+const destinationCounter = document.getElementById("destinationCounter");
+const viewAllBtn = document.getElementById("viewAllBtn");
+const carouselDots = document.getElementById("carouselDots");
 
-function destinationCardMarkup(destination) {
-  return `
-    <article class="destination-card">
-      <img src="${destination.image}" alt="${destination.alt}" loading="lazy" onerror="this.onerror=null;this.src='${LOCAL_IMAGES.collage}'">
-      <div class="destination-card-body">
-        <span class="destination-tag">${destination.tag}</span>
-        <h3>${destination.name}</h3>
-        <p>${destination.subtitle}. ${destination.description.slice(0, 76)}…</p>
-        <button class="discover-button" type="button" data-destination="${destination.id}">Discover Destination →</button>
-      </div>
-    </article>`;
+const destinationCards = Array.from(
+    document.querySelectorAll(".destination-card")
+);
+
+let showingAllDestinations = false;
+
+function getDestinationCardWidth() {
+    const card = destinationCards[0];
+    if (!card) return 300;
+
+    return card.getBoundingClientRect().width +
+        parseFloat(getComputedStyle(destinationGrid).columnGap || 22);
 }
 
-if (destinationTrack) {
-  destinationTrack.innerHTML = destinations.map(destinationCardMarkup).join("");
+function updateDestinationCounter() {
+    if (showingAllDestinations) {
+        destinationCounter.textContent = "ALL 12 DESTINATIONS";
+        return;
+    }
+
+    const index = Math.round(
+        destinationGrid.scrollLeft / getDestinationCardWidth()
+    );
+
+    const current = Math.min(index + 1, destinationCards.length);
+    destinationCounter.textContent =
+        String(current).padStart(2, "0") + " / " +
+        String(destinationCards.length).padStart(2, "0");
+
+    carouselDots.querySelectorAll(".carousel-dot").forEach(function (dot, i) {
+        dot.classList.toggle("active", i === Math.min(index, destinationCards.length - 1));
+    });
 }
 
-function getCardsPerPage() {
-  if (window.innerWidth <= 700) return 1;
-  if (window.innerWidth <= 1100) return 3;
-  return 4;
+function createCarouselDots() {
+    carouselDots.innerHTML = "";
+
+    destinationCards.forEach(function (_, index) {
+        const dot = document.createElement("button");
+        dot.className = "carousel-dot";
+        dot.setAttribute("aria-label", "Go to destination " + (index + 1));
+
+        dot.addEventListener("click", function () {
+            destinationGrid.scrollTo({
+                left: index * getDestinationCardWidth(),
+                behavior: "smooth"
+            });
+        });
+
+        carouselDots.appendChild(dot);
+    });
+
+    updateDestinationCounter();
 }
 
-function updateDestinationControls() {
-  if (!destinationViewport || destinationViewport.classList.contains("is-expanded")) return;
-  const cardWidth = destinationTrack.querySelector(".destination-card")?.getBoundingClientRect().width || 0;
-  const gap = parseFloat(getComputedStyle(destinationTrack).gap) || 0;
-  const maxIndex = Math.max(0, destinations.length - getCardsPerPage());
-  const currentIndex = cardWidth ? Math.round(destinationViewport.scrollLeft / (cardWidth + gap)) : 0;
-  if (destinationCount) {
-    const first = Math.min(destinations.length, currentIndex + 1);
-    const last = Math.min(destinations.length, currentIndex + getCardsPerPage());
-    destinationCount.textContent = `${String(first).padStart(2,"0")}–${String(last).padStart(2,"0")} / ${String(destinations.length).padStart(2,"0")}`;
-  }
-  if (prevDestination) prevDestination.disabled = destinationViewport.scrollLeft <= 4;
-  if (nextDestination) nextDestination.disabled = currentIndex >= maxIndex;
-  if (destinationDots) {
-    const pages = Math.ceil(destinations.length / getCardsPerPage());
-    const activePage = Math.floor(currentIndex / getCardsPerPage());
-    destinationDots.innerHTML = Array.from({length: pages}, (_, index) =>
-      `<button class="carousel-dot ${index === activePage ? "active" : ""}" type="button" aria-label="Go to destination group ${index + 1}" data-page="${index}"></button>`
-    ).join("");
-  }
-}
-
-function scrollDestinations(direction) {
-  if (!destinationViewport) return;
-  destinationViewport.scrollBy({ left: direction * destinationViewport.clientWidth * .92, behavior: "smooth" });
-}
-
-prevDestination?.addEventListener("click", () => scrollDestinations(-1));
-nextDestination?.addEventListener("click", () => scrollDestinations(1));
-destinationViewport?.addEventListener("scroll", () => window.requestAnimationFrame(updateDestinationControls));
-window.addEventListener("resize", () => window.requestAnimationFrame(updateDestinationControls));
-
-destinationDots?.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-page]");
-  if (!button || !destinationViewport) return;
-  destinationViewport.scrollTo({ left: Number(button.dataset.page) * destinationViewport.clientWidth, behavior: "smooth" });
+previousDestination.addEventListener("click", function () {
+    if (!showingAllDestinations) {
+        destinationGrid.scrollBy({
+            left: -getDestinationCardWidth(),
+            behavior: "smooth"
+        });
+    }
 });
 
-viewAllDestinations?.addEventListener("click", () => {
-  const expanded = destinationViewport.classList.toggle("is-expanded");
-  viewAllDestinations.setAttribute("aria-expanded", String(expanded));
-  viewAllDestinations.querySelector("span").textContent = expanded ? "Show Carousel" : "View All Destinations";
-  if (destinationControls) destinationControls.hidden = expanded;
-  if (destinationDots) destinationDots.hidden = expanded;
-  if (!expanded) destinationViewport.scrollTo({ left: 0, behavior: "smooth" });
-  window.setTimeout(updateDestinationControls, 80);
+nextDestination.addEventListener("click", function () {
+    if (!showingAllDestinations) {
+        destinationGrid.scrollBy({
+            left: getDestinationCardWidth(),
+            behavior: "smooth"
+        });
+    }
 });
 
-/* ---------- DESTINATION MODAL ---------- */
+destinationGrid.addEventListener("scroll", updateDestinationCounter);
+
+viewAllBtn.addEventListener("click", function () {
+    showingAllDestinations = !showingAllDestinations;
+
+    destinationGrid.classList.toggle("show-all", showingAllDestinations);
+
+    viewAllBtn.textContent = showingAllDestinations
+        ? "Show Carousel ↑"
+        : "View All Destinations →";
+
+    previousDestination.disabled = showingAllDestinations;
+    nextDestination.disabled = showingAllDestinations;
+
+    carouselDots.style.display = showingAllDestinations ? "none" : "flex";
+
+    if (showingAllDestinations) {
+        destinationGrid.scrollLeft = 0;
+    }
+
+    updateDestinationCounter();
+});
+
+window.addEventListener("resize", updateDestinationCounter);
+
+createCarouselDots();
+
+
+/* DESTINATION MODAL */
+
 const destinationModal = document.getElementById("destinationModal");
-const modalDialog = destinationModal?.querySelector(".destination-modal");
-const modalClose = document.getElementById("modalClose");
-let lastModalTrigger = null;
+const closeModalBtn = document.getElementById("closeModal");
+const modalBackdrop = document.getElementById("modalBackdrop");
+const planDestinationBtn = document.getElementById("planDestination");
 
-function openDestination(destinationId, trigger) {
-  const destination = destinations.find((item) => item.id === destinationId);
-  if (!destination || !destinationModal) return;
-  lastModalTrigger = trigger || document.activeElement;
-  document.getElementById("modalImage").src = destination.image;
-  document.getElementById("modalImage").alt = destination.alt;
-  document.getElementById("modalTag").textContent = destination.tag;
-  document.getElementById("modalTitle").textContent = destination.name;
-  document.getElementById("modalSubtitle").textContent = destination.subtitle;
-  document.getElementById("modalDescription").textContent = destination.description;
-  document.getElementById("modalPlaces").innerHTML = destination.places.map((place) => `<li>${place}</li>`).join("");
-  document.getElementById("modalExperiences").innerHTML = destination.experiences.map((experience) => `<li>${experience}</li>`).join("");
-  document.getElementById("modalTip").textContent = destination.tip;
-  document.getElementById("modalGallery").innerHTML = destination.gallery.map((src, index) =>
-    `<img src="${src}" alt="${destination.name} travel photograph ${index + 1}" loading="lazy" onerror="this.onerror=null;this.src='${destination.image}'">`
-  ).join("");
-  destinationModal.hidden = false;
-  document.body.classList.add("modal-open");
-  modalClose?.focus();
+let currentDestination = "";
+
+function openDestination(key) {
+    const data = destinationData[key];
+    if (!data) return;
+
+    currentDestination = key;
+
+    document.getElementById("modalImage").src = data.image;
+    document.getElementById("modalImage").alt = data.name;
+    document.getElementById("modalTag").textContent = data.tag;
+    document.getElementById("modalTitle").textContent = data.name;
+    document.getElementById("modalDescription").textContent = data.description;
+    document.getElementById("modalExperiences").textContent = data.experiences;
+    document.getElementById("modalCuisine").textContent = data.cuisine;
+    document.getElementById("modalDuration").textContent = data.duration;
+
+    const placesList = document.getElementById("modalPlaces");
+    placesList.innerHTML = "";
+
+    data.places.forEach(function (place) {
+        const li = document.createElement("li");
+        li.textContent = place;
+        placesList.appendChild(li);
+    });
+
+    destinationModal.classList.add("open");
+    destinationModal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+
+    closeModalBtn.focus();
 }
 
 function closeDestinationModal() {
-  if (!destinationModal || destinationModal.hidden) return;
-  destinationModal.hidden = true;
-  document.body.classList.remove("modal-open");
-  lastModalTrigger?.focus?.();
+    destinationModal.classList.remove("open");
+    destinationModal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
 }
 
-destinationTrack?.addEventListener("click", (event) => {
-  const trigger = event.target.closest("[data-destination]");
-  if (trigger) openDestination(trigger.dataset.destination, trigger);
-});
-modalClose?.addEventListener("click", closeDestinationModal);
-destinationModal?.addEventListener("click", (event) => {
-  if (event.target === destinationModal) closeDestinationModal();
-});
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") closeDestinationModal();
-});
-document.getElementById("modalPlan")?.addEventListener("click", closeDestinationModal);
+destinationCards.forEach(function (card) {
+    card.addEventListener("click", function () {
+        openDestination(card.dataset.destination);
+    });
 
-/* ---------- CULTURE EXPLORER: SWITCH-CASE ---------- */
+    card.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openDestination(card.dataset.destination);
+        }
+    });
+});
+
+closeModalBtn.addEventListener("click", closeDestinationModal);
+modalBackdrop.addEventListener("click", closeDestinationModal);
+
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+        closeDestinationModal();
+    }
+});
+
+planDestinationBtn.addEventListener("click", function () {
+    const name = destinationData[currentDestination]?.name;
+
+    closeDestinationModal();
+
+    document.getElementById("registrationDestination").value = name || "";
+
+    document.getElementById("registration").scrollIntoView({
+        behavior: "smooth"
+    });
+});
+
+
+/* =========================================
+   3. CULTURE — SWITCH CASE
+   ========================================= */
+
 const cultureNav = document.getElementById("cultureNav");
 const cultureCards = document.getElementById("cultureCards");
-const cultureResultTitle = document.getElementById("cultureResultTitle");
-const cultureResultDescription = document.getElementById("cultureResultDescription");
-const cultureResultsCount = document.getElementById("cultureResultsCount");
-
-function getCultureCollection(category) {
-  let heading = "";
-  let introduction = "";
-  let items = [];
-
-  switch (category) {
-    case "dance":
-      heading = "Classical & Folk Dance";
-      introduction = "Discover India's dance traditions, from expressive classical performances to energetic regional folk dances.";
-      items = [
-        ["Bharatanatyam", "Tamil Nadu", "A classical dance form known for expressive gestures, rhythmic footwork and storytelling.", WIKIMEDIA.dance],
-        ["Kathak", "North India", "A classical style featuring intricate footwork, turns and narrative expression.", WIKIMEDIA.dance],
-        ["Kathakali", "Kerala", "A dance-drama tradition recognised for elaborate costumes, makeup and expressive performance.", WIKIMEDIA.dance],
-        ["Odissi", "Odisha", "A classical form known for fluid movements, sculptural poses and expressive storytelling.", WIKIMEDIA.dance],
-        ["Kuchipudi", "Andhra Pradesh", "A classical dance tradition combining movement, rhythm and theatrical storytelling.", WIKIMEDIA.dance],
-        ["Manipuri", "Manipur", "A graceful classical form often associated with devotional and Vaishnavite themes.", WIKIMEDIA.dance],
-        ["Garba", "Gujarat", "A lively community folk dance widely performed during Navratri.", WIKIMEDIA.dance],
-        ["Bhangra", "Punjab", "An energetic folk dance associated with Punjabi cultural celebrations and harvest traditions.", WIKIMEDIA.dance],
-        ["Lavani", "Maharashtra", "A Marathi performance tradition combining expressive singing, rhythm and dance.", WIKIMEDIA.dance],
-        ["Bihu Dance", "Assam", "A joyful folk dance associated with Bihu celebrations and Assamese cultural life.", WIKIMEDIA.dance]
-      ];
-      break;
-
-    case "food":
-      heading = "Flavours of Bharat";
-      introduction = "Explore regional dishes shaped by local ingredients, cooking traditions, climate and community life.";
-      items = [
-        ["Puran Poli", "Maharashtra", "A sweet flatbread traditionally filled with a mixture such as lentils and jaggery.", WIKIMEDIA.thali],
-        ["Dhokla", "Gujarat", "A savoury steamed snack commonly made from fermented gram-flour batter.", WIKIMEDIA.thali],
-        ["Dal Baati Churma", "Rajasthan", "A traditional combination of lentil curry, baked wheat balls and a sweet crumbled preparation.", WIKIMEDIA.thali],
-        ["Appam", "Kerala", "A soft-centred, bowl-shaped pancake often served with curries or vegetable stew.", WIKIMEDIA.thali],
-        ["Rogan Josh", "Kashmir", "A well-known Kashmiri curry traditionally prepared with aromatic spices.", WIKIMEDIA.thali],
-        ["Sarson da Saag", "Punjab", "A mustard-green preparation often served with makki di roti.", WIKIMEDIA.thali],
-        ["Masala Dosa", "South India", "A crisp fermented-rice-and-lentil crepe commonly served with a spiced potato filling.", WIKIMEDIA.thali],
-        ["Litti Chokha", "Bihar", "Roasted wheat balls filled with sattu and served with a vegetable preparation.", WIKIMEDIA.thali],
-        ["Macher Jhol", "Bengal", "A Bengali-style fish curry prepared with regional spices and ingredients.", WIKIMEDIA.thali],
-        ["Pongal", "Tamil Nadu", "A rice-based dish; sweet and savoury versions are enjoyed in different contexts.", WIKIMEDIA.thali]
-      ];
-      break;
-
-    case "festival":
-      heading = "Festivals & Celebrations";
-      introduction = "Experience the celebrations, seasonal customs and community traditions observed across India.";
-      items = [
-        ["Diwali", "Across India", "Celebrated in different ways by various communities, often associated with lights, family gatherings and renewal.", WIKIMEDIA.diwali],
-        ["Holi", "Across India", "A spring festival known for colourful celebrations, with customs that vary by region.", WIKIMEDIA.diwali],
-        ["Ganesh Chaturthi", "Especially Maharashtra", "Honours Lord Ganesha through devotional practices and community celebrations.", WIKIMEDIA.diwali],
-        ["Navratri", "Across India", "A festival period with diverse regional traditions, including Garba and Dandiya Raas in Gujarat.", WIKIMEDIA.diwali],
-        ["Onam", "Kerala", "A major Kerala festival associated with cultural celebrations, flower arrangements and festive meals.", WIKIMEDIA.diwali],
-        ["Durga Puja", "Especially West Bengal", "A major celebration featuring artistic displays, community gatherings and devotion to Goddess Durga.", WIKIMEDIA.diwali],
-        ["Bihu", "Assam", "A group of Assamese festivals connected with seasonal change, agriculture, music and dance.", WIKIMEDIA.diwali],
-        ["Pongal", "Tamil Nadu", "A harvest festival expressing gratitude for the harvest, the Sun and nature.", WIKIMEDIA.diwali],
-        ["Baisakhi", "Punjab", "A festival associated with the harvest season and significant in Sikh history and tradition.", WIKIMEDIA.diwali],
-        ["Eid", "Muslim communities", "Celebrations include prayer, charity, family gatherings and festive meals, with practices varying between communities.", WIKIMEDIA.diwali]
-      ];
-      break;
-
-    case "music":
-      heading = "Music of Bharat";
-      introduction = "Discover classical, folk and devotional musical traditions alongside India's evolving contemporary sounds.";
-      items = [
-        ["Hindustani Classical", "North India", "A classical music tradition featuring ragas, improvisation and distinctive performance styles.", WIKIMEDIA.music],
-        ["Carnatic Music", "South India", "A classical tradition known for structured compositions, melodic frameworks and rhythmic patterns.", WIKIMEDIA.music],
-        ["Qawwali", "South Asian Sufi tradition", "A devotional musical form performed in gatherings associated with Sufi traditions.", WIKIMEDIA.music],
-        ["Lavani Music", "Maharashtra", "A lively Marathi performance tradition combining singing, rhythm and expressive dance.", WIKIMEDIA.music],
-        ["Baul Music", "Bengal", "A distinctive folk-mystical tradition associated with Baul singers and philosophical songs.", WIKIMEDIA.music],
-        ["Bihu Music", "Assam", "Festive music featuring regional singing, rhythms and instruments associated with Bihu.", WIKIMEDIA.music],
-        ["Rajasthani Folk Music", "Rajasthan", "Folk traditions featuring local instruments, ballads and community storytelling.", WIKIMEDIA.music],
-        ["Punjabi Folk Music", "Punjab", "Lively singing and rhythmic traditions associated with community life and celebrations.", WIKIMEDIA.music]
-      ];
-      break;
-
-    case "clothing":
-      heading = "Traditional Clothing & Textiles";
-      introduction = "Explore India's textiles, weaving, embroidery and regional styles of traditional dress.";
-      items = [
-        ["Nauvari Saree", "Maharashtra", "A traditional nine-yard saree draping style associated with Maharashtra.", WIKIMEDIA.textile],
-        ["Bandhani", "Gujarat & Rajasthan", "A tie-dye textile tradition that creates patterns by tying sections of fabric before dyeing.", WIKIMEDIA.textile],
-        ["Banarasi Silk", "Varanasi, Uttar Pradesh", "A renowned weaving tradition known for detailed silk textiles and brocade work.", WIKIMEDIA.textile],
-        ["Phulkari", "Punjab", "An embroidery tradition known for colourful floral and geometric designs.", WIKIMEDIA.textile],
-        ["Mekhela Chador", "Assam", "A traditional Assamese women's ensemble with regional weaving traditions.", WIKIMEDIA.textile],
-        ["Kanjeevaram Silk", "Tamil Nadu", "A silk-weaving tradition associated with Kanchipuram and richly woven sarees.", WIKIMEDIA.textile],
-        ["Pashmina", "Kashmir region", "Fine wool textiles associated with specialised craftsmanship and shawl-making traditions.", WIKIMEDIA.textile],
-        ["Kasavu Saree", "Kerala", "A traditional Kerala textile style often recognised by its light fabric and gold-toned border.", WIKIMEDIA.textile],
-        ["Chikankari", "Lucknow, Uttar Pradesh", "An embroidery tradition known for delicate, detailed needlework.", WIKIMEDIA.textile]
-      ];
-      break;
-
-    case "art":
-      heading = "Indian Art & Handicrafts";
-      introduction = "Meet the artistic traditions and craft skills that connect materials, communities and generations.";
-      items = [
-        ["Warli Painting", "Maharashtra", "A painting tradition using geometric figures to depict community life, nature and everyday activities.", WIKIMEDIA.warli],
-        ["Madhubani Painting", "Bihar", "A detailed painting tradition associated with the Mithila region and its distinctive patterns.", WIKIMEDIA.warli],
-        ["Pattachitra", "Odisha & West Bengal", "A traditional painting tradition known for detailed compositions and narrative themes.", WIKIMEDIA.warli],
-        ["Blue Pottery", "Jaipur, Rajasthan", "A decorative pottery craft recognised for its characteristic blue designs.", WIKIMEDIA.warli],
-        ["Papier-Mâché", "Kashmir", "A craft involving shaped paper material and decorative painted designs.", WIKIMEDIA.warli],
-        ["Channapatna Toys", "Karnataka", "Traditional wooden toys associated with turning, colouring and lacquered finishes.", WIKIMEDIA.warli],
-        ["Kutch Embroidery", "Gujarat", "Embroidery traditions known for colourful threadwork, mirrors and regional patterns.", WIKIMEDIA.warli],
-        ["Bidriware", "Bidar, Karnataka", "A metal craft known for contrasting inlaid designs on a dark surface.", WIKIMEDIA.warli],
-        ["Dhokra Metal Craft", "Several regions", "A traditional metal-casting craft known for distinctive figurines and decorative objects.", WIKIMEDIA.warli]
-      ];
-      break;
-
-    case "languages":
-      heading = "Languages of Bharat";
-      introduction = "Explore India's linguistic diversity through regional languages, scripts and literary traditions.";
-      items = [
-        ["Marathi", "Maharashtra", "A major language with rich traditions in poetry, theatre, devotional writing and modern literature.", WIKIMEDIA.manuscript],
-        ["Tamil", "Tamil Nadu and beyond", "A classical language with a long literary history and vibrant contemporary cultural life.", WIKIMEDIA.manuscript],
-        ["Bengali", "West Bengal and beyond", "A language with extensive traditions in poetry, fiction, songs and theatre.", WIKIMEDIA.manuscript],
-        ["Gujarati", "Gujarat", "A language with its own literary traditions and a broad range of regional writing.", WIKIMEDIA.manuscript],
-        ["Punjabi", "Punjab and beyond", "A language with strong traditions in poetry, music, oral storytelling and literature.", WIKIMEDIA.manuscript],
-        ["Malayalam", "Kerala", "A language with rich traditions in literature, poetry, cinema and theatre.", WIKIMEDIA.manuscript],
-        ["Assamese", "Assam", "A language with a long literary history, including poetry, novels and cultural writing.", WIKIMEDIA.manuscript],
-        ["Kannada", "Karnataka", "A language with a significant literary tradition spanning classical and contemporary works.", WIKIMEDIA.manuscript],
-        ["Telugu", "Andhra Pradesh & Telangana", "A major language with extensive traditions in poetry, theatre, cinema and literature.", WIKIMEDIA.manuscript],
-        ["Sanskrit", "Classical Indian tradition", "A classical language important to historical works of philosophy, literature and religious thought.", WIKIMEDIA.manuscript]
-      ];
-      break;
-
-    case "architecture":
-      heading = "Architectural Heritage of Bharat";
-      introduction = "Discover forts, temples, mosques, palaces, stepwells and historic structures shaped by different eras and communities.";
-      items = [
-        ["Taj Mahal", "Agra, Uttar Pradesh", "A white-marble mausoleum recognised for its Mughal architecture and intricate decorative work.", WIKIMEDIA.taj],
-        ["Forts of Rajasthan", "Rajasthan", "Historic fort complexes reflecting regional kingdoms, defensive design and royal histories.", LOCAL_IMAGES.rajasthan],
-        ["Ajanta & Ellora Caves", "Maharashtra", "Rock-cut cave complexes renowned for their art, sculpture and religious heritage.", LOCAL_IMAGES.maharashtra],
-        ["Meenakshi Amman Temple", "Madurai, Tamil Nadu", "A major temple complex known for sculptural details and decorated gateway towers.", WIKIMEDIA.temple],
-        ["Konark Sun Temple", "Odisha", "A historic temple famous for its monumental form and elaborate stone carving.", WIKIMEDIA.temple],
-        ["Hampi", "Karnataka", "A historic landscape with temples, public spaces and structures from the Vijayanagara period.", WIKIMEDIA.temple],
-        ["Sanchi Stupa", "Madhya Pradesh", "A major Buddhist monument complex known for historic stupas and carved gateways.", WIKIMEDIA.temple],
-        ["Rani ki Vav", "Patan, Gujarat", "A historic stepwell known for its multi-level structure and intricate sculptural decoration.", WIKIMEDIA.warli]
-      ];
-      break;
-
-    default:
-      heading = "Explore Indian Culture";
-      introduction = "Choose a category to discover traditions from across Bharat.";
-      items = [];
-  }
-
-  return { heading, introduction, items };
-}
+const cultureResults = document.getElementById("cultureResults");
 
 function showCulture(category) {
-  if (!cultureCards || !cultureResultTitle || !cultureResultDescription) return;
-  const collection = getCultureCollection(category);
-  cultureResultTitle.textContent = collection.heading;
-  cultureResultDescription.textContent = collection.introduction;
-  cultureResultsCount.textContent = `${collection.items.length} ${collection.items.length === 1 ? "ENTRY" : "TRADITIONS"}`;
 
-  cultureCards.innerHTML = collection.items.map(([name, region, description, image]) => `
-    <article class="culture-card">
-      <div class="culture-card-top">
-        <span class="culture-region">${region}</span>
-        <img src="${image}" alt="${name}" loading="lazy" onerror="this.onerror=null;this.src='${LOCAL_IMAGES.collage}'">
-      </div>
-      <div class="culture-card-content">
-        <h4>${name}</h4>
-        <p>${description}</p>
-      </div>
-    </article>`).join("");
+    let heading = "";
+    let introduction = "";
+    let items = [];
 
-  cultureNav?.querySelectorAll(".culture-tab").forEach((button) => {
-    const active = button.dataset.category === category;
-    button.classList.toggle("active", active);
-    button.setAttribute("aria-pressed", String(active));
-  });
+    switch (category) {
+
+        /* DANCE */
+
+        case "dance":
+            heading = "Classical & Folk Dance";
+            introduction = "Discover India's classical and regional folk dance traditions.";
+
+            items = [
+                ["Bharatanatyam", "Tamil Nadu", "Known for expressive gestures, rhythmic footwork and storytelling.", "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=400&q=80"],
+                ["Kathak", "North India", "A classical dance form featuring intricate footwork, graceful turns and storytelling.", "https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=400&q=80"],
+                ["Kathakali", "Kerala", "A dance-drama tradition with elaborate costumes, expressive makeup and dramatic stories.", "https://images.unsplash.com/photo-1604608672516-9d5aabf7d1c4?auto=format&fit=crop&w=400&q=80"],
+                ["Odissi", "Odisha", "A classical dance form known for fluid movement and sculptural poses.", "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=400&q=80"],
+                ["Kuchipudi", "Andhra Pradesh", "A classical dance combining expressive movement, rhythm and theatrical elements.", "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=400&q=80"],
+                ["Manipuri", "Manipur", "A graceful classical dance tradition often associated with devotional stories.", "https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=400&q=80"],
+                ["Garba", "Gujarat", "A lively community folk dance widely performed during Navratri.", "https://images.unsplash.com/photo-1604608672516-9d5aabf7d1c4?auto=format&fit=crop&w=400&q=80"],
+                ["Bhangra", "Punjab", "An energetic folk dance associated with Punjabi celebrations and harvest traditions.", "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=400&q=80"],
+                ["Lavani", "Maharashtra", "A Marathi performance tradition combining expressive singing, rhythm and dance.", "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=400&q=80"],
+                ["Bihu Dance", "Assam", "A joyful folk dance associated with Bihu celebrations and Assamese culture.", "https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=400&q=80"]
+            ];
+            break;
+
+
+        /* FOOD */
+
+        case "food":
+            heading = "Flavours of Bharat";
+            introduction = "Explore regional dishes shaped by ingredients, climate and culinary traditions.";
+
+            items = [
+                ["Puran Poli", "Maharashtra", "A sweet flatbread traditionally filled with lentils and jaggery.", "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=400&q=80"],
+                ["Dhokla", "Gujarat", "A savoury steamed snack commonly made from fermented gram-flour batter.", "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=400&q=80"],
+                ["Dal Baati Churma", "Rajasthan", "A traditional combination of lentil curry, baked wheat balls and sweet crumbles.", "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=400&q=80"],
+                ["Appam", "Kerala", "A soft-centred pancake often served with curries or vegetable stews.", "https://images.unsplash.com/photo-1567337710282-00832b415979?auto=format&fit=crop&w=400&q=80"],
+                ["Rogan Josh", "Kashmir", "A well-known Kashmiri curry prepared with aromatic spices.", "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=400&q=80"],
+                ["Sarson da Saag", "Punjab", "A mustard-green preparation often served with makki di roti.", "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=400&q=80"],
+                ["Masala Dosa", "South India", "A crisp fermented-rice-and-lentil crepe with spiced potato filling.", "https://images.unsplash.com/photo-1668236543090-82eba5ee5976?auto=format&fit=crop&w=400&q=80"],
+                ["Litti Chokha", "Bihar", "Roasted wheat balls filled with sattu, served with a vegetable preparation.", "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=400&q=80"],
+                ["Macher Jhol", "Bengal", "A Bengali fish curry prepared with regional spices.", "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=400&q=80"],
+                ["Pongal", "Tamil Nadu", "A rice-based dish prepared in sweet and savoury variations.", "https://images.unsplash.com/photo-1567337710282-00832b415979?auto=format&fit=crop&w=400&q=80"]
+            ];
+            break;
+
+
+        /* FESTIVALS */
+
+        case "festival":
+            heading = "Festivals & Celebrations";
+            introduction = "Experience the celebrations, seasonal customs and community traditions of India.";
+
+            items = [
+                ["Diwali", "Across India", "A festival celebrated in different ways by communities, often associated with lights and renewal.", "https://images.unsplash.com/photo-1606293926075-69a00dbfde81?auto=format&fit=crop&w=400&q=80"],
+                ["Holi", "Across India", "A spring festival known for colourful celebrations and regional customs.", "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&w=400&q=80"],
+                ["Ganesh Chaturthi", "Maharashtra", "A festival honouring Lord Ganesha through devotional and community celebrations.", "https://images.unsplash.com/photo-1567591370504-8b9c3ba7b2f8?auto=format&fit=crop&w=400&q=80"],
+                ["Navratri", "Across India", "A festival period with diverse traditions, including Garba and Dandiya Raas.", "https://images.unsplash.com/photo-1604608672516-9d5aabf7d1c4?auto=format&fit=crop&w=400&q=80"],
+                ["Onam", "Kerala", "A major Kerala festival associated with flower arrangements and festive meals.", "https://images.unsplash.com/photo-1604608672516-9d5aabf7d1c4?auto=format&fit=crop&w=400&q=80"],
+                ["Durga Puja", "West Bengal", "A major celebration featuring artistic displays, gatherings and devotion to Goddess Durga.", "https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=400&q=80"],
+                ["Bihu", "Assam", "A group of Assamese festivals connected with seasonal change, agriculture, music and dance.", "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=400&q=80"],
+                ["Pongal", "Tamil Nadu", "A harvest festival expressing gratitude for the harvest, the Sun and nature.", "https://images.unsplash.com/photo-1604608672516-9d5aabf7d1c4?auto=format&fit=crop&w=400&q=80"],
+                ["Baisakhi", "Punjab", "A harvest-associated festival with significance in Sikh history and tradition.", "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=400&q=80"],
+                ["Eid", "Muslim communities", "Celebrations include prayer, charity, family gatherings and festive meals.", "https://images.unsplash.com/photo-1606293926075-69a00dbfde81?auto=format&fit=crop&w=400&q=80"]
+            ];
+            break;
+
+
+        /* MUSIC */
+
+        case "music":
+            heading = "Music of Bharat";
+            introduction = "Discover classical, folk and devotional music traditions across India.";
+
+            items = [
+                ["Hindustani Classical", "North India", "A classical tradition featuring ragas and improvisation.", "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=400&q=80"],
+                ["Carnatic Music", "South India", "Known for structured compositions, melodic frameworks and rhythmic patterns.", "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=400&q=80"],
+                ["Qawwali", "South Asian Sufi tradition", "A devotional musical form performed in gatherings associated with Sufi traditions.", "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80"],
+                ["Lavani Music", "Maharashtra", "A lively Marathi performance tradition combining singing and rhythm.", "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=400&q=80"],
+                ["Baul Music", "Bengal", "A folk-mystical tradition associated with Baul singers and philosophical songs.", "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=400&q=80"],
+                ["Bihu Music", "Assam", "Festive music featuring regional singing, rhythms and traditional instruments.", "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80"],
+                ["Rajasthani Folk Music", "Rajasthan", "Folk traditions featuring local instruments, ballads and storytelling.", "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=400&q=80"],
+                ["Punjabi Folk Music", "Punjab", "Lively singing and rhythmic traditions associated with community life.", "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=400&q=80"]
+            ];
+            break;
+
+
+        /* CLOTHING */
+
+        case "clothing":
+            heading = "Traditional Clothing & Textiles";
+            introduction = "Explore India's textiles, weaving, embroidery and regional styles of dress.";
+
+            items = [
+                ["Nauvari Saree", "Maharashtra", "A traditional nine-yard saree draping style.", "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80"],
+                ["Bandhani", "Gujarat & Rajasthan", "A tie-dye tradition creating patterns by tying portions of fabric before dyeing.", "https://images.unsplash.com/photo-1609741199670-7a8f9e3d2e4d?auto=format&fit=crop&w=400&q=80"],
+                ["Banarasi Silk", "Uttar Pradesh", "A renowned silk-weaving tradition known for detailed brocade work.", "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80"],
+                ["Phulkari", "Punjab", "An embroidery tradition known for colourful floral and geometric designs.", "https://images.unsplash.com/photo-1609741199670-7a8f9e3d2e4d?auto=format&fit=crop&w=400&q=80"],
+                ["Mekhela Chador", "Assam", "A traditional Assamese women's ensemble with regional weaving traditions.", "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80"],
+                ["Kanjeevaram Silk", "Tamil Nadu", "A silk-weaving tradition associated with Kanchipuram.", "https://images.unsplash.com/photo-1609741199670-7a8f9e3d2e4d?auto=format&fit=crop&w=400&q=80"],
+                ["Pashmina", "Kashmir", "Fine wool textiles associated with specialised shawl-making craftsmanship.", "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80"],
+                ["Kasavu Saree", "Kerala", "A traditional textile style often recognised by its light fabric and gold-toned border.", "https://images.unsplash.com/photo-1609741199670-7a8f9e3d2e4d?auto=format&fit=crop&w=400&q=80"],
+                ["Chikankari", "Lucknow", "An embroidery tradition known for delicate, detailed needlework.", "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80"]
+            ];
+            break;
+
+
+        /* ART & CRAFTS */
+
+        case "art":
+            heading = "Indian Art & Handicrafts";
+            introduction = "Discover creative traditions and craft skills passed through generations.";
+
+            items = [
+                ["Warli Painting", "Maharashtra", "A painting tradition using geometric figures to depict community life and nature.", "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=400&q=80"],
+                ["Madhubani Painting", "Bihar", "A detailed painting tradition associated with the Mithila region.", "https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=400&q=80"],
+                ["Pattachitra", "Odisha & West Bengal", "A traditional painting style known for detailed compositions and narrative themes.", "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=400&q=80"],
+                ["Blue Pottery", "Jaipur", "A decorative pottery craft recognised for its characteristic blue designs.", "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=400&q=80"],
+                ["Papier-Mâché", "Kashmir", "A craft involving shaped paper material and decorative painted designs.", "https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=400&q=80"],
+                ["Channapatna Toys", "Karnataka", "Traditional wooden toys associated with turning and lacquered finishes.", "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=400&q=80"],
+                ["Kutch Embroidery", "Gujarat", "Embroidery traditions known for colourful threadwork and mirror decoration.", "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=400&q=80"],
+                ["Bidriware", "Karnataka", "A metal craft known for contrasting inlaid designs on dark surfaces.", "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=400&q=80"],
+                ["Dhokra Metal Craft", "Several regions", "A traditional metal-casting craft known for distinctive figurines and objects.", "https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=400&q=80"]
+            ];
+            break;
+
+
+        /* LANGUAGES */
+
+        case "languages":
+            heading = "Languages of Bharat";
+            introduction = "Explore India's linguistic diversity, regional languages and literary traditions.";
+
+            items = [
+                ["Marathi", "Maharashtra", "A language with rich traditions in poetry, theatre, devotional writing and literature.", "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=400&q=80"],
+                ["Tamil", "Tamil Nadu", "A classical language with a long literary history and vibrant cultural life.", "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=400&q=80"],
+                ["Bengali", "West Bengal", "A language with extensive traditions in poetry, fiction, songs and theatre.", "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=400&q=80"],
+                ["Gujarati", "Gujarat", "A language with distinctive literary traditions and regional writing.", "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=400&q=80"],
+                ["Punjabi", "Punjab", "A language with traditions in poetry, music and oral storytelling.", "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=400&q=80"],
+                ["Malayalam", "Kerala", "A language with rich traditions in literature, cinema and theatre.", "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=400&q=80"],
+                ["Assamese", "Assam", "A language with a long literary history and a variety of cultural writing.", "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=400&q=80"],
+                ["Kannada", "Karnataka", "A language with a significant classical and contemporary literary tradition.", "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=400&q=80"],
+                ["Telugu", "Andhra Pradesh & Telangana", "A major language with extensive traditions in poetry, theatre and literature.", "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=400&q=80"],
+                ["Sanskrit", "Classical Indian tradition", "A classical language important to many historical works of philosophy and literature.", "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=400&q=80"]
+            ];
+            break;
+
+
+        /* ARCHITECTURE */
+
+        case "architecture":
+            heading = "Architectural Heritage of Bharat";
+            introduction = "Discover forts, temples, palaces, stepwells and historic structures from different eras.";
+
+            items = [
+                ["Taj Mahal", "Agra, Uttar Pradesh", "A white-marble mausoleum recognised for its Mughal architecture.", "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=400&q=80"],
+                ["Forts of Rajasthan", "Rajasthan", "Historic fort complexes reflecting regional kingdoms and defensive design.", "https://images.unsplash.com/photo-1599661046827-dacff0c0f09a?auto=format&fit=crop&w=400&q=80"],
+                ["Ajanta & Ellora Caves", "Maharashtra", "Rock-cut cave complexes renowned for their art, sculpture and heritage.", "https://images.unsplash.com/photo-1606293926075-69a00dbfde81?auto=format&fit=crop&w=400&q=80"],
+                ["Meenakshi Amman Temple", "Tamil Nadu", "A temple complex known for sculptural details and decorated gateway towers.", "https://images.unsplash.com/photo-1606293926075-69a00dbfde81?auto=format&fit=crop&w=400&q=80"],
+                ["Konark Sun Temple", "Odisha", "A historic temple famous for monumental architecture and stone carving.", "https://images.unsplash.com/photo-1606293926075-69a00dbfde81?auto=format&fit=crop&w=400&q=80"],
+                ["Hampi", "Karnataka", "A historic landscape with temples and structures of the Vijayanagara Empire.", "https://images.unsplash.com/photo-1606293926075-69a00dbfde81?auto=format&fit=crop&w=400&q=80"],
+                ["Sanchi Stupa", "Madhya Pradesh", "A major Buddhist monument complex known for its stupas and carved gateways.", "https://images.unsplash.com/photo-1606293926075-69a00dbfde81?auto=format&fit=crop&w=400&q=80"],
+                ["Rani ki Vav", "Gujarat", "A historic stepwell with multiple levels and intricate sculptural decoration.", "https://images.unsplash.com/photo-1606293926075-69a00dbfde81?auto=format&fit=crop&w=400&q=80"]
+            ];
+            break;
+
+
+        default:
+            heading = "Explore Indian Culture";
+            introduction = "Choose a category to discover traditions from across Bharat.";
+            items = [];
+    }
+
+
+    /* UPDATE CULTURE HEADING */
+
+    const headingBox = cultureResults.querySelector(".culture-results-heading");
+
+    headingBox.innerHTML = `
+        <p class="section-tag">EXPLORE OUR HERITAGE</p>
+        <h3>${heading}</h3>
+        <p>${introduction}</p>
+    `;
+
+
+    /* UPDATE CULTURE CARDS */
+
+    cultureCards.innerHTML = items.map(function (item) {
+        return `
+            <article class="culture-card">
+
+                <div class="culture-card-top">
+                    <span class="culture-region">${item[1]}</span>
+
+                    <img
+                        src="${item[3]}"
+                        alt="${item[0]}"
+                        loading="lazy"
+                        onerror="this.style.display='none'">
+                </div>
+
+                <div class="culture-card-content">
+                    <h4>${item[0]}</h4>
+                    <p>${item[2]}</p>
+                </div>
+
+            </article>
+        `;
+    }).join("");
+
+
+    /* ACTIVE CATEGORY BUTTON */
+
+    cultureNav.querySelectorAll(".culture-tab").forEach(function (button) {
+        const active = button.dataset.category === category;
+
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", active);
+    });
 }
 
-cultureNav?.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-category]");
-  if (!button) return;
-  showCulture(button.dataset.category);
+
+/* CULTURE CATEGORY EVENTS */
+
+cultureNav.addEventListener("click", function (event) {
+    const button = event.target.closest(".culture-tab");
+
+    if (!button) return;
+
+    showCulture(button.dataset.category);
 });
+
+
+/* SHOW DANCE BY DEFAULT */
+
 showCulture("dance");
 
-/* ---------- TRAVEL STYLE SELECTION ---------- */
-const travelStyleCards = document.querySelectorAll(".travel-style-card");
+
+/* =========================================
+   4. TRAVEL STYLE SELECTION
+   ========================================= */
+
+const styleCards = document.querySelectorAll(".travel-style-card");
 const tripStyleSelect = document.getElementById("tripStyle");
 
-travelStyleCards.forEach((card) => {
-  card.addEventListener("click", () => {
-    travelStyleCards.forEach((item) => {
-      item.classList.remove("selected");
-      item.setAttribute("aria-pressed", "false");
+styleCards.forEach(function (card) {
+    card.addEventListener("click", function () {
+
+        styleCards.forEach(function (item) {
+            item.classList.remove("selected");
+            item.setAttribute("aria-pressed", "false");
+        });
+
+        card.classList.add("selected");
+        card.setAttribute("aria-pressed", "true");
+
+        tripStyleSelect.value = card.dataset.style;
+
     });
-    card.classList.add("selected");
-    card.setAttribute("aria-pressed", "true");
-    if (tripStyleSelect) tripStyleSelect.value = card.dataset.style;
-    document.getElementById("trip-planner")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  });
 });
 
-/* ---------- TRIP PLANNER: IF / ELSE IF / ELSE ---------- */
-const tripPlannerForm = document.getElementById("tripPlannerForm");
-const tripResult = document.getElementById("tripResult");
-const plannerError = document.getElementById("plannerError");
 
-tripPlannerForm?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const budget = document.getElementById("tripBudget").value;
-  const duration = document.getElementById("tripDuration").value;
-  const style = document.getElementById("tripStyle").value;
-  plannerError.textContent = "";
-  tripResult.hidden = true;
+/* =========================================
+   5. BUILD YOUR OWN TRIP — IF ELSE
+   ========================================= */
 
-  if (!budget || !duration || !style) {
-    plannerError.textContent = "Please select your budget, duration and travel style.";
-    return;
-  }
+document.getElementById("findTripBtn").addEventListener("click", function () {
 
-  let title = "";
-  let description = "";
+    const budget = document.getElementById("tripBudget").value;
+    const duration = document.getElementById("tripDuration").value;
+    const style = document.getElementById("tripStyle").value;
 
-  if (style === "adventure" && budget === "premium") {
-    title = "Ladakh Adventure Expedition";
-    description = "Explore high-altitude lakes, monasteries and striking Himalayan landscapes. Plan acclimatisation days and check seasonal road access before travelling.";
-  } else if (style === "adventure" && (budget === "high" || budget === "medium")) {
-    title = "Himachal Mountain Escape";
-    description = "Discover mountain towns, scenic walks and Himalayan viewpoints. Choose a route that fits your travel time and transport budget.";
-  } else if (style === "adventure") {
-    title = "A Nearby Adventure Getaway";
-    description = "Consider a nearby hill station, guided nature walk or beginner-friendly outdoor activity to keep transport costs manageable.";
-  } else if (style === "nature" && budget === "premium") {
-    title = "Kashmir Nature Retreat";
-    description = "Explore lakes, valleys, gardens and Himalayan scenery, with time for relaxed sightseeing and local experiences.";
-  } else if (style === "nature") {
-    title = "Kerala Green Escape";
-    description = "Discover backwaters, greenery and regional food. Adapt the route and accommodation to your selected budget.";
-  } else if (style === "heritage" && budget === "low") {
-    title = "Maharashtra Heritage Trail";
-    description = "Explore nearby forts, museums and historic sites with a budget-conscious regional itinerary.";
-  } else if (style === "heritage") {
-    title = "Royal Rajasthan Journey";
-    description = "Discover forts, palace architecture, traditional markets and regional cuisine across Rajasthan.";
-  } else if (style === "beach" && budget === "low") {
-    title = "Coastal Weekend Escape";
-    description = "Choose an accessible nearby beach destination and plan around transport costs, local food and a simple stay.";
-  } else if (style === "beach") {
-    title = "Goa Coastal Holiday";
-    description = "Enjoy coastal scenery, heritage neighbourhoods and relaxed sightseeing. Choose experiences that suit your schedule.";
-  } else if (style === "spiritual") {
-    title = "Spiritual & Heritage Journey";
-    description = "Explore culturally significant destinations, historic places and local traditions with respect for community customs.";
-  } else if (style === "family") {
-    title = "Family Discovery Holiday";
-    description = "Choose a destination with family-friendly attractions, convenient transport and a comfortable pace.";
-  } else {
-    title = "Discover Bharat";
-    description = "Explore destinations across India and choose experiences that fit your travel preferences.";
-  }
+    const error = document.getElementById("plannerError");
+    const result = document.getElementById("tripResult");
 
-  let suggestedDuration = "";
-  if (duration === "weekend") {
-    suggestedDuration = "1–2 days";
-    description += " Keep the route local or regional so you have enough time to enjoy the trip without rushing.";
-  } else if (duration === "short") {
-    suggestedDuration = "3–5 days";
-  } else {
-    suggestedDuration = "6 or more days";
-    description += " A longer trip can include additional nearby attractions, depending on transfer times.";
-  }
+    error.textContent = "";
+    result.hidden = true;
 
-  let budgetGuide = "";
-  if (budget === "low") budgetGuide = "Under ₹5,000 per person";
-  else if (budget === "medium") budgetGuide = "₹5,000–₹10,000 per person";
-  else if (budget === "high") budgetGuide = "₹10,000–₹20,000 per person";
-  else budgetGuide = "Above ₹20,000 per person";
+    if (!budget || !duration || !style) {
+        error.textContent = "Please select your budget, duration and travel style.";
+        return;
+    }
 
-  document.getElementById("resultTitle").textContent = title;
-  document.getElementById("resultDescription").textContent = description;
-  document.getElementById("resultDuration").textContent = suggestedDuration;
-  document.getElementById("resultBudget").textContent = budgetGuide;
-  tripResult.hidden = false;
-  tripResult.scrollIntoView({ behavior: "smooth", block: "center" });
+    let title = "";
+    let description = "";
+    let suggestedDuration = "";
+    let budgetGuide = "";
+
+
+    /* DESTINATION RECOMMENDATION */
+
+    if (style === "adventure" && budget === "premium") {
+        title = "Ladakh Adventure Expedition";
+        description = "Explore dramatic Himalayan landscapes, monasteries and scenic mountain routes. Plan for acclimatisation and seasonal travel conditions.";
+
+    } else if (style === "adventure" && budget === "high") {
+        title = "Himachal Mountain Escape";
+        description = "Discover mountain towns, nature trails and spectacular Himalayan scenery.";
+
+    } else if (style === "adventure") {
+        title = "Local Adventure Getaway";
+        description = "Consider a nearby hill station, guided walk or beginner-friendly outdoor activity.";
+
+    } else if (style === "nature" && budget === "premium") {
+        title = "Kashmir Nature Retreat";
+        description = "Explore lakes, valleys, gardens and Himalayan scenery.";
+
+    } else if (style === "nature") {
+        title = "Kerala Green Escape";
+        description = "Discover lush landscapes, local cuisine and backwater experiences.";
+
+    } else if (style === "heritage" && budget === "low") {
+        title = "Maharashtra Heritage Trail";
+        description = "Explore historic forts, museums and local heritage sites.";
+
+    } else if (style === "heritage") {
+        title = "Royal Rajasthan Tour";
+        description = "Discover forts, palaces, traditional markets and regional cuisine.";
+
+    } else if (style === "beach" && budget === "low") {
+        title = "Coastal Weekend Escape";
+        description = "Choose an accessible nearby beach destination and plan around transport costs.";
+
+    } else if (style === "beach") {
+        title = "Goa Coastal Holiday";
+        description = "Enjoy coastal scenery, local heritage and relaxed sightseeing.";
+
+    } else if (style === "spiritual") {
+        title = "Spiritual & Heritage Journey";
+        description = "Explore culturally significant destinations, historic places and local traditions respectfully.";
+
+    } else if (style === "family") {
+        title = "Family Discovery Holiday";
+        description = "Choose a destination with convenient transport, family-friendly sightseeing and a comfortable pace.";
+
+    } else {
+        title = "Discover Bharat";
+        description = "Explore destinations across India and choose experiences that match your preferences.";
+    }
+
+
+    /* DURATION */
+
+    if (duration === "weekend") {
+        suggestedDuration = "1–2 days";
+        description += " Keep the itinerary local or regional to avoid rushing.";
+
+    } else if (duration === "short") {
+        suggestedDuration = "3–5 days";
+
+    } else {
+        suggestedDuration = "6 or more days";
+        description += " Consider exploring multiple nearby attractions if travel time permits.";
+    }
+
+
+    /* BUDGET */
+
+    if (budget === "low") {
+        budgetGuide = "Under ₹5,000 per person";
+
+    } else if (budget === "medium") {
+        budgetGuide = "₹5,000–₹10,000 per person";
+
+    } else if (budget === "high") {
+        budgetGuide = "₹10,000–₹20,000 per person";
+
+    } else {
+        budgetGuide = "Above ₹20,000 per person";
+    }
+
+
+    /* DISPLAY RESULT */
+
+    document.getElementById("resultTitle").textContent = title;
+    document.getElementById("resultDescription").textContent = description;
+    document.getElementById("resultDuration").textContent = suggestedDuration;
+    document.getElementById("resultBudget").textContent = budgetGuide;
+
+    result.hidden = false;
+
+    result.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
 });
 
-/* ---------- REGISTRATION FORM (FRONT-END DEMO) ---------- */
+
+/* =========================================
+   6. REGISTRATION FORM VALIDATION
+   ========================================= */
+
 const registrationForm = document.getElementById("registrationForm");
 const registrationMessage = document.getElementById("registrationMessage");
-const travelDate = document.getElementById("travelDate");
-const registrationDestination = document.getElementById("registrationDestination");
+const travelDateInput = document.getElementById("travelDate");
 
-if (travelDate) {
-  const today = new Date();
-  const localToday = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().split("T")[0];
-  travelDate.min = localToday;
-}
+const today = new Date();
+const localToday = new Date(
+    today.getTime() - today.getTimezoneOffset() * 60000
+).toISOString().split("T")[0];
 
-registrationForm?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  if (!registrationForm.reportValidity()) return;
-  const name = document.getElementById("fullName").value.trim();
-  const destination = registrationDestination.value;
-  const date = travelDate.value;
-  registrationMessage.textContent = `Thank you, ${name}! Your Explore Bharat demo registration for ${destination} on ${date} has been recorded on this page. No booking or payment has been made.`;
-  registrationMessage.hidden = false;
-  registrationForm.reset();
-  if (travelDate) {
-    const today = new Date();
-    travelDate.min = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().split("T")[0];
-  }
+travelDateInput.min = localToday;
+
+
+registrationForm.addEventListener("submit", function (event) {
+
+    event.preventDefault();
+
+    if (!registrationForm.checkValidity()) {
+        registrationForm.reportValidity();
+        return;
+    }
+
+    const name = document.getElementById("fullName").value.trim();
+
+    const destination = document.getElementById(
+        "registrationDestination"
+    ).value;
+
+    registrationMessage.textContent =
+        "Thank you, " + name + "! Your journey to " +
+        destination + " has been registered in this demo.";
+
+    registrationForm.reset();
+    travelDateInput.min = localToday;
+
 });
 
-/* ---------- FOOTER YEAR + INITIAL UI ---------- */
-const yearNode = document.getElementById("copyrightYear");
-if (yearNode) yearNode.textContent = new Date().getFullYear();
-updateDestinationControls();
+
+});
