@@ -461,7 +461,7 @@ function showCulture(category) {
                 ["Bihu", "Assam", "A group of Assamese festivals connected with seasonal change, agriculture, music and dance.", "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=400&q=80"],
                 ["Pongal", "Tamil Nadu", "A harvest festival expressing gratitude for the harvest, the Sun and nature.", "https://images.unsplash.com/photo-1604608672516-9d5aabf7d1c4?auto=format&fit=crop&w=400&q=80"],
                 ["Baisakhi", "Punjab", "A harvest-associated festival with significance in Sikh history and tradition.", "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=400&q=80"],
-                ["Eid", "Muslim communities", "Celebrations include prayer, charity, family gatherings and festive meals.", "https://images.unsplash.com/photo-1606293926075-69a00dbfde81?auto=format&fit=crop&w=400&q=80"]
+
             ];
             break;
 
