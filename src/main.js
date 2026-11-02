@@ -74,9 +74,9 @@ async function start() {
   applyTheme();
   applyLayout();
   bindUI();
-  const healthResult = await fetch("/api/health").then(response => response.ok ? response.json() : null).catch(() => null);
+  const healthResult = await fetch("api/health").then(response => response.ok ? response.json() : null).catch(() => null);
   if (healthResult) health = healthResult;
-  const authStatus = await fetch("/api/auth/status").then(response => response.json()).catch(() => ({ required: false }));
+  const authStatus = await fetch("api/auth/status").then(response => response.json()).catch(() => ({ required: false }));
   if (authStatus.required && !authStatus.authenticated) id("login-dialog").showModal();
   if (workspace.settings.serverSync) await loadServerCopy(hasLocalWorkspace);
   refresh();
@@ -85,7 +85,7 @@ async function start() {
   updateProviderStatus();
   updateDateGreeting();
   if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
-    navigator.serviceWorker.register("/service-worker.js").catch(() => {});
+    navigator.serviceWorker.register("service-worker.js").catch(() => {});
   }
   detectSegments();
 }
@@ -525,7 +525,7 @@ async function askQuestion(rawQuestion) {
   workspace.messages.push(pending);
   renderConversation();
   try {
-    const response = await fetch("/api/ai/chat", {
+    const response = await fetch("api/ai/chat", {
       method: "POST",
       headers: { "content-type": "application/json" },
       credentials: "same-origin",
@@ -610,7 +610,7 @@ async function persistNow() {
 }
 async function loadServerCopy(hasLocal = true) {
   try {
-    const response = await fetch("/api/workspace", { credentials: "same-origin" });
+    const response = await fetch("api/workspace", { credentials: "same-origin" });
     if (response.status === 401) { id("login-dialog").showModal(); return; }
     if (!response.ok) throw new Error("server workspace unavailable");
     const remote = await response.json();
@@ -630,11 +630,11 @@ async function pushServerCopy() {
   if (!workspace.settings.serverSync) return;
   try {
     if (serverRevision === 0) {
-      const current = await fetch("/api/workspace", { credentials: "same-origin" });
+      const current = await fetch("api/workspace", { credentials: "same-origin" });
       if (current.status === 401) { id("login-dialog").showModal(); return; }
       if (current.ok) serverRevision = (await current.json()).revision || 0;
     }
-    const response = await fetch("/api/workspace", {
+    const response = await fetch("api/workspace", {
       method: "PUT",
       headers: { "content-type": "application/json" },
       credentials: "same-origin",
@@ -775,7 +775,7 @@ async function login(event) {
   event.preventDefault();
   id("login-error").textContent = "";
   try {
-    const response = await fetch("/api/auth/login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ password: id("login-password").value }) });
+    const response = await fetch("api/auth/login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ password: id("login-password").value }) });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || "Could not sign in.");
     id("login-dialog").close();
@@ -790,7 +790,7 @@ async function clearLocalWorkspace() {
   workspace = defaultWorkspace();
   hasLocalWorkspace = false;
   serverRevision = 0;
-  await fetch("/api/workspace", { method: "DELETE", credentials: "same-origin" }).catch(() => {});
+  await fetch("api/workspace", { method: "DELETE", credentials: "same-origin" }).catch(() => {});
   refresh(); initCanvas(); scheduleSave();
   id("settings-dialog").close();
   toast("This browser's workspace data was cleared.");

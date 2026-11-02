@@ -1,17 +1,17 @@
 {
-  "id": "/studio.html",
+  "id": "./studio.html",
   "name": "Veya Data Studio",
   "short_name": "Veya",
   "description": "A local-first workspace for data analysis, visual exploration, and notes.",
-  "start_url": "/studio.html",
-  "scope": "/",
+  "start_url": "./studio.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#f5f5f2",
   "theme_color": "#f5f5f2",
   "orientation": "any",
   "icons": [
     {
-      "src": "/assets/veya-mark.svg",
+      "src": "assets/veya-mark.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"

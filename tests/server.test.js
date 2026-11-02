@@ -52,7 +52,7 @@ test("keeps the original home and serves the separate studio and approved assets
   assert.match(await home.text(), /Explore <span class="logo-highlight">Bharat<\/span>/);
   const studio = await fetch(baseURL + "/studio.html");
   assert.equal(studio.status, 200);
-  assert.match(await studio.text(), /href="\/studio.css"/);
+  assert.match(await studio.text(), /href="studio\.css"/);
   assert.equal((await fetch(baseURL + "/studio.css")).status, 200);
   assert.equal((await fetch(baseURL + "/images/Kashmir%20for%20project.jpg")).status, 200);
   assert.equal((await fetch(baseURL + "/server/index.js")).status, 404);
