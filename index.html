@@ -1,72 +1,307 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#123B5D">
-    <title>Explore Bharat</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101d31">
+  <meta name="description" content="Explore Bharat — discover India's destinations, culture, traditions and travel experiences.">
+  <title>Explore Bharat | One Nation. Endless Journeys.</title>
+  <link rel="preconnect" href="https://upload.wikimedia.org">
+  <link rel="preconnect" href="https://thumb.wikimedia.org">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-    <header class="navbar">
-        <a class="logo" href="#home" aria-label="Explore Bharat home">
-            Explore <span class="logo-highlight">Bharat</span>
-        </a>
-    </header>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Explore Bharat home">
+      <span class="brand-mark" aria-hidden="true">✦</span>
+      <span class="brand-name">Explore <b>Bharat</b></span>
+      <span class="brand-divider" aria-hidden="true"></span>
+      <span class="brand-tagline">One Nation. Endless Journeys.</span>
+    </a>
 
-    <main>
-        <section class="hero" id="home" aria-labelledby="home-title">
-            <div class="hero-visual">
-                <img
-                    class="hero-image"
-                    src="images/collage%20for%20project.jpg"
-                    alt="Photo collage of landscapes and landmarks across India"
-                    loading="lazy"
-                    decoding="async">
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="navMenu">☰</button>
+
+    <nav class="main-nav" id="navMenu" aria-label="Main navigation">
+      <a class="nav-link active" href="#home">Home</a>
+      <a class="nav-link" href="#destinations">Destinations</a>
+      <a class="nav-link" href="#culture">Culture</a>
+      <a class="nav-link" href="#packages">Tour Packages</a>
+      <a class="nav-link nav-register" href="#registration">Registration</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HOME / HERO -->
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <div class="hero-visual">
+        <img src="images/hero-collage.jpg" alt="A collage of Indian destinations including Kashmir, mountains, heritage sites and Kerala backwaters" fetchpriority="high">
+        <div class="hero-image-label">
+          <span class="label-spark">✦</span>
+          <span><b>Incredible Bharat</b><small>A land of a thousand stories</small></span>
+        </div>
+        <div class="hero-visual-note">FROM THE HIMALAYAS TO THE COAST</div>
+      </div>
+
+      <div class="hero-copy">
+        <div class="hero-ornament" aria-hidden="true">✧</div>
+        <p class="eyebrow light-eyebrow">✦ DISCOVER THE INCREDIBLE</p>
+        <h1 id="hero-title">Explore<br><span>Bharat.</span></h1>
+        <h2>One Nation. Endless Journeys.</h2>
+        <p class="hero-description">From the majestic Himalayas to the golden sands of Rajasthan, discover the <strong>beauty, culture and traditions of India.</strong> Every destination has a story waiting to be told.</p>
+        <div class="hero-actions">
+          <a class="button button-gold" href="#destinations">Explore Destinations <span aria-hidden="true">→</span></a>
+          <a class="button button-outline-light" href="#culture">Discover Our Culture <span aria-hidden="true">→</span></a>
+        </div>
+        <p class="hero-footnote"><em>Your journey through Bharat starts here.</em></p>
+        <div class="hero-stats" aria-label="Explore India's diversity">
+          <span>28 STATES</span><i aria-hidden="true">|</i><span>ONE INCREDIBLE BHARAT</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- DESTINATIONS -->
+    <section class="destinations section-ivory" id="destinations" aria-labelledby="destinations-title">
+      <div class="section-shell">
+        <div class="section-heading destination-heading">
+          <div>
+            <p class="section-kicker">EXPLORE INDIA</p>
+            <h2 id="destinations-title">Explore <span>Destinations</span></h2>
+            <p>Find the place that speaks to your soul.</p>
+          </div>
+          <button class="text-action" id="viewAllDestinations" type="button" aria-expanded="false">▦ <span>View All Destinations</span></button>
+        </div>
+
+        <div class="carousel-toolbar" id="destinationControls">
+          <span class="carousel-caption">A few places to begin your journey</span>
+          <div class="carousel-actions">
+            <span class="carousel-count" id="destinationCount">01 / 12</span>
+            <button class="round-arrow" id="prevDestination" type="button" aria-label="Previous destinations">←</button>
+            <button class="round-arrow" id="nextDestination" type="button" aria-label="Next destinations">→</button>
+          </div>
+        </div>
+
+        <div class="destination-viewport" id="destinationViewport" tabindex="0" aria-label="Destination carousel. Scroll horizontally to explore.">
+          <div class="destination-track" id="destinationTrack"></div>
+        </div>
+        <div class="carousel-dots" id="destinationDots" aria-label="Destination pages"></div>
+      </div>
+    </section>
+
+    <!-- CULTURE -->
+    <section class="culture-section" id="culture" aria-labelledby="culture-title">
+      <div class="section-shell culture-shell">
+        <div class="culture-intro">
+          <p class="section-kicker culture-kicker">MORE THAN A DESTINATION</p>
+          <h2 id="culture-title">Experience the <span>soul of Bharat.</span></h2>
+          <p>From classical dance and colourful festivals to regional cuisines and timeless traditions, India's culture is a celebration of diversity.</p>
+          <p>Every region has its own language, art and <strong>unique identity.</strong> Come discover what makes each one special.</p>
+          <p class="culture-script">Stories woven through <i>Time</i>.</p>
+          <p class="culture-callout">Explore India's <i>traditions</i>, <i>flavours</i>, <i>art</i> and <i>celebrations</i>. <span>→</span></p>
+        </div>
+
+        <nav class="culture-nav" id="cultureNav" aria-label="Explore culture categories">
+          <button class="culture-tab active" type="button" data-category="dance" aria-pressed="true">Dance</button>
+          <button class="culture-tab" type="button" data-category="food" aria-pressed="false">Food</button>
+          <button class="culture-tab" type="button" data-category="festival" aria-pressed="false">Festival</button>
+          <button class="culture-tab" type="button" data-category="music" aria-pressed="false">Music</button>
+          <button class="culture-tab" type="button" data-category="clothing" aria-pressed="false">Clothing</button>
+          <button class="culture-tab" type="button" data-category="art" aria-pressed="false">Art &amp; Craft</button>
+          <button class="culture-tab" type="button" data-category="languages" aria-pressed="false">Languages</button>
+          <button class="culture-tab" type="button" data-category="architecture" aria-pressed="false">Architecture</button>
+        </nav>
+
+        <div class="culture-results" id="cultureResults" aria-live="polite">
+          <div class="culture-results-heading">
+            <div>
+              <p class="section-kicker culture-kicker">EXPLORE OUR HERITAGE</p>
+              <h3 id="cultureResultTitle">Classical &amp; Folk Dance</h3>
+              <p id="cultureResultDescription">Discover India's dance traditions, from expressive classical performances to energetic regional folk dances.</p>
             </div>
+            <span class="results-count" id="cultureResultsCount">10 TRADITIONS</span>
+          </div>
+          <div class="culture-grid" id="cultureCards"></div>
+        </div>
+      </div>
+    </section>
 
-            <div class="hero-content">
-                <p class="eyebrow">✦ DISCOVER THE INCREDIBLE</p>
+    <!-- TOUR PACKAGES / TRAVEL STYLE -->
+    <section class="travel-style-section" id="packages" aria-labelledby="travel-style-title">
+      <div class="section-shell">
+        <div class="section-heading travel-heading">
+          <div>
+            <p class="section-kicker">MAKE IT HAPPEN</p>
+            <h2 id="travel-style-title">What kind of journey are you <span>dreaming of?</span></h2>
+            <p>Mountains, beaches, history or adventure — choose your journey and start exploring Bharat.</p>
+            <p>From weekend escapes to unforgettable adventures — discover Bharat your way.</p>
+          </div>
+        </div>
 
-                <h1 id="home-title">
-                    Explore <br><span><i>Bharat.</i></span>
-                </h1>
+        <div class="travel-style-grid" id="travelStyleGrid">
+          <button class="travel-style-card" type="button" data-style="adventure" aria-pressed="false">
+            <span class="style-icon" aria-hidden="true">⌁</span>
+            <span class="style-card-copy"><b>Adventure &amp; Mountains</b><small>Find your next high-altitude escape.</small></span>
+            <span class="style-arrow" aria-hidden="true">↗</span>
+          </button>
+          <button class="travel-style-card" type="button" data-style="nature" aria-pressed="false">
+            <span class="style-icon" aria-hidden="true">❧</span>
+            <span class="style-card-copy"><b>Nature &amp; Wildlife</b><small>Slow down among forests and valleys.</small></span>
+            <span class="style-arrow" aria-hidden="true">↗</span>
+          </button>
+          <button class="travel-style-card" type="button" data-style="heritage" aria-pressed="false">
+            <span class="style-icon" aria-hidden="true">⌂</span>
+            <span class="style-card-copy"><b>Heritage &amp; History</b><small>Walk through stories carved in stone.</small></span>
+            <span class="style-arrow" aria-hidden="true">↗</span>
+          </button>
+          <button class="travel-style-card" type="button" data-style="beach" aria-pressed="false">
+            <span class="style-icon" aria-hidden="true">〰</span>
+            <span class="style-card-copy"><b>Beaches &amp; Relaxation</b><small>Follow the coast at your own pace.</small></span>
+            <span class="style-arrow" aria-hidden="true">↗</span>
+          </button>
+          <button class="travel-style-card" type="button" data-style="spiritual" aria-pressed="false">
+            <span class="style-icon" aria-hidden="true">✺</span>
+            <span class="style-card-copy"><b>Spiritual Journeys</b><small>Discover places of faith and reflection.</small></span>
+            <span class="style-arrow" aria-hidden="true">↗</span>
+          </button>
+          <button class="travel-style-card" type="button" data-style="family" aria-pressed="false">
+            <span class="style-icon" aria-hidden="true">♡</span>
+            <span class="style-card-copy"><b>Family Holidays</b><small>Make memories across generations.</small></span>
+            <span class="style-arrow" aria-hidden="true">↗</span>
+          </button>
+        </div>
+      </div>
+    </section>
 
-                <h2><i>One Nation. Endless Journeys.</i></h2>
+    <!-- BUILD YOUR OWN TRIP -->
+    <section class="trip-planner-section" id="trip-planner" aria-labelledby="trip-planner-title">
+      <div class="section-shell planner-shell">
+        <div class="planner-intro">
+          <p class="section-kicker planner-kicker">YOUR PERSONAL TRAVEL PLANNER</p>
+          <h2 id="trip-planner-title">Build Your <span>Own Trip.</span></h2>
+          <p>Tell us your budget, available time and travel interests to find a journey that feels right for you.</p>
+        </div>
 
-                <p class="hero-description">
-                    From the majestic Himalayas to the golden sands
-                    of Rajasthan, discover the
-                    <strong>beauty, culture and traditions of India.</strong>
-                    Every destination has a story waiting to be told.
-                </p>
+        <form class="planner-form" id="tripPlannerForm">
+          <div class="planner-field">
+            <label for="tripBudget">What's your budget per person?</label>
+            <select id="tripBudget" required>
+              <option value="">Select your budget</option>
+              <option value="low">Under ₹5,000</option>
+              <option value="medium">₹5,000–₹10,000</option>
+              <option value="high">₹10,000–₹20,000</option>
+              <option value="premium">Above ₹20,000</option>
+            </select>
+          </div>
+          <div class="planner-field">
+            <label for="tripDuration">How much time do you have?</label>
+            <select id="tripDuration" required>
+              <option value="">Select duration</option>
+              <option value="weekend">1–2 days</option>
+              <option value="short">3–5 days</option>
+              <option value="long">6+ days</option>
+            </select>
+          </div>
+          <div class="planner-field">
+            <label for="tripStyle">What kind of trip do you prefer?</label>
+            <select id="tripStyle" required>
+              <option value="">Select travel style</option>
+              <option value="adventure">Adventure &amp; Mountains</option>
+              <option value="nature">Nature &amp; Wildlife</option>
+              <option value="heritage">Heritage &amp; History</option>
+              <option value="beach">Beaches &amp; Relaxation</option>
+              <option value="spiritual">Spiritual Journeys</option>
+              <option value="family">Family Holidays</option>
+            </select>
+          </div>
+          <button class="button button-gold planner-submit" type="submit">Find My Trip <span aria-hidden="true">→</span></button>
+          <p class="planner-error" id="plannerError" role="alert"></p>
+        </form>
 
-                <div class="hero-buttons">
-                    <a href="destinations.html" class="btn btn-primary">
-                        Explore Destinations <span aria-hidden="true">→</span>
-                    </a>
-
-                    <a href="#culture" class="btn btn-outline">
-                        Discover Our Culture
-                    </a>
-                </div>
-
-                <p class="hero-note">
-                    <em>Your journey through Bharat starts here.</em>
-                </p>
+        <div class="trip-result" id="tripResult" hidden aria-live="polite">
+          <div class="result-mark">✦ YOUR TRAVEL INSPIRATION</div>
+          <div class="result-content">
+            <h3 id="resultTitle">Your recommended journey</h3>
+            <p id="resultDescription"></p>
+            <div class="result-meta">
+              <span><small>Suggested duration</small><b id="resultDuration"></b></span>
+              <span><small>Budget preference</small><b id="resultBudget"></b></span>
             </div>
+            <a class="button button-dark" href="#registration">Plan this journey <span aria-hidden="true">→</span></a>
+            <p class="result-disclaimer">Illustrative recommendation for this student project. Actual travel costs vary by date, transport, accommodation and inclusions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-            <a href="#destinations" class="scroll-indicator">
-                <span>SCROLL TO EXPLORE</span>
-                <span class="scroll-arrow" aria-hidden="true">↓</span>
-            </a>
+    <!-- REGISTRATION -->
+    <section class="registration-section" id="registration" aria-labelledby="registration-title">
+      <div class="registration-shell">
+        <div class="registration-heading">
+          <p class="section-kicker registration-kicker">YOUR NEXT CHAPTER</p>
+          <h2 id="registration-title">Register for Your Journey</h2>
+          <p>Discover India with Explore Bharat.</p>
+        </div>
+        <form class="registration-form" id="registrationForm">
+          <div class="form-field">
+            <label for="fullName">Full Name</label>
+            <input id="fullName" name="fullName" type="text" placeholder="Enter your full name" autocomplete="name" minlength="2" required>
+          </div>
+          <div class="form-field">
+            <label for="email">Email Address</label>
+            <input id="email" name="email" type="email" placeholder="Enter your email" autocomplete="email" required>
+          </div>
+          <div class="form-field">
+            <label for="phone">Phone Number</label>
+            <input id="phone" name="phone" type="tel" placeholder="10-digit mobile number" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" autocomplete="tel" required>
+          </div>
+          <div class="form-field">
+            <label for="registrationDestination">Choose Destination</label>
+            <select id="registrationDestination" name="destination" required>
+              <option value="">Select a destination</option>
+              <option>Kashmir</option><option>Rajasthan</option><option>Kerala</option><option>Maharashtra</option>
+              <option>Ladakh</option><option>Goa</option><option>Uttarakhand</option><option>Agra</option>
+              <option>Varanasi</option><option>Assam</option><option>Tamil Nadu</option><option>Himachal Pradesh</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="travelDate">Preferred Travel Date</label>
+            <input id="travelDate" name="travelDate" type="date" required>
+          </div>
+          <button class="button button-blue registration-submit" type="submit">Register Now <span aria-hidden="true">→</span></button>
+          <p class="form-note">This is a front-end project demonstration. No booking or payment is processed.</p>
+          <p class="form-success" id="registrationMessage" role="status" hidden></p>
+        </form>
+      </div>
+    </section>
+  </main>
 
-            <div class="hero-label" aria-label="28 states, one incredible Bharat">
-                <span>28 STATES</span>
-                <span class="label-divider" aria-hidden="true">|</span>
-                <span>ONE INCREDIBLE BHARAT</span>
-            </div>
-        </section>
-    </main>
+  <!-- DESTINATION DETAIL MODAL -->
+  <div class="modal-backdrop" id="destinationModal" hidden>
+    <section class="destination-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
+      <button class="modal-close" id="modalClose" type="button" aria-label="Close destination details">×</button>
+      <div class="modal-hero-image"><img id="modalImage" src="" alt=""></div>
+      <div class="modal-body">
+        <p class="section-kicker" id="modalTag">DESTINATION GUIDE</p>
+        <h2 id="modalTitle"></h2>
+        <p class="modal-subtitle" id="modalSubtitle"></p>
+        <p class="modal-description" id="modalDescription"></p>
+        <div class="modal-gallery" id="modalGallery"></div>
+        <div class="modal-columns">
+          <div><h3>Places to explore</h3><ul id="modalPlaces"></ul></div>
+          <div><h3>Local experiences</h3><ul id="modalExperiences"></ul></div>
+        </div>
+        <div class="modal-footer-note" id="modalTip"></div>
+        <a class="button button-gold modal-plan" href="#registration" id="modalPlan">Plan Your Journey <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </div>
+
+  <footer class="site-footer">
+    <a class="footer-brand" href="#home"><span>✦</span> Explore <b>Bharat</b></a>
+    <p class="footer-tagline">One Nation. Endless Journeys.</p>
+    <p class="footer-credit">Designed &amp; developed with passion by <strong>Pranav Patil and Ayush Jadhav.</strong></p>
+    <p class="footer-copy">© <span id="copyrightYear">2026</span> Explore Bharat. Made with care in India.</p>
+    <div class="footer-links"><a href="image-credits.html">Image credits &amp; licences</a><a class="footer-top" href="#home">Back to top ↑</a></div>
+  </footer>
 </body>
 </html>

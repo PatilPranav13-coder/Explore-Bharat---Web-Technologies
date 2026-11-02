@@ -1,6 +1,6 @@
 # Explore Bharat + Veya Data Studio
 
-The original Explore Bharat home page remains at `/` with its existing `index.html` and `style.css`. Open the data analysis workspace at `/studio.html`; it uses its own `studio.css` and includes a photo from the existing project assets. Front-end paths are relative so the app can also live under a GitHub Pages repository path.
+The Explore Bharat tourism website is the root page, built from `index.html`, `style.css`, `script.js`, and the `images/` folder. Veya Data Studio remains at `/studio.html` with its separate `studio.css` and modules. The website includes `image-credits.html` and `IMAGE-CREDITS.md`; some destination and culture photos are hotlinked from Wikimedia Commons. Front-end paths are relative for GitHub Pages repository paths.
 
 Veya is a local-first workspace for exploring datasets, asking calculation-grounded questions, and keeping analysis notes together. The interface adapts from a compact phone layout to a multi-panel studio, with feature detection for segmented foldable displays.
 

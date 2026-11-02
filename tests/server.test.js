@@ -49,11 +49,14 @@ test("keeps the original home and serves the separate studio and approved assets
   const home = await fetch(baseURL + "/");
   assert.equal(home.status, 200);
   assert.match(home.headers.get("content-type"), /text\/html/);
-  assert.match(await home.text(), /Explore <span class="logo-highlight">Bharat<\/span>/);
+  assert.match(await home.text(), /<title>Explore Bharat/);
+  assert.equal((await fetch(baseURL + "/script.js")).status, 200);
   const studio = await fetch(baseURL + "/studio.html");
   assert.equal(studio.status, 200);
   assert.match(await studio.text(), /href="studio\.css"/);
   assert.equal((await fetch(baseURL + "/studio.css")).status, 200);
+  assert.equal((await fetch(baseURL + "/image-credits.html")).status, 200);
+  assert.equal((await fetch(baseURL + "/images/hero-collage.jpg")).status, 200);
   assert.equal((await fetch(baseURL + "/images/Kashmir%20for%20project.jpg")).status, 200);
   assert.equal((await fetch(baseURL + "/server/index.js")).status, 404);
   assert.equal((await fetch(baseURL + "/.env")).status, 404);

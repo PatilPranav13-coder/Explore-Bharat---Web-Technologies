@@ -164,7 +164,7 @@ async function serveStatic(request, response, url) {
   catch { return message(response, 400, "Invalid path."); }
   if (pathname === "/") pathname = "/index.html";
   if (pathname.split("/").includes("..") || pathname.includes("\\")) return message(response, 400, "Invalid path.");
-  const publicPath = pathname === "/index.html" || pathname === "/style.css" || pathname === "/studio.html" || pathname === "/studio.css" || pathname === "/manifest.webmanifest" || pathname === "/service-worker.js" || pathname.startsWith("/src/") || pathname.startsWith("/assets/") || pathname.startsWith("/images/");
+  const publicPath = pathname === "/index.html" || pathname === "/style.css" || pathname === "/script.js" || pathname === "/studio.html" || pathname === "/studio.css" || pathname === "/image-credits.html" || pathname === "/manifest.webmanifest" || pathname === "/service-worker.js" || pathname.startsWith("/src/") || pathname.startsWith("/assets/") || pathname.startsWith("/images/");
   if (!publicPath) return message(response, 404, "Not found.");
   const filePath = resolve(root, "." + pathname);
   if (filePath !== root && !filePath.startsWith(root + sep)) return message(response, 403, "Forbidden.");
