@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f5f2">
+  <meta name="description" content="Veya is a local-first workspace for data analysis, visual exploration, and notes.">
+  <title>Veya — Data Studio</title>
+  <link rel="icon" href="/assets/veya-mark.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="/studio.css">
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3.5 7.5a2 2 0 0 1 2-2h5l2 2h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></symbol>
+    <symbol id="i-table" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M9 9.5v10M15 9.5v10"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 2 1.7 6.3L20 10l-6.3 1.7L12 18l-1.7-6.3L4 10l6.3-1.7L12 2Z"/><path d="m19 16 .8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16Z"/></symbol>
+    <symbol id="i-note" viewBox="0 0 24 24"><path d="M5 3.5h14v13l-4 4H5z"/><path d="M15 20.5v-4h4M8 8h8M8 12h8"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V3m0 0L7.5 7.5M12 3l4.5 4.5"/><path d="M4 14v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.5"/><path d="m16 16 4.5 4.5"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1a1.7 1.7 0 1 1-2.4 2.4l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.4a1.7 1.7 0 1 1-3.4 0v-.2A1.7 1.7 0 0 0 7.8 17l-.1.1a1.7 1.7 0 1 1-2.4-2.4l.1-.1a1.7 1.7 0 0 0-1.2-2.9h-.4a1.7 1.7 0 1 1 0-3.4H4A1.7 1.7 0 0 0 5.4 5.8l-.1-.1a1.7 1.7 0 1 1 2.4-2.4l.1.1a1.7 1.7 0 0 0 2.9-1.2v-.4a1.7 1.7 0 1 1 3.4 0V2a1.7 1.7 0 0 0 2.9 1.4l.1-.1a1.7 1.7 0 1 1 2.4 2.4l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.4a1.7 1.7 0 1 1 0 3.4H20a1.7 1.7 0 0 0-.6 2.9Z"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v15m0 0 6-6m-6 6-6-6"/></symbol>
+  </svg>
+
+  <div class="app-shell" id="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <a class="brand" href="#overview" aria-label="Veya home">
+        <span class="brand-mark"><img src="/assets/veya-mark.svg" alt=""></span>
+        <span class="brand-word">veya<span class="brand-period">.</span></span>
+      </a>
+
+      <div class="workspace-switcher">
+        <span class="workspace-avatar">S</span>
+        <span class="workspace-label"><strong>Studio workspace</strong><small>Personal</small></span>
+        <svg class="icon"><use href="#i-chevron"/></svg>
+      </div>
+
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="primary-nav">
+        <button class="nav-item active" data-view="overview"><svg class="icon"><use href="#i-grid"/></svg><span>Overview</span><kbd>1</kbd></button>
+        <button class="nav-item" data-view="projects"><svg class="icon"><use href="#i-folder"/></svg><span>Projects</span><kbd>2</kbd></button>
+        <button class="nav-item" data-view="datasets"><svg class="icon"><use href="#i-table"/></svg><span>Data explorer</span><kbd>3</kbd></button>
+        <button class="nav-item" data-view="insights"><svg class="icon"><use href="#i-spark"/></svg><span>Discoveries</span><span class="nav-count" id="finding-count">0</span></button>
+        <button class="nav-item" data-view="notebook"><svg class="icon"><use href="#i-note"/></svg><span>Notebook</span></button>
+      </nav>
+
+      <div class="nav-label nav-label-row"><span>RECENT PROJECTS</span><button class="icon-button tiny" id="new-project" aria-label="Create project"><svg class="icon"><use href="#i-plus"/></svg></button></div>
+      <div class="project-list" id="project-list"></div>
+
+      <div class="sidebar-spacer"></div>
+      <a class="destination-photo" href="/index.html"><img src="/images/Kashmir%20for%20project.jpg" alt="Mountain scenery in Kashmir"><span><strong>Explore Bharat</strong><small>Open the original home page</small></span></a>
+      <div class="sidebar-footer">
+        <div class="sync-status"><span class="status-dot" id="sync-dot"></span><span id="sync-label">Saved on this device</span></div>
+        <button class="nav-item utility-item" id="open-settings"><svg class="icon"><use href="#i-settings"/></svg><span>Settings</span></button>
+        <div class="profile-row"><span class="profile-avatar">P</span><span><strong>Personal workspace</strong><small>Local-first account</small></span><button class="icon-button tiny" id="theme-toggle" aria-label="Toggle dark theme"><svg class="icon"><use href="#i-sun"/></svg></button></div>
+      </div>
+    </aside>
+
+    <main class="workspace-main">
+      <header class="topbar">
+        <div class="breadcrumbs"><span>Workspace</span><span class="crumb-divider">/</span><strong id="crumb-current">Overview</strong></div>
+        <div class="topbar-actions">
+          <label class="search-box"><svg class="icon"><use href="#i-search"/></svg><input id="global-search" type="search" placeholder="Search anything"><kbd>⌘ K</kbd></label>
+          <button class="button button-quiet hide-compact" id="focus-mode">Focus mode</button>
+          <button class="icon-button" id="layout-toggle" aria-label="Toggle focus split layout" title="Focus split layout"><span class="layout-glyph"><i></i><i></i></span></button>
+          <button class="icon-button" id="open-settings-top" aria-label="Settings"><svg class="icon"><use href="#i-settings"/></svg></button>
+          <button class="profile-avatar top-avatar" aria-label="Personal workspace">P</button>
+        </div>
+      </header>
+
+      <div class="content-frame">
+        <section class="view-panel active" data-view-panel="overview" id="overview-panel">
+          <div class="welcome-row">
+            <div>
+              <div class="eyebrow"><span class="eyebrow-dot"></span> MONDAY, YOUR WORKSPACE IS READY</div>
+              <h1>Good morning, <span>Pranav.</span></h1>
+              <p class="page-subtitle">A clear view of your work, with room for the next question.</p>
+            </div>
+            <div class="welcome-actions">
+              <button class="button button-secondary" id="new-analysis"><svg class="icon"><use href="#i-plus"/></svg>New analysis</button>
+              <button class="button button-primary" id="import-top"><svg class="icon"><use href="#i-upload"/></svg>Import data</button>
+            </div>
+          </div>
+
+          <div class="demo-notice" id="demo-notice"><span class="demo-mark">i</span><span><strong>Example workspace</strong> — this clearly labelled retail dataset is sample data. Import your own file to begin a private analysis.</span><button id="dismiss-demo" aria-label="Dismiss example notice">×</button></div>
+
+          <div class="metric-grid">
+            <article class="metric-card"><div class="metric-label">Active datasets<span class="metric-icon violet"><svg class="icon"><use href="#i-table"/></svg></span></div><div class="metric-value" id="metric-datasets">0</div><div class="metric-foot" id="metric-datasets-foot">Bring in a CSV, JSON or Excel file</div></article>
+            <article class="metric-card"><div class="metric-label">Rows in view<span class="metric-icon mint"><svg class="icon"><use href="#i-grid"/></svg></span></div><div class="metric-value" id="metric-rows">0</div><div class="metric-foot" id="metric-rows-foot">Calculated locally in your browser</div></article>
+            <article class="metric-card"><div class="metric-label">Things worth a look<span class="metric-icon peach"><svg class="icon"><use href="#i-spark"/></svg></span></div><div class="metric-value" id="metric-findings">0</div><div class="metric-foot" id="metric-findings-foot">Evidence-backed data checks</div></article>
+            <article class="metric-card"><div class="metric-label">Workspace state<span class="metric-icon blue"><svg class="icon"><use href="#i-note"/></svg></span></div><div class="metric-value metric-state" id="metric-state">Saved</div><div class="metric-foot" id="metric-saved">On this device</div></article>
+          </div>
+
+          <div class="work-grid">
+            <section class="surface chart-surface" aria-labelledby="chart-title">
+              <div class="surface-heading">
+                <div><p class="section-kicker">VISUAL EXPLORATION</p><h2 id="chart-title">Your data, in shape</h2><p class="surface-subtitle" id="chart-subtitle">Choose a dataset to start finding a story.</p></div>
+                <div class="chart-tools">
+                  <select id="chart-type" aria-label="Chart type"><option value="line">Line</option><option value="bar">Bar</option></select>
+                  <button class="icon-button compact-button" id="chart-export" aria-label="Export chart as image" title="Export chart"><svg class="icon"><use href="#i-down"/></svg></button>
+                </div>
+              </div>
+              <div class="chart-legend" id="chart-legend"></div>
+              <div class="chart-wrap" id="chart-wrap"><svg id="main-chart" role="img" aria-label="Dataset chart"></svg><div class="chart-empty" id="chart-empty"><div class="empty-orbit"><span></span><span></span><span></span></div><strong>Your next chart starts with a file</strong><p>Bring in a dataset and Veya will map its shape here.</p><button class="text-button" id="import-chart">Import a dataset <svg class="icon"><use href="#i-arrow"/></svg></button></div></div>
+              <div class="chart-footer"><span class="chart-footnote" id="chart-footnote">Calculations are performed locally.</span><button class="text-button" id="open-data-view">Explore rows <svg class="icon"><use href="#i-arrow"/></svg></button></div>
+            </section>
+
+            <section class="surface analyst-surface" aria-labelledby="analyst-title">
+              <div class="surface-heading analyst-heading"><div><p class="section-kicker">VEYA ANALYST</p><h2 id="analyst-title">Ask about your data</h2></div><span class="online-pill"><span></span>Local engine</span></div>
+              <div class="context-chip" id="context-chip"><svg class="icon"><use href="#i-spark"/></svg><span>Dataset summary</span><button id="clear-context" aria-label="Clear selected context">×</button></div>
+              <div class="conversation" id="conversation" aria-live="polite"></div>
+              <div class="suggestion-row" id="suggestion-row">
+                <button class="suggestion-chip">What changed over time?</button>
+                <button class="suggestion-chip">Check data quality</button>
+                <button class="suggestion-chip">Find unusual values</button>
+              </div>
+              <form class="ask-form" id="ask-form">
+                <label for="question-input" class="sr-only">Ask a question about your data</label>
+                <textarea id="question-input" rows="2" placeholder="Ask a question about this dataset…" maxlength="1200"></textarea>
+                <div class="ask-controls"><span class="privacy-hint"><svg class="icon"><use href="#i-settings"/></svg> Local calculations</span><button class="send-button" type="submit" aria-label="Send question"><svg class="icon"><use href="#i-arrow"/></svg></button></div>
+              </form>
+              <p class="analyst-disclaimer">Answers use calculated results. AI is optional and off until you enable it.</p>
+            </section>
+          </div>
+
+          <div class="lower-grid">
+            <section class="surface dataset-surface">
+              <div class="surface-heading small-heading"><div><p class="section-kicker">RECENT DATA</p><h2>Datasets</h2></div><button class="text-button" data-open-view="datasets">View all <svg class="icon"><use href="#i-arrow"/></svg></button></div>
+              <div class="dataset-list" id="recent-datasets"></div>
+            </section>
+            <section class="surface discoveries-surface">
+              <div class="surface-heading small-heading"><div><p class="section-kicker">DATA DETECTIVE</p><h2>Worth investigating</h2></div><button class="text-button" data-open-view="insights">See all <svg class="icon"><use href="#i-arrow"/></svg></button></div>
+              <div class="discovery-list" id="recent-discoveries"></div>
+            </section>
+          </div>
+
+          <footer class="privacy-footer"><span class="privacy-lock">◈</span><span>Your data stays on this device unless you choose to share a summary with an AI provider.</span><button class="text-button" id="privacy-settings">Privacy settings</button></footer>
+        </section>
+
+        <section class="view-panel" data-view-panel="projects" id="projects-panel">
+          <div class="page-heading-row"><div><p class="section-kicker">YOUR WORK</p><h1>Projects</h1><p class="page-subtitle">Keep datasets, questions, and notes together.</p></div><button class="button button-primary" id="new-project-page"><svg class="icon"><use href="#i-plus"/></svg>New project</button></div>
+          <div class="project-grid" id="projects-grid"></div>
+        </section>
+
+        <section class="view-panel" data-view-panel="datasets" id="datasets-panel">
+          <div class="page-heading-row"><div><p class="section-kicker">DATA EXPLORER</p><h1>Datasets</h1><p class="page-subtitle">Inspect your imported files and their quality profile.</p></div><button class="button button-primary" id="import-data-view"><svg class="icon"><use href="#i-upload"/></svg>Import data</button></div>
+          <div class="surface dataset-inspector">
+            <div class="surface-heading"><div><p class="section-kicker">ACTIVE DATASET</p><h2 id="dataset-title">No dataset selected</h2></div><div class="inspector-actions"><select id="dataset-select" aria-label="Select dataset"><option value="">No dataset</option></select><button class="button button-secondary" id="export-csv">Export CSV</button></div></div>
+            <div class="quality-strip" id="quality-strip"></div>
+            <div class="table-controls"><label class="search-box table-search"><svg class="icon"><use href="#i-search"/></svg><input id="table-search" type="search" placeholder="Search records"></label><span id="table-count">No rows</span><button class="text-button" id="remove-duplicates">Remove duplicates</button></div>
+            <div class="table-scroll" id="table-scroll"><div class="empty-inline">Import a CSV, JSON or XLSX file to inspect its rows.</div></div>
+          </div>
+          <div class="surface quality-report"><div class="surface-heading small-heading"><div><p class="section-kicker">QUALITY REPORT</p><h2>Column profile</h2></div><span class="quality-score" id="quality-score">—</span></div><div id="column-profile" class="column-profile"></div></div>
+        </section>
+
+        <section class="view-panel" data-view-panel="insights" id="insights-panel">
+          <div class="page-heading-row"><div><p class="section-kicker">AUTOMATIC DATA DETECTIVE</p><h1>Things worth investigating</h1><p class="page-subtitle">Every finding shows the check and evidence that produced it.</p></div><button class="button button-secondary" id="refresh-insights">Refresh checks</button></div>
+          <div class="discovery-board" id="discovery-board"></div>
+        </section>
+
+        <section class="view-panel" data-view-panel="notebook" id="notebook-panel">
+          <div class="page-heading-row"><div><p class="section-kicker">VEYA NOTEBOOK</p><h1>Think with your hands</h1><p class="page-subtitle">Type, sketch, and attach a note to the active analysis.</p></div><span class="autosave-label"><span class="status-dot"></span>Autosaves on this device</span></div>
+          <div class="notebook-grid">
+            <section class="surface note-editor"><div class="note-title-row"><input id="note-title" value="Untitled note" aria-label="Note title" maxlength="100"><span class="note-save-state" id="note-save-state">Saved</span></div><textarea id="note-body" class="note-body" placeholder="Write a question, observation, or next step…"></textarea><div class="note-link-row"><span class="link-dot"></span><span id="note-linked-dataset">No dataset attached</span><button id="attach-dataset" class="text-button">Attach current dataset</button></div></section>
+            <section class="surface drawing-surface"><div class="surface-heading small-heading"><div><p class="section-kicker">SKETCH CANVAS</p><h2>Annotate or sketch</h2></div><span class="stylus-label">Pointer, touch, or stylus</span></div><div class="drawing-tools" role="toolbar" aria-label="Drawing tools"><button class="tool-button active" data-tool="pen">Pen</button><button class="tool-button" data-tool="highlighter">Highlight</button><button class="tool-button" data-tool="eraser">Erase</button><label class="color-control">Color <input type="color" id="pen-color" value="#7458d8"></label><button class="tool-button" id="undo-drawing">Undo</button><button class="tool-button" id="clear-drawing">Clear</button></div><div class="canvas-frame"><canvas id="note-canvas" aria-label="Drawing area for notes and chart annotations"></canvas><span class="canvas-placeholder" id="canvas-placeholder">Start a sketch, mark a trend, or annotate a finding.</span></div><p class="canvas-caption">Canvas uses browser Pointer Events. Native PencilKit and palm rejection require an iOS app shell.</p></section>
+          </div>
+        </section>
+      </div>
+
+      <input id="file-input" type="file" accept=".csv,.tsv,.json,.xlsx,.xls,text/csv,application/json" multiple hidden>
+      <input id="drop-file-input" type="file" hidden>
+
+      <dialog class="modal" id="settings-dialog">
+        <form method="dialog" class="modal-form">
+          <div class="modal-header"><div><p class="section-kicker">PREFERENCES</p><h2>Settings</h2></div><button class="icon-button" value="close" aria-label="Close settings"><svg class="icon"><use href="#i-close"/></svg></button></div>
+          <div class="settings-block"><h3>AI provider</h3><p>Provider keys stay on your server. Veya does not store API keys in this browser.</p><label class="field-label">Provider<select id="ai-provider"><option value="none">Off — use local calculations</option><option value="openai">OpenAI</option><option value="anthropic">Anthropic Claude</option></select></label><label class="field-label">What may be shared<select id="privacy-mode"><option value="local">Local only (recommended)</option><option value="summary">Calculated summary only</option><option value="selection">Summary plus selected rows</option></select></label><div class="provider-status" id="provider-status">Checking server configuration…</div></div>
+          <div class="settings-block"><h3>Workspace continuity</h3><p>Local data autosaves in IndexedDB. When the local server is available, a signed-session protected snapshot can also be saved there.</p><div class="setting-row"><span>Local autosave</span><strong class="setting-on">On</strong></div><label class="setting-row sync-setting"><span><input type="checkbox" id="server-sync-toggle"> Save a copy to this local server</span><strong id="server-sync-setting">Off</strong></label></div>
+          <div class="settings-block danger-zone"><h3>Local data</h3><p>Export a workspace backup or clear this device's saved data.</p><div class="button-row"><button class="button button-secondary" id="backup-workspace" type="button">Download backup</button><button class="button button-danger" id="clear-workspace" type="button">Clear local data</button></div></div>
+          <div class="modal-actions"><button class="button button-secondary" value="close">Done</button></div>
+        </form>
+      </dialog>
+
+      <dialog class="modal small-modal" id="login-dialog">
+        <form class="modal-form" id="login-form"><div class="modal-header"><div><p class="section-kicker">PRIVATE WORKSPACE</p><h2>Sign in</h2></div></div><p class="login-copy">This server requires the workspace password. Your local browser data remains on this device.</p><label class="field-label">Workspace password<input id="login-password" type="password" autocomplete="current-password" required></label><p class="form-error" id="login-error" role="alert"></p><div class="modal-actions"><button class="button button-primary" type="submit">Continue</button></div></form>
+      </dialog>
+
+      <div class="toast-region" id="toast-region" aria-live="polite"></div>
+      <div class="drop-overlay" id="drop-overlay" aria-hidden="true"><div><svg class="icon"><use href="#i-upload"/></svg><strong>Drop files to inspect them</strong><span>CSV, JSON, TSV or XLSX</span></div></div>
+    </main>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

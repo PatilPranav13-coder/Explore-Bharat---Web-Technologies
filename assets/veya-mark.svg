@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">Veya mark</title>
+  <rect width="128" height="128" rx="34" fill="#222333"/>
+  <path d="M26 38h15l23 53 23-53h15L69 106H59L26 38Z" fill="#F7F4EE"/>
+  <path d="M64 22c7 10 11 19 11 27a11 11 0 0 1-22 0c0-8 4-17 11-27Z" fill="#D5B7FF"/>
+  <circle cx="96" cy="94" r="8" fill="#A8D7C4"/>
+</svg>
