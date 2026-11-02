@@ -118,7 +118,7 @@ h2 span {
 
 .logo span:last-child,
 .footer-logo span {
-    color: var(--saffron);
+    color: var(--gold);
 }
 
 .logo-star {
@@ -1169,7 +1169,7 @@ h2 span {
 }
 
 .footer > p {
-    color: #D8E2EA;
+    color: #fff;
     font-size: 14px;
     margin-top: 8px;
 }
@@ -1182,7 +1182,7 @@ h2 span {
 .footer .copyright {
     margin-top: 18px;
     font-size: 12px;
-    color: #B8C9D8;
+    color: #fff;
 }
 
 
