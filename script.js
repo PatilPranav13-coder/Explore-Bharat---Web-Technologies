@@ -550,17 +550,17 @@ function showCulture(category) {
 
         case "architecture":
             heading = "Architectural Heritage of Bharat";
-            introduction = "Discover forts, temples, palaces, stepwells and historic structures from different eras.";
+            introduction = "Open a monument to explore its story, architectural language, craftsmanship and place in history.";
 
             items = [
-                ["Taj Mahal", "Agra, Uttar Pradesh", "A white-marble mausoleum recognised for its Mughal architecture.", "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=400&q=80"],
-                ["Forts of Rajasthan", "Rajasthan", "Historic fort complexes reflecting regional kingdoms and defensive design.", "https://images.unsplash.com/photo-1599661046827-dacff0c0f09a?auto=format&fit=crop&w=400&q=80"],
-                ["Ajanta & Ellora Caves", "Maharashtra", "Rock-cut cave complexes renowned for their art, sculpture and heritage.", "https://images.unsplash.com/photo-1606293926075-69a00dbfde81?auto=format&fit=crop&w=400&q=80"],
-                ["Meenakshi Amman Temple", "Tamil Nadu", "A temple complex known for sculptural details and decorated gateway towers.", "https://images.unsplash.com/photo-1606293926075-69a00dbfde81?auto=format&fit=crop&w=400&q=80"],
-                ["Konark Sun Temple", "Odisha", "A historic temple famous for monumental architecture and stone carving.", "https://images.unsplash.com/photo-1606293926075-69a00dbfde81?auto=format&fit=crop&w=400&q=80"],
-                ["Hampi", "Karnataka", "A historic landscape with temples and structures of the Vijayanagara Empire.", "https://images.unsplash.com/photo-1606293926075-69a00dbfde81?auto=format&fit=crop&w=400&q=80"],
-                ["Sanchi Stupa", "Madhya Pradesh", "A major Buddhist monument complex known for its stupas and carved gateways.", "https://images.unsplash.com/photo-1606293926075-69a00dbfde81?auto=format&fit=crop&w=400&q=80"],
-                ["Rani ki Vav", "Gujarat", "A historic stepwell with multiple levels and intricate sculptural decoration.", "https://images.unsplash.com/photo-1606293926075-69a00dbfde81?auto=format&fit=crop&w=400&q=80"]
+                ["Taj Mahal", "Agra, Uttar Pradesh", "A white-marble Mughal mausoleum set within a formal garden.", "https://commons.wikimedia.org/wiki/Special:FilePath/The_Taj_Mahal%2C_Agra_Photography.jpg?width=1100"],
+                ["Forts of Rajasthan", "Amber, Jaipur, Rajasthan", "Rajput fortification and palace architecture shaped by the Aravalli landscape.", "https://commons.wikimedia.org/wiki/Special:FilePath/Amber_Fort%2C_Jaipur_%28Rajasthan%29.jpg?width=1100"],
+                ["Ajanta & Ellora Caves", "Aurangabad region, Maharashtra", "Rock-cut Buddhist, Hindu and Jain monuments with remarkable sculpture and painting.", "https://commons.wikimedia.org/wiki/Special:FilePath/Ajanta_Caves%2C_Maharashtra%2C_India.jpg?width=1100"],
+                ["Meenakshi Amman Temple", "Madurai, Tamil Nadu", "A celebrated temple complex with sculpted Dravidian gateway towers.", "https://commons.wikimedia.org/wiki/Special:FilePath/Meenakshi_Amman_Temple%2C_Madurai.jpg?width=1100"],
+                ["Konark Sun Temple", "Konark, Odisha", "A monumental stone representation of Surya's celestial chariot.", "https://commons.wikimedia.org/wiki/Special:FilePath/Konark_Sun_Temple_of_Orissa.jpg?width=1100"],
+                ["Hampi", "Vijayanagara region, Karnataka", "The remains of a powerful capital, with sacred complexes, bazaars and the famous stone chariot.", "https://commons.wikimedia.org/wiki/Special:FilePath/Hampi_stone_chariot.jpg?width=1100"],
+                ["Sanchi Stupa", "Sanchi, Madhya Pradesh", "A major Buddhist monument with a great hemispherical stupa and carved gateways.", "https://commons.wikimedia.org/wiki/Special:FilePath/SANCHI_STUPA_AT_SANCHI_IN_RAISEN.jpg?width=1100"],
+                ["Rani ki Vav", "Patan, Gujarat", "A seven-level stepwell where water engineering becomes monumental sculpture.", "https://commons.wikimedia.org/wiki/Special:FilePath/Rani_ki_vav_at_Patan.jpg?width=1100"]
             ];
             break;
 
@@ -586,22 +586,28 @@ function showCulture(category) {
     /* UPDATE CULTURE CARDS */
 
     cultureCards.innerHTML = items.map(function (item) {
+        const isArchitecture = category === "architecture";
+        const architectureId = item[0].toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
         return `
-            <article class="culture-card">
+            <article class="culture-card${isArchitecture ? " architecture-card" : ""}"
+                ${isArchitecture ? `role="button" tabindex="0" data-architecture-id="${architectureId}" aria-haspopup="dialog" aria-label="Explore the architecture of ${item[0]}"` : ""}>
 
                 <div class="culture-card-top">
                     <span class="culture-region">${item[1]}</span>
 
                     <img
                         src="${item[3]}"
-                        alt="${item[0]}"
+                        alt="${item[0]} architecture"
                         loading="lazy"
-                        onerror="this.style.display='none'">
+                        decoding="async"
+                        onerror="this.classList.add('image-unavailable')">
+                    ${isArchitecture ? '<span class="architecture-image-shade" aria-hidden="true"></span>' : ""}
                 </div>
 
                 <div class="culture-card-content">
                     <h4>${item[0]}</h4>
                     <p>${item[2]}</p>
+                    ${isArchitecture ? '<span class="architecture-card-cta">Explore the story <b aria-hidden="true">↗</b></span>' : ""}
                 </div>
 
             </article>
