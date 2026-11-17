@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       description:"The Sun Temple at Konark is conceived as the monumental chariot of Surya. Its carved stone wheels, sculptural programme and carefully composed architectural mass make it one of the most distinctive temple monuments on India’s eastern coast.",
       highlights:["The temple’s chariot form is expressed through sculpted wheels and horse imagery.","The ornament includes scenes of music, dance, daily life and religious symbolism.","It represents a culmination of Kalinga temple architecture."],
       experience:"Study the carved wheels and the sculptural bands around the platform. Morning and late-afternoon light help reveal the depth of the stone carving.",
-      sources:[["UNESCO heritage record","https://whc.unesco.org/en/list/246/"],["Photo: Bhubaneswar2009 · CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:Konark_Sun_Temple_%2C_Konark_%2C_Odisha_%2C_India.jpg"],["Licence details","https://creativecommons.org/licenses/by-sa/4.0/"]]
+      sources:[["UNESCO heritage record","https://whc.unesco.org/en/list/246/"],["Photo: SUDEEP PRAMANIK · CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:Konark_Sun_Temple,_Konark.jpg"],["Licence details","https://creativecommons.org/licenses/by-sa/4.0/"]]
     },
     "hampi":{
       title:"Hampi",location:"Vijayanagara region, Karnataka",period:"Principal capital remains from the 14th–16th centuries",style:"Vijayanagara and Dravidian architecture",region:"Karnataka",
