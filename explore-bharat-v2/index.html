@@ -13,7 +13,7 @@
   <header class="site-header"><a class="brand" href="#"><span class="brand-mark">इ</span><span>EXPLORE <b>BHARAT</b><small>THE JOURNEY IS YOURS</small></span></a>
     <nav class="main-nav" aria-label="Main navigation"><a href="#destinations">Destinations</a><a href="#planner">Build a trip</a><a href="#packages">Tour packages</a><a href="#stories">Travel stories</a></nav>
     <form class="nav-search" id="navSearchForm" role="search" aria-label="Search Explore Bharat"><span class="nav-search-icon" aria-hidden="true">⌕</span><input id="siteSearch" type="search" placeholder="Search destinations, trips…" aria-label="Search destinations, trips and website information" autocomplete="off"><button type="submit" aria-label="Submit search">↵</button></form>
-    <div class="header-actions"><a class="btn btn-dark btn-small" href="#planner">Start planning <span>↗</span></a><button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button></div>
+    <div class="header-actions"><a class="btn btn-dark btn-small" href="#planner">Start planning <span>↗</span></a><button class="nav-tool profile-tool" id="profileOpen" type="button" aria-label="Open your profile"><span class="nav-tool-icon">◯</span><span class="nav-tool-label">Profile</span></button><button class="nav-tool cart-tool" id="cartOpen" type="button" aria-label="Open shopping cart"><span class="nav-tool-icon">▢</span><span class="nav-tool-label">Cart</span><b class="cart-count" id="cartCount">0</b></button><button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button></div>
   </header>
   <div class="search-panel" id="searchPanel" aria-live="polite"><div class="search-panel-top"><label>Explore Bharat search</label><button id="searchClose" type="button" aria-label="Close search results">×</button></div><div class="search-quick"><span>QUICK LINKS</span><button type="button" data-search-jump="#destinations">Destinations</button><button type="button" data-search-jump="#planner">Build a trip</button><button type="button" data-search-jump="#packages">Tour packages</button><button type="button" data-search-suggest="Kerala">Kerala</button><button type="button" data-search-suggest="Ladakh">Ladakh</button></div><div id="searchResults" class="search-results"></div></div>
   <main id="main-content">
@@ -46,11 +46,11 @@
         <p class="form-footnote">No payment or commitment. Just the start of something memorable.</p>
       </form></div></section>
 
-    <section class="packages section-wrap" id="packages"><div class="section-heading"><div><p class="eyebrow">A GOOD PLACE TO START</p><h2>Journeys worth <em>taking.</em></h2></div><p class="intro-text">A few thoughtful starting points. Make them yours by changing the pace, places and experiences.</p></div><div class="package-grid">
-      <article class="package-card"><div class="package-image pack-rajasthan"></div><div class="package-body"><div class="package-meta"><span>5 DAYS · 4 NIGHTS</span><span class="offer">ASK ABOUT SEASONAL OFFERS</span></div><h3>Colours of Rajasthan</h3><p>Jaipur · Jodhpur · Udaipur</p><div class="package-bottom"><div><small>Indicative starting point</small><b>₹18,900 <small>/ person</small></b></div><button class="circle-arrow package-pick" data-package="Colours of Rajasthan" data-places="Jaipur,Jodhpur,Udaipur">↗</button></div></div></article>
-      <article class="package-card"><div class="package-image pack-kerala"></div><div class="package-body"><div class="package-meta"><span>6 DAYS · 5 NIGHTS</span><span class="offer">CUSTOMISE THIS ROUTE</span></div><h3>Kerala, Unhurried</h3><p>Kochi · Munnar · Alleppey</p><div class="package-bottom"><div><small>Indicative starting point</small><b>₹24,500 <small>/ person</small></b></div><button class="circle-arrow package-pick" data-package="Kerala, Unhurried" data-places="Kerala,Kochi,Munnar,Alleppey">↗</button></div></div></article>
-      <article class="package-card"><div class="package-image pack-himalaya"></div><div class="package-body"><div class="package-meta"><span>7 DAYS · 6 NIGHTS</span><span class="offer">ADVENTURE ROUTE</span></div><h3>Himalayan Highways</h3><p>Manali · Jispa · Leh</p><div class="package-bottom"><div><small>Indicative starting point</small><b>₹32,800 <small>/ person</small></b></div><button class="circle-arrow package-pick" data-package="Himalayan Highways" data-places="Manali,Jispa,Ladakh">↗</button></div></div></article>
-    </div><p class="disclaimer">Package prices are illustrative planning estimates, not live quotes. Final pricing depends on dates, availability, group size and inclusions.</p></section>
+    <section class="packages section-wrap" id="packages"><div class="section-heading"><div><p class="eyebrow">A GOOD PLACE TO START</p><h2>Journeys worth <em>taking.</em></h2><p class="intro-text">A few thoughtful starting points. Make them yours by changing the pace, places and experiences.</p></div><div class="rail-actions"><span class="rail-position" id="packagePosition">01 / 03</span><button class="rail-button" id="packagePrev" type="button" aria-label="Scroll packages left">←</button><button class="rail-button" id="packageNext" type="button" aria-label="Scroll packages right">→</button></div></div><div class="package-grid package-rail" id="packageRail" tabindex="0" role="region" aria-label="Tour packages. Use the arrow buttons or horizontal scrolling to explore.">
+      <article class="package-card"><div class="package-image pack-rajasthan"></div><div class="package-body"><div class="package-meta"><span>5 DAYS · 4 NIGHTS</span><span class="offer">TEST PRICE · PER PERSON</span></div><h3>Colours of Rajasthan</h3><p>Jaipur · Jodhpur · Udaipur</p><div class="package-bottom"><div><small>Test amount · per person</small><b>₹18,900</b></div><button class="circle-arrow package-pick" data-package="Colours of Rajasthan" data-places="Jaipur,Jodhpur,Udaipur" aria-label="Customise Colours of Rajasthan">↗</button></div><div class="package-actions"><button class="add-cart-btn" type="button" data-cart-add="rajasthan">Add to cart <span>＋</span></button></div></div></article>
+      <article class="package-card"><div class="package-image pack-kerala"></div><div class="package-body"><div class="package-meta"><span>6 DAYS · 5 NIGHTS</span><span class="offer">TEST PRICE · PER PERSON</span></div><h3>Kerala, Unhurried</h3><p>Kochi · Munnar · Alleppey</p><div class="package-bottom"><div><small>Test amount · per person</small><b>₹24,500</b></div><button class="circle-arrow package-pick" data-package="Kerala, Unhurried" data-places="Kerala,Kochi,Munnar,Alleppey" aria-label="Customise Kerala, Unhurried">↗</button></div><div class="package-actions"><button class="add-cart-btn" type="button" data-cart-add="kerala">Add to cart <span>＋</span></button></div></div></article>
+      <article class="package-card"><div class="package-image pack-himalaya"></div><div class="package-body"><div class="package-meta"><span>7 DAYS · 6 NIGHTS</span><span class="offer">TEST PRICE · PER PERSON</span></div><h3>Himalayan Highways</h3><p>Manali · Jispa · Leh</p><div class="package-bottom"><div><small>Test amount · per person</small><b>₹32,800</b></div><button class="circle-arrow package-pick" data-package="Himalayan Highways" data-places="Manali,Jispa,Ladakh" aria-label="Customise Himalayan Highways">↗</button></div><div class="package-actions"><button class="add-cart-btn" type="button" data-cart-add="himalaya">Add to cart <span>＋</span></button></div></div></article>
+    </div><p class="disclaimer">The amounts above are sample values for Razorpay test-mode checkout only. They are not live package prices and cannot be charged as real travel bookings. Final itineraries, availability, taxes and cancellation terms must be confirmed before live payments are enabled.</p></section>
 
     <section class="faq-section section-wrap" id="faq"><div class="faq-heading"><p class="eyebrow">A FEW USEFUL DETAILS</p><h2>Good to know<br><em>before you go.</em></h2><p>Some quick answers to help you plan with confidence. Final travel arrangements are confirmed only after a separate booking process.</p></div><div class="faq-list">
     <details><summary>Can I build a trip across multiple destinations?<span>＋</span></summary><p>Yes. Select several places in the trip builder, or add your own destinations. Your selected places, dates, group size, interests and budget are collected in the enquiry summary.</p></details>
@@ -99,5 +99,58 @@
       </div>
     </section>
   </div>
+  <div class="commerce-backdrop" id="commerceBackdrop" aria-hidden="true">
+    <aside class="commerce-panel cart-panel" id="cartPanel" role="dialog" aria-modal="true" aria-labelledby="cartTitle" aria-hidden="true">
+      <div class="commerce-panel-head"><div><p class="eyebrow">YOUR SELECTION</p><h2 id="cartTitle">Your cart<span id="cartSubtitle"> · 0 items</span></h2></div><button class="panel-close" type="button" data-commerce-close aria-label="Close cart">×</button></div>
+      <div class="commerce-scroll" id="cartContents"><div class="empty-cart"><span>▢</span><h3>Your next journey starts here.</h3><p>Add a tour package and it will be waiting in your cart.</p><button class="btn btn-dark" type="button" data-commerce-close>Explore packages</button></div></div>
+      <div class="cart-footer" id="cartFooter"><div class="cart-total"><span>Estimated total</span><b id="cartTotal">₹0</b></div><small>Sample amounts only · test checkout</small><button class="btn btn-dark checkout-start" id="checkoutStart" type="button" disabled>Continue to traveller details <span>→</span></button></div>
+    </aside>
+    <aside class="commerce-panel profile-panel" id="profilePanel" role="dialog" aria-modal="true" aria-labelledby="profileTitle" aria-hidden="true">
+      <div class="commerce-panel-head"><div><p class="eyebrow">YOUR EXPLORE BHARAT ACCOUNT</p><h2 id="profileTitle">Your profile</h2></div><button class="panel-close" type="button" data-commerce-close aria-label="Close profile">×</button></div>
+      <div class="commerce-scroll">
+        <div id="profileSignedOut">
+          <div class="profile-intro"><span class="profile-avatar-large">✳</span><h3>Your journeys, all in one place.</h3><p>Sign in with a secure email link to save your details, view bookings and keep a record of places you've visited.</p></div>
+          <form id="profileSignInForm" class="commerce-form">
+            <label>Full name<input class="text-input" name="name" autocomplete="name" required maxlength="100" placeholder="Your name"></label>
+            <label>Email address<input class="text-input" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com"></label>
+            <label>Mobile number <small>Optional</small><input class="text-input" name="phone" type="tel" autocomplete="tel" maxlength="24" placeholder="+91 98765 43210"></label>
+            <button class="btn btn-dark full-btn" type="submit">Email me a secure sign-in link ↗</button>
+            <p class="form-footnote" id="profileAuthMessage">No password to remember. Your travel history is private to your account.</p>
+          </form>
+        </div>
+        <div id="profileSignedIn" class="hidden">
+          <div class="profile-identity"><span class="profile-avatar-large">✳</span><div><h3 id="profileDisplayName">Traveller</h3><p id="profileDisplayEmail"></p></div><button id="profileSignOut" class="soft-button" type="button">Sign out</button></div>
+          <form id="profileEditForm" class="commerce-form">
+            <h3>Personal details</h3>
+            <label>Full name<input class="text-input" name="name" required maxlength="100"></label>
+            <label>Email address<input class="text-input" name="email" type="email" disabled></label>
+            <label>Mobile number<input class="text-input" name="phone" type="tel" maxlength="24" placeholder="+91 98765 43210"></label>
+            <button class="soft-button" type="submit">Save profile changes</button><small id="profileSaveMessage"></small>
+          </form>
+          <div class="profile-section"><div class="profile-section-title"><div><p class="eyebrow">YOUR BOOKINGS</p><h3>Travel history</h3></div><span class="history-count" id="historyCount">0</span></div><div id="bookingHistory" class="history-list"><p class="subtle-note">Your confirmed bookings will appear here.</p></div></div>
+          <div class="profile-section"><div class="profile-section-title"><div><p class="eyebrow">COLLECT YOUR MEMORIES</p><h3>Places I've visited</h3></div></div><form id="travelLogForm" class="travel-log-form"><input name="destination" class="text-input" required maxlength="100" placeholder="Add a place you've visited"><input name="visitedOn" class="text-input" type="date" aria-label="Date visited"><button class="soft-button" type="submit">＋ Add to travel log</button></form><div id="travelLogList" class="history-list"><p class="subtle-note">Your visited places will live here.</p></div></div>
+        </div>
+      </div>
+    </aside>
+    <aside class="commerce-panel checkout-panel" id="checkoutPanel" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle" aria-hidden="true">
+      <div class="commerce-panel-head"><div><p class="eyebrow">SECURE TEST CHECKOUT</p><h2 id="checkoutTitle">Your trip details</h2></div><button class="panel-close" type="button" data-commerce-close aria-label="Close checkout">×</button></div>
+      <div class="commerce-scroll">
+        <div class="checkout-progress"><span class="active">01 · DETAILS</span><i></i><span>02 · PAYMENT</span><i></i><span>03 · CONFIRMATION</span></div>
+        <div id="checkoutItems" class="checkout-items"></div>
+        <form id="commerceCheckoutForm" class="commerce-form">
+          <h3>Traveller information</h3>
+          <label>Full name<input class="text-input" name="name" required autocomplete="name" maxlength="100" placeholder="Name as you would like it on the booking"></label>
+          <label>Email address<input class="text-input" name="email" type="email" required autocomplete="email" maxlength="254" placeholder="you@example.com"></label>
+          <label>Mobile number<input class="text-input" name="phone" type="tel" required autocomplete="tel" maxlength="24" placeholder="+91 98765 43210"></label>
+          <label>Preferred departure date<input class="text-input" name="travelDate" type="date" required></label>
+          <label class="checkout-consent"><input type="checkbox" name="terms" required><span>I understand these are sample tour prices in Razorpay test mode. No real booking or travel service is being sold in this demo. I have read the <a href="terms.html" target="_blank" rel="noopener">terms</a> and <a href="privacy.html" target="_blank" rel="noopener">privacy note</a>.</span></label>
+          <div class="checkout-price"><span>Test checkout total</span><b id="checkoutTotal">₹0</b></div>
+          <button class="btn btn-dark full-btn" type="submit" id="payNowButton">Continue to secure test payment <span>↗</span></button>
+          <p class="form-footnote" id="paymentStatus">Razorpay test credentials and database setup are required. No real money will be collected in test mode.</p>
+        </form>
+      </div>
+    </aside>
+  </div>
+  <div class="toast-region" id="toastRegion" aria-live="polite"></div>
   <script src="app.js"></script>
 </body></html>
