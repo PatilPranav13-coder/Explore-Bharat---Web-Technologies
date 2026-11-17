@@ -2,18 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#102b25">
+  <meta name="theme-color" content="#f5f5f7">
   <meta name="description" content="Explore Bharat — discover destinations, build your own India trip and get an AI travel companion.">
   <title>Explore Bharat — Your India, Your Journey</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>\n  <a class="skip-link" href="#main-content">Skip to main content</a>
   <div class="announcement"><div class="ticker"><span>✦ Discover the extraordinary India&nbsp;&nbsp; · &nbsp;&nbsp;Build a journey that feels like yours&nbsp;&nbsp; · &nbsp;&nbsp;Travel deeper, travel responsibly&nbsp;&nbsp; · &nbsp;&nbsp;</span><span aria-hidden="true">✦ Discover the extraordinary India&nbsp;&nbsp; · &nbsp;&nbsp;Build a journey that feels like yours&nbsp;&nbsp; · &nbsp;&nbsp;Travel deeper, travel responsibly&nbsp;&nbsp; · &nbsp;&nbsp;</span></div></div>
   <header class="site-header"><a class="brand" href="#"><span class="brand-mark">इ</span><span>EXPLORE <b>BHARAT</b><small>THE JOURNEY IS YOURS</small></span></a>
     <nav class="main-nav" aria-label="Main navigation"><a href="#destinations">Destinations</a><a href="#planner">Build a trip</a><a href="#packages">Tour packages</a><a href="#stories">Travel stories</a></nav>
-    <div class="header-actions"><button class="icon-btn" id="searchToggle" aria-label="Open search">⌕</button><a class="btn btn-dark btn-small" href="#planner">Plan my trip <span>↗</span></a><button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button></div>
+    <div class="header-actions"><button class="icon-btn" id="searchToggle" aria-label="Open search">⌕</button><a class="btn btn-dark btn-small" href="#planner">Start planning <span>↗</span></a><button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button></div>
   </header>
   <div class="search-panel" id="searchPanel"><label for="siteSearch">Search Explore Bharat</label><div class="search-row"><input id="siteSearch" placeholder="Try ‘beaches in Kerala’ or ‘heritage in Rajasthan’"><button class="btn btn-dark" id="searchButton">Search</button></div><div id="searchResults" class="search-results"></div></div>
   <main id="main-content">
@@ -33,9 +31,9 @@
       </div>
     </section>
 
-    <section class="planner-section" id="planner"><div class="planner-shell"><div class="planner-intro"><p class="eyebrow light">YOUR TRIP. YOUR RULES.</p><h2>Don't fit into<br>a package. <em>Build yours.</em></h2><p>Choose the places, pace and experiences you care about. Your selections come together in one clear enquiry — no one-size-fits-all itinerary.</p><div class="planner-promise"><span>✳</span><div><b>A little more you, a little less itinerary.</b><small>Customise every detail. Change your mind at any step.</small></div></div></div>
+    <section class="planner-section" id="planner"><div class="planner-shell"><div class="planner-intro"><p class="eyebrow light">A JOURNEY, DESIGNED AROUND YOU</p><h2>Travel, in a way<br>that feels <em>like you.</em></h2><p>Choose the places, pace and experiences you care about. Your selections come together in one clear enquiry — no one-size-fits-all itinerary.</p><div class="planner-promise"><span>✳</span><div><b>A little more you, a little less itinerary.</b><small>Customise every detail. Change your mind at any step.</small></div></div></div>
       <form class="trip-form" id="tripForm">
-        <div class="form-top"><div><span class="step-label">TRIP BUILDER <b id="stepCurrent">01</b> / 03</span><h3 id="formTitle">Where would you like to go?</h3></div><span class="form-icon">✳</span></div>
+        <div class="form-top"><div><span class="step-label">YOUR TRIP SETTINGS <b id="stepCurrent">01</b> / 03</span><h3 id="formTitle">Where would you like to go?</h3></div><span class="form-icon">✳</span></div>
         <div class="progress"><span id="progressBar"></span></div>
         <div class="form-step active" data-step="1"><label class="field-label">Pick your destinations <small>Select as many as you like</small></label><div class="place-options" id="placeOptions">
           <label class="place-option"><input type="checkbox" name="places" value="Ladakh"><span>🏔️</span><b>Ladakh</b></label><label class="place-option"><input type="checkbox" name="places" value="Jaipur"><span>🏰</span><b>Jaipur</b></label><label class="place-option"><input type="checkbox" name="places" value="Kerala"><span>🌴</span><b>Kerala</b></label><label class="place-option"><input type="checkbox" name="places" value="Meghalaya"><span>🌿</span><b>Meghalaya</b></label><label class="place-option"><input type="checkbox" name="places" value="Varanasi"><span>🪷</span><b>Varanasi</b></label><label class="place-option"><input type="checkbox" name="places" value="Andaman Islands"><span>🏝️</span><b>Andaman</b></label><label class="place-option"><input type="checkbox" name="places" value="Mumbai"><span>🌆</span><b>Mumbai</b></label><label class="place-option"><input type="checkbox" name="places" value="Hampi"><span>🛕</span><b>Hampi</b></label>
@@ -68,6 +66,36 @@
 
   <button class="chat-launcher" id="chatLauncher" aria-label="Open Explore Bharat AI assistant"><span>✳</span><b>Ask Bharat AI</b></button>
   <section class="chat-panel" id="chatPanel" aria-label="Bharat AI travel assistant" aria-hidden="true"><div class="chat-head"><div><span class="ai-avatar">✳</span><span><b>Bharat AI</b><small>Your travel companion</small></span></div><button id="chatClose" aria-label="Close assistant">×</button></div><div class="chat-messages" id="chatMessages"><div class="chat-bubble bot">Namaste! I'm your Explore Bharat guide. Ask me about destinations, places to visit, trip ideas or anything on this website.</div></div><div class="chat-suggestions"><button>Plan a 5-day trip</button><button>Best time for Kerala?</button></div><form id="chatForm" class="chat-input"><input id="chatInput" placeholder="Ask about your journey…" autocomplete="off" required><button aria-label="Send message">↑</button></form><small class="chat-disclaimer">AI can make mistakes. Verify travel, safety and booking details.</small></section>
-  <div class="modal-backdrop" id="tripModal"><section class="trip-modal"><button class="modal-close" id="modalClose">×</button><p class="eyebrow">YOUR JOURNEY, AT A GLANCE</p><h2>Looking good. <em>Let's make it real.</em></h2><div id="tripSummary"></div><form id="contactForm"><h3>Where can we reach you?</h3><div class="two-fields"><label>Your name<input class="text-input" name="name" required placeholder="Full name"></label><label>Email address<input class="text-input" type="email" name="email" required placeholder="you@example.com"></label></div><label class="field-label spaced">Phone number (optional)<input class="text-input" name="phone" type="tel" placeholder="+91"></label><label class="consent-check"><input type="checkbox" name="consent" required><span>I agree to share my contact details and trip preferences for follow-up. Read the <a href="privacy.html" target="_blank" rel="noopener">privacy note</a>.</span></label><div class="modal-actions"><button class="back-btn" id="editTrip" type="button">Edit my trip</button><button class="btn btn-dark" type="submit">Save enquiry ↗</button></div><p class="form-footnote" id="contactNote">Online enquiry storage is enabled when the site owner connects PostgreSQL. Otherwise, the demo saves on this device only.</p></form></section></div>
+  <div class="modal-backdrop" id="tripModal">
+    <section class="trip-modal registration-modal" role="dialog" aria-modal="true" aria-labelledby="registrationTitle">
+      <button class="modal-close" id="modalClose" type="button" aria-label="Close registration">×</button>
+      <div class="registration-topline"><span class="registration-wordmark"><span class="registration-mark">इ</span> EXPLORE BHARAT</span><span class="registration-security"><span>●</span> PRIVATE ENQUIRY</span></div>
+      <div class="registration-layout">
+        <aside class="registration-aside">
+          <p class="eyebrow">YOUR JOURNEY, AT A GLANCE</p>
+          <h2 id="registrationTitle">A few details.<br><em>A world of possibility.</em></h2>
+          <p class="registration-lede">Your itinerary is taking shape. Add your details and we'll have everything together in one place.</p>
+          <div id="tripSummary"></div>
+          <div class="registration-assurance"><span class="assurance-icon">✓</span><span><b>No payment at this stage</b><small>This is a trip enquiry, not a confirmed booking.</small></span></div>
+        </aside>
+        <div class="registration-form-area">
+          <div class="registration-progress"><span>01</span><i></i><b>TRAVELLER DETAILS</b><small>FINAL STEP</small></div>
+          <h3>Who's travelling?</h3>
+          <p class="registration-subtitle">Tell us how to reach you about this journey.</p>
+          <form id="contactForm">
+            <div class="registration-fields">
+              <label class="register-field full-field"><span>Full name</span><input class="text-input" name="name" required autocomplete="name" placeholder="e.g. Aarya Sharma" maxlength="100"></label>
+              <label class="register-field full-field"><span>Email address</span><input class="text-input" type="email" name="email" required autocomplete="email" placeholder="you@example.com" maxlength="254"></label>
+              <label class="register-field full-field"><span>Mobile number <small>Optional</small></span><div class="phone-control"><select name="phoneCountryCode" aria-label="Country calling code"><option value="+91" selected>🇮🇳 +91</option><option value="+1">🇺🇸 +1</option><option value="+44">🇬🇧 +44</option><option value="+971">🇦🇪 +971</option><option value="+65">🇸🇬 +65</option></select><input class="text-input" name="phone" type="tel" autocomplete="tel-national" placeholder="Your mobile number" maxlength="30"></div></label>
+              <fieldset class="contact-preference full-field"><legend>How should we contact you?</legend><label><input type="radio" name="preferredContact" value="Email" checked><span>Email</span></label><label><input type="radio" name="preferredContact" value="WhatsApp"><span>WhatsApp</span></label><label><input type="radio" name="preferredContact" value="Phone call"><span>Phone call</span></label></fieldset>
+            </div>
+            <label class="consent-check"><input type="checkbox" name="consent" required><span>I agree to share my details and trip preferences for this enquiry. <a href="privacy.html" target="_blank" rel="noopener">Privacy note</a>.</span></label>
+            <div class="registration-actions"><button class="back-btn" id="editTrip" type="button">← Edit journey</button><button class="btn btn-dark registration-submit" type="submit">Send trip enquiry <span>↗</span></button></div>
+            <p class="form-footnote" id="contactNote">Your details are used only to follow up on this trip enquiry. No account is created and no payment is taken here.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
   <script src="app.js"></script>
 </body></html>
