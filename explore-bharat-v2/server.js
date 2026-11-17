@@ -146,6 +146,11 @@ async function createBookingFromPayment(session, paymentId) {
     const locked = await connection.query("SELECT * FROM checkout_sessions WHERE order_id=$1 FOR UPDATE", [session.order_id]);
     if (!locked.rowCount) throw new Error("Checkout session not found.");
     const checkout = locked.rows[0];
+    if (checkout.status === "paid" && checkout.booking_id) {
+      const priorBooking = await connection.query("SELECT * FROM bookings WHERE id=$1", [checkout.booking_id]);
+      await connection.query("COMMIT");
+      if (priorBooking.rowCount) return priorBooking.rows[0];
+    }
     const duplicate = await connection.query("SELECT * FROM bookings WHERE payment_id=$1", [paymentId]);
     if (duplicate.rowCount) {
       await connection.query("COMMIT");
