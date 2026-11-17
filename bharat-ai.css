@@ -1,0 +1,154 @@
+
+/* Bharat AI — compact navigation companion and website guide panel */
+.nav-utility-row{gap:9px}
+.bharat-ai-toggle{
+  position:relative;flex:0 0 auto;display:flex;align-items:center;gap:8px;
+  min-height:43px;padding:5px 12px 5px 7px;border:1px solid rgba(245,215,120,.78);
+  border-radius:13px;color:#fff;cursor:pointer;
+  background:linear-gradient(135deg,rgba(255,255,255,.17),rgba(255,255,255,.055));
+  box-shadow:0 5px 16px rgba(0,0,0,.17);
+  transition:transform .24s,border-color .24s,box-shadow .24s,background .24s;
+}
+.bharat-ai-toggle:hover,.bharat-ai-toggle[aria-expanded="true"]{
+  transform:translateY(-2px);border-color:#ffe29b;
+  background:linear-gradient(135deg,rgba(249,115,22,.28),rgba(255,255,255,.12));
+  box-shadow:0 9px 24px rgba(0,0,0,.24),0 0 0 3px rgba(245,215,120,.08);
+}
+.bharat-ai-orbit{
+  width:31px;height:31px;flex:0 0 31px;display:grid;place-items:center;
+  border-radius:10px;color:#2a1732;font-size:19px;
+  background:linear-gradient(145deg,#fff0b9,#eca842);
+  box-shadow:0 4px 12px rgba(0,0,0,.18);
+  animation:aiOrbitGlow 3.4s ease-in-out infinite;
+}
+@keyframes aiOrbitGlow{0%,100%{box-shadow:0 4px 12px rgba(0,0,0,.18),0 0 0 0 rgba(245,215,120,0)}50%{box-shadow:0 4px 12px rgba(0,0,0,.18),0 0 0 5px rgba(245,215,120,.13)}}
+.bharat-ai-toggle-copy{display:grid;gap:1px;text-align:left}
+.bharat-ai-toggle-copy strong{font-size:11px;letter-spacing:.02em}
+.bharat-ai-toggle-copy small{font-size:9px;color:#f5d778}
+.bharat-ai-live-dot,.bharat-ai-status-dot{
+  display:inline-block;width:6px;height:6px;flex:0 0 6px;border-radius:50%;
+  background:#71d7a6;box-shadow:0 0 0 3px rgba(113,215,166,.12),0 0 10px rgba(113,215,166,.6)
+}
+.bharat-ai-live-dot{position:absolute;right:7px;top:7px;width:5px;height:5px;flex-basis:5px}
+@media(max-width:1120px) and (min-width:761px){
+  .nav-utility-row{flex:0 1 auto;max-width:100%;gap:8px}
+  .nav-utility-row .site-search{flex:1 1 205px;min-width:155px;max-width:270px}
+  .bharat-ai-toggle{padding-right:10px}
+}
+@media(max-width:900px) and (min-width:761px){
+  .nav-utility-row .site-search{min-width:135px;max-width:220px}
+  .bharat-ai-toggle-copy small{display:none}
+  .bharat-ai-toggle{padding-right:9px}
+}
+@media(max-width:760px){
+  .nav-utility-row{gap:7px}
+  .bharat-ai-toggle{width:43px;height:42px;min-height:42px;justify-content:center;padding:5px;border-radius:12px}
+  .bharat-ai-toggle-copy,.bharat-ai-live-dot{display:none}
+  .bharat-ai-orbit{width:29px;height:29px;flex-basis:29px}
+}
+
+/* Assistant window */
+.bharat-ai-panel{
+  position:fixed;z-index:2800;top:104px;right:clamp(12px,4vw,58px);
+  display:flex;flex-direction:column;width:min(390px,calc(100vw - 28px));
+  height:min(610px,calc(100dvh - 126px));min-height:410px;overflow:hidden;
+  border:1px solid rgba(245,215,120,.72);border-radius:20px;
+  color:#f9f3e8;
+  background:
+    radial-gradient(ellipse at 100% 0%,rgba(240,75,36,.2),transparent 42%),
+    linear-gradient(155deg,#17243a,#0b1426 68%,#26133a);
+  box-shadow:0 24px 75px rgba(0,0,0,.38),0 0 0 1px rgba(255,255,255,.06) inset;
+  transform-origin:top right;
+  animation:aiPanelEnter .3s cubic-bezier(.2,.8,.2,1) both;
+}
+.bharat-ai-panel[hidden]{display:none}
+@keyframes aiPanelEnter{from{opacity:0;transform:translateY(-10px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.bharat-ai-header{
+  display:flex;align-items:center;gap:11px;padding:15px 16px;
+  border-bottom:1px solid rgba(245,215,120,.22);
+  background:linear-gradient(110deg,rgba(240,75,36,.2),rgba(255,255,255,.025));
+}
+.bharat-ai-avatar{
+  width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center;
+  border-radius:13px;color:#291a32;font-size:23px;
+  background:linear-gradient(145deg,#fff1bd,#e9a449);
+  box-shadow:0 7px 18px rgba(0,0,0,.23);
+}
+.bharat-ai-heading{min-width:0;flex:1}
+.bharat-ai-heading h2{margin:0;color:#fff;font:700 17px Georgia,serif}
+.bharat-ai-heading p{display:flex;align-items:center;gap:8px;margin:4px 0 0;color:#e7d4ad;font-size:9px}
+.bharat-ai-close{
+  width:32px;height:32px;border:1px solid rgba(255,255,255,.2);border-radius:50%;
+  color:#fff;background:rgba(255,255,255,.07);font-size:21px;cursor:pointer;
+  transition:background .2s,transform .2s
+}
+.bharat-ai-close:hover{background:rgba(255,255,255,.17);transform:rotate(90deg)}
+.bharat-ai-intro{padding:12px 16px 11px;border-bottom:1px solid rgba(255,255,255,.07)}
+.bharat-ai-intro-kicker{color:#f5d778;font-size:8px;font-weight:900;letter-spacing:.18em}
+.bharat-ai-intro p{margin:5px 0 0;color:rgba(255,255,255,.84);font-size:11px;line-height:1.55}
+.bharat-ai-messages{
+  flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;
+  padding:14px 13px 10px;display:flex;flex-direction:column;gap:12px;
+  scrollbar-width:thin;scrollbar-color:rgba(245,215,120,.36) transparent
+}
+.bharat-ai-message{display:flex;align-items:flex-end;gap:7px;max-width:94%;animation:aiMessageIn .24s ease both}
+@keyframes aiMessageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.bharat-ai-message.bharat-ai-user{align-self:flex-end;justify-content:flex-end}
+.bharat-ai-message.bharat-ai-bot{align-self:flex-start}
+.bharat-ai-message-avatar{
+  width:25px;height:25px;flex:0 0 25px;display:grid;place-items:center;
+  border-radius:8px;background:linear-gradient(145deg,#ffe6a4,#e99f42);color:#271631;font-size:14px
+}
+.bharat-ai-bubble{
+  padding:10px 12px;border:1px solid rgba(245,215,120,.17);
+  border-radius:13px 13px 13px 4px;background:rgba(255,255,255,.075);
+  color:#fff;font-size:11px;line-height:1.6;overflow-wrap:anywhere
+}
+.bharat-ai-user .bharat-ai-bubble{
+  border-color:rgba(245,215,120,.22);border-radius:13px 13px 4px 13px;
+  background:linear-gradient(135deg,rgba(240,75,36,.36),rgba(184,57,30,.23))
+}
+.bharat-ai-bubble p{margin:0;white-space:pre-line}
+.bharat-ai-message-meta{display:block;margin-top:6px;color:#eacb8a;font-size:8px;letter-spacing:.035em}
+.bharat-ai-suggestions{display:flex;flex-wrap:wrap;gap:6px;padding:7px 13px 11px}
+.bharat-ai-suggestions button{
+  padding:7px 10px;border:1px solid rgba(245,215,120,.32);border-radius:999px;
+  background:rgba(255,255,255,.06);color:#ffe6a8;font-size:9px;font-weight:700;
+  cursor:pointer;transition:background .2s,transform .2s,border-color .2s
+}
+.bharat-ai-suggestions button:hover{transform:translateY(-2px);background:rgba(245,215,120,.13);border-color:#f5d778}
+.bharat-ai-form{
+  display:flex;align-items:center;gap:8px;margin:0 12px 8px;padding:6px 7px 6px 13px;
+  border:1px solid rgba(245,215,120,.5);border-radius:14px;background:rgba(255,255,255,.09);
+  transition:border-color .2s,box-shadow .2s
+}
+.bharat-ai-form:focus-within{border-color:#f5d778;box-shadow:0 0 0 3px rgba(245,215,120,.1)}
+.bharat-ai-form input{
+  flex:1;min-width:0;border:0!important;outline:0!important;box-shadow:none!important;
+  background:transparent;color:#fff;padding:9px 0;font-size:11px
+}
+.bharat-ai-form input::placeholder{color:rgba(255,255,255,.55)}
+.bharat-ai-form button{
+  width:34px;height:34px;flex:0 0 34px;border:0;border-radius:10px;
+  color:#28172f;background:linear-gradient(145deg,#ffe9ac,#e9a344);font-size:17px;
+  cursor:pointer;transition:transform .2s,filter .2s
+}
+.bharat-ai-form button:hover{transform:translateY(-2px) scale(1.04);filter:brightness(1.08)}
+.bharat-ai-footnote{margin:0;padding:0 14px 12px;color:rgba(255,255,255,.48);font-size:8px;line-height:1.45;text-align:center}
+.bharat-ai-typing{display:flex;align-items:center;gap:4px;padding:4px 2px}
+.bharat-ai-typing span{width:5px;height:5px;border-radius:50%;background:#f5d778;animation:aiTyping .8s infinite alternate}
+.bharat-ai-typing span:nth-child(2){animation-delay:.15s}.bharat-ai-typing span:nth-child(3){animation-delay:.3s}
+@keyframes aiTyping{to{opacity:.25;transform:translateY(-4px)}}
+.ai-destination-open{animation:aiDestinationPulse 1.2s ease}
+@keyframes aiDestinationPulse{0%,100%{box-shadow:0 9px 24px rgba(10,20,38,.12)}35%{box-shadow:0 0 0 5px rgba(245,215,120,.44),0 18px 40px rgba(10,20,38,.2)}}
+@media(max-width:760px){
+  .bharat-ai-panel{
+    top:auto;right:10px;bottom:10px;width:calc(100vw - 20px);
+    height:min(650px,calc(100dvh - 100px));min-height:390px;
+    border-radius:19px;transform-origin:bottom right
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .bharat-ai-panel,.bharat-ai-message,.bharat-ai-orbit,.bharat-ai-typing span,.ai-destination-open{animation:none!important}
+  .bharat-ai-toggle,.bharat-ai-close,.bharat-ai-suggestions button{transition:none}
+}
