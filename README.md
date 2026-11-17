@@ -2,23 +2,37 @@
 
 Explore Bharat is a travel discovery and custom itinerary website concept focused on India.
 
-## New version
+## Live website
 
-The refreshed responsive website and Node.js backend are in **[explore-bharat-v2/](explore-bharat-v2/)**.
+The GitHub Pages frontend is published from the repository root:
 
-It includes:
-- Destination discovery with filters and expandable destination details.
-- A three-step custom trip builder that carries visitor selections into an enquiry form.
-- Tour-package starting points, indicative price ranges and seasonal-offer enquiry prompts.
-- Destination search with optional live web search and source links.
-- Bharat AI travel assistant powered by the OpenAI Responses API.
-- Optional PostgreSQL enquiry storage, consent checkbox, privacy and terms pages.
-- Persistent cart with traveller quantities, always-visible profile/cart navigation, Supabase passwordless profiles, private travel logs and booking history.
-- Razorpay test-mode checkout with server-calculated totals, payment signature/status verification and payment-confirmed booking records.
-- Horizontal package rail, accessible scroll controls and site-wide section/card motion with reduced-motion support.
-- Mobile-responsive design, accessibility improvements and smoke checks.
+**https://patilpranav13-coder.github.io/Explore-Bharat---Web-Technologies/**
 
-## Run the new website
+The root `index.html`, `styles.css`, `app.js`, `privacy.html` and `terms.html` files mirror the updated v2 website so GitHub Pages can serve the design directly. The original ZIP and complete source folder are preserved.
+
+## Website features
+
+- Responsive destination discovery with filters and expandable destination details.
+- Three-step custom trip builder.
+- Tour package cards and a horizontally scrollable package rail.
+- Website search with local destination/section results.
+- Bharat AI assistant with a local website-guide fallback.
+- Persistent browser cart with traveller quantities.
+- Profile, travel-log and booking-history interface.
+- Privacy and terms pages, mobile navigation and reduced-motion support.
+
+## GitHub Pages limitations
+
+GitHub Pages serves static HTML, CSS and JavaScript. Browser-side browsing, planning and cart features work on the static site. The following features require the Node.js backend and their own configuration, and are not activated by GitHub Pages alone:
+
+- OpenAI-powered Bharat AI and live web search.
+- Server-stored trip enquiries.
+- Supabase passwordless sign-in and saved profile/travel history (also requires the public Supabase URL and anon key in `config.js`).
+- Razorpay test checkout and server-verified booking records.
+
+The backend is in `explore-bharat-v2/server.js`. It must be deployed separately with private environment variables. Razorpay live payments are deliberately not enabled; the integration is test-mode only.
+
+## Run the full application locally
 
 Requires Node.js 20 or newer.
 
@@ -29,8 +43,6 @@ cp .env.example .env
 npm run dev
 ```
 
-Open http://localhost:3000.
+Open http://localhost:3000. Add `OPENAI_API_KEY` to `.env` to enable Bharat AI and live web search, and `DATABASE_URL` to enable server-side enquiry and checkout storage.
 
-Add `OPENAI_API_KEY` to `.env` to enable Bharat AI and live web search. Add `DATABASE_URL` to enable server-side trip enquiries. The original `Explore-Bharat-GitHub-Upload.zip` is preserved in the repository.
-
-See [the v2 README](explore-bharat-v2/README.md) for setup and deployment notes.
+See [the v2 README](explore-bharat-v2/README.md) for configuration and backend setup.
