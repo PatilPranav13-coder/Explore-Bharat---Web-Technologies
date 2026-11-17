@@ -145,6 +145,11 @@ document.addEventListener("DOMContentLoaded", () => {
     },true);
   }
 
+  document.addEventListener("explore-bharat:assistant-action",event=>{
+    const detail=event.detail||{};
+    if(detail.title&&detail.detail)record(String(detail.title).slice(0,100),String(detail.detail).slice(0,500));
+  });
+
   const searchForm=$("siteSearchForm"),searchInput=$("siteSearchInput");
   searchForm?.addEventListener("submit",()=>{
     const query=searchInput?.value.trim();if(query)record("Website search","Searched Explore Bharat for: "+query);
