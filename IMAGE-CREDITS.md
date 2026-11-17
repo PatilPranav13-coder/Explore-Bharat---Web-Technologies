@@ -34,3 +34,21 @@ These are remote image references. The image source pages below contain author d
 ## Changes
 
 Images are displayed in the site as supplied or referenced; no derivative edits were made to the Commons images in this package. If you crop, recolour or otherwise adapt an image, update its attribution note and follow the licence's requirements. For all Creative Commons licences, give credit, link to the licence and indicate any changes. For ShareAlike files, review the requirement to distribute adaptations under the same or a compatible licence.
+
+
+## Architectural heritage cards added
+
+The architecture category now uses eight distinct Wikimedia Commons photographs. The expansion panel identifies the photographer and licence and links directly to the source file page.
+
+| Monument | Creator | Licence | Source |
+|---|---|---|---|
+| Taj Mahal | Fastestfaraz1 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:The_Taj_Mahal,_Agra_Photography.jpg |
+| Amber Fort | Rijin S | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Amber_Fort_Jaipur_01.jpg |
+| Ajanta Caves | Jayesh Paranjape | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:Ajanta_Caves_as_seen_from_the_view-point.JPG |
+| Meenakshi Amman Temple | Ilya Mauter | CC BY 3.0 | https://commons.wikimedia.org/wiki/File:Meenakshi_Amman_temple_in_Madurai.JPG |
+| Konark Sun Temple | Bhubaneswar2009 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Konark_Sun_Temple,_Konark,_Odisha,_India.jpg |
+| Hampi stone chariot | Hardeep Asrani | CC0 1.0 | https://commons.wikimedia.org/wiki/File:Hampi_stone_chariot.jpg |
+| Sanchi Stupa | See source page | Check source page | https://commons.wikimedia.org/wiki/File:SANCHI_STUPA_AT_SAN_CHI_IN_RAISEN.jpg |
+| Rani ki Vav | Bernard Gagnon | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:Rani_ki_vav_04.jpg |
+
+Photographs are linked as remote Wikimedia Commons files. Licence terms and attribution are provided by the linked source pages; check those pages before redistributing images outside this website.
