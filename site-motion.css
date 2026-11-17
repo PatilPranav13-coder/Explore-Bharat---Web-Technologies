@@ -1,0 +1,200 @@
+/* Explore Bharat — site-wide motion system
+   Performance-first: transforms and opacity, with reduced-motion support. */
+:root{
+  --site-motion-ease:cubic-bezier(.2,.75,.25,1);
+  --site-motion-gold:#f5d778;
+  --site-motion-saffron:#f04b24;
+}
+html{scroll-behavior:smooth}
+body{--site-motion-progress:0}
+
+/* Scroll reveal and staggered entrances */
+.site-motion-ready .site-reveal{
+  opacity:0;
+  transform:translate3d(0,26px,0) scale(.985);
+  filter:blur(3px);
+  transition:opacity .72s var(--site-motion-ease),
+             transform .78s var(--site-motion-ease),
+             filter .72s var(--site-motion-ease);
+  transition-delay:var(--site-motion-delay,0ms);
+  will-change:opacity,transform;
+}
+.site-motion-ready .site-reveal.site-revealed{
+  opacity:1;transform:translate3d(0,0,0) scale(1);filter:blur(0);
+}
+.site-motion-ready .site-reveal.site-reveal-left{transform:translate3d(-34px,8px,0); }
+.site-motion-ready .site-reveal.site-reveal-right{transform:translate3d(34px,8px,0);}
+.site-motion-ready .site-reveal.site-reveal-zoom{transform:scale(.91);filter:blur(5px)}
+.site-motion-ready .site-reveal.site-revealed.site-reveal-left,
+.site-motion-ready .site-reveal.site-revealed.site-reveal-right{transform:translate3d(0,0,0)}
+.site-motion-ready .site-reveal.site-revealed.site-reveal-zoom{transform:scale(1);filter:blur(0)}
+
+/* Navigation shrinks into a glass-like travel toolbar after scrolling */
+.navbar{
+  transition:min-height .3s ease,padding .3s ease,background .3s ease,
+             box-shadow .3s ease,backdrop-filter .3s ease;
+}
+.navbar.is-scrolled{
+  background:rgba(9,17,33,.91);
+  backdrop-filter:blur(18px) saturate(145%);
+  box-shadow:0 9px 28px rgba(0,0,0,.25);
+  padding-top:8px;padding-bottom:8px;
+}
+.navbar.is-scrolled .logo{letter-spacing:-.025em}
+.navbar nav .main-link{transition:color .22s,transform .22s}
+.navbar nav .main-link:hover{transform:translateY(-2px)}
+.navbar nav .main-link::after{transform-origin:left;transition:width .32s var(--site-motion-ease)}
+.menu-toggle{transition:transform .25s,color .25s}
+.menu-toggle[aria-expanded="true"]{transform:rotate(90deg);color:var(--site-motion-gold)}
+
+/* Image bloom, Ken Burns on content media, and 3D card tilt */
+.site-motion-image{
+  transform:translateZ(0) scale(1.015);
+  filter:saturate(.88) contrast(1.015);
+  transition:transform .8s var(--site-motion-ease),filter .65s ease;
+  will-change:transform;
+}
+.destination-card:hover .site-motion-image,
+.culture-card:hover .site-motion-image,
+.featured-card:hover .site-motion-image,
+.site-motion-image:hover{
+  transform:translateZ(0) scale(1.075);
+  filter:saturate(1.18) contrast(1.04);
+}
+.site-motion-tilt{
+  transform-style:preserve-3d;
+  backface-visibility:hidden;
+  transition:transform .38s var(--site-motion-ease),box-shadow .38s ease;
+}
+.site-motion-tilt:hover{
+  transform:perspective(950px) rotateX(var(--site-tilt-x,0deg))
+             rotateY(var(--site-tilt-y,0deg)) translateY(-7px);
+  box-shadow:0 22px 44px rgba(10,20,38,.2);
+}
+.destination-card,.culture-card,.featured-card,.travel-style-card{transform-origin:center}
+
+/* Buttons: shimmer, magnetic float, press feedback and click ripple */
+.site-motion-button{
+  position:relative;isolation:isolate;overflow:hidden;
+  transition:box-shadow .24s ease,filter .24s ease,translate .22s ease;
+  translate:var(--site-magnet-x,0px) var(--site-magnet-y,0px);
+}
+.site-motion-button::before{
+  content:"";position:absolute;z-index:0;top:-80%;left:-48%;width:30%;height:260%;
+  pointer-events:none;transform:rotate(24deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
+  transition:left .75s ease;
+}
+.site-motion-button:hover::before{left:135%}
+.site-motion-button:active{translate:0 2px;filter:brightness(.96)}
+.site-motion-button>*{position:relative;z-index:1}
+.site-ripple{
+  position:absolute;z-index:0;display:block;pointer-events:none;
+  width:12px;height:12px;border-radius:50%;
+  background:rgba(255,255,255,.48);
+  transform:translate(-50%,-50%) scale(0);
+  animation:siteRipple .68s ease-out forwards;
+}
+@keyframes siteRipple{
+  0%{opacity:.72;transform:translate(-50%,-50%) scale(0)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(19)}
+}
+.site-motion-button:focus-visible,.site-motion-back-top:focus-visible{
+  outline:3px solid rgba(245,215,120,.85);outline-offset:4px
+}
+.btn,.register-button,.btn-gold,.text-link,.carousel-arrow,.profile-trigger,
+.site-search-box button,.profile-save-button{transition-timing-function:var(--site-motion-ease)}
+
+/* Animated underlines and tab movement */
+.main-link::after,.footer-logo::after{
+  content:"";position:absolute;left:0;bottom:-5px;width:0;height:2px;
+  background:linear-gradient(90deg,#f04b24,#f5d778,#176b48);
+  transition:width .3s var(--site-motion-ease)
+}
+.main-link:hover::after{width:100%}
+.culture-tab{transition:transform .25s var(--site-motion-ease),background .3s,box-shadow .3s,color .3s}
+.culture-tab:active{transform:scale(.96)}
+.culture-tab.active{animation:siteTabSelect .34s var(--site-motion-ease)}
+@keyframes siteTabSelect{0%{transform:scale(.94)}65%{transform:scale(1.045)}100%{transform:scale(1)}}
+
+/* Sections receive a soft, shifting atmospheric glow */
+.culture,.packages,.registration-section,.trip-planner{
+  background-position:0 0,100% 100%,0 0;
+  background-size:170% 170%,170% 170%,100% 100%;
+}
+.culture{background-image:radial-gradient(ellipse at 5% 12%,rgba(240,75,36,.12),transparent 38%),radial-gradient(ellipse at 93% 86%,rgba(23,107,72,.12),transparent 37%),linear-gradient(135deg,#0b1426,#17243a)}
+.packages{background-image:radial-gradient(ellipse at 5% 5%,rgba(240,75,36,.09),transparent 35%),radial-gradient(ellipse at 95% 90%,rgba(212,175,101,.17),transparent 34%),linear-gradient(145deg,#fffaf0,#f6ecdc)}
+.registration-section{background-image:radial-gradient(ellipse at 10% 12%,rgba(240,75,36,.15),transparent 40%),radial-gradient(ellipse at 90% 88%,rgba(23,107,72,.14),transparent 38%),linear-gradient(135deg,#111d32,#29173d)}
+.culture::before,.trip-planner::before{will-change:transform;animation-duration:24s}
+
+/* A continuously moving travel ribbon between homepage sections */
+.bharat-marquee{
+  position:relative;overflow:hidden;padding:12px 0;
+  color:#fff2cf;background:linear-gradient(90deg,#9f351e,#e65a27 24%,#bb702b 55%,#176b48 100%);
+  border-bottom:1px solid rgba(245,215,120,.42);
+}
+.bharat-marquee-track{
+  display:flex;width:max-content;align-items:center;gap:30px;
+  animation:siteMarquee 34s linear infinite;
+}
+.bharat-marquee:hover .bharat-marquee-track{animation-play-state:paused}
+.bharat-marquee span{
+  white-space:nowrap;font-size:10px;font-weight:850;letter-spacing:.17em;text-transform:uppercase
+}
+.bharat-marquee .marquee-star{color:#ffe19a;font-size:15px}
+@keyframes siteMarquee{to{transform:translateX(-50%)}}
+
+/* Smooth form focus, animated checks and useful validation feedback */
+input,select,textarea{transition:border-color .22s ease,box-shadow .22s ease,background .22s ease}
+input:focus,select:focus,textarea:focus{
+  outline:0;border-color:#e78b40!important;
+  box-shadow:0 0 0 3px rgba(240,75,36,.14),0 0 18px rgba(245,215,120,.13);
+}
+input[type="checkbox"],input[type="radio"]{accent-color:#176b48;transition:transform .18s}
+input[type="checkbox"]:checked,input[type="radio"]:checked{animation:siteCheckPop .25s ease}
+@keyframes siteCheckPop{0%{transform:scale(.75)}70%{transform:scale(1.18)}100%{transform:scale(1)}}
+.site-field-shake{animation:siteErrorShake .38s ease}
+@keyframes siteErrorShake{0%,100%{translate:0 0}20%,60%{translate:-5px 0}40%,80%{translate:5px 0}}
+.trip-result.site-result-enter{animation:siteResultPop .5s var(--site-motion-ease) both}
+@keyframes siteResultPop{0%{opacity:0;transform:translateY(18px) scale(.94)}70%{opacity:1;transform:translateY(-3px) scale(1.015)}100%{opacity:1;transform:translateY(0) scale(1)}}
+
+/* Search, profile and modal transitions feel like one coherent interface */
+.site-search-results{transform-origin:top right}
+.search-result{transition:background .2s,transform .22s var(--site-motion-ease)}
+.profile-drawer{will-change:transform}
+.modal-box{transform-origin:center;will-change:transform,opacity}
+.modal.open .modal-box{animation:siteModalEnter .42s var(--site-motion-ease) both}
+@keyframes siteModalEnter{0%{opacity:0;transform:translateY(22px) scale(.94) rotateX(4deg)}70%{opacity:1;transform:translateY(-3px) scale(1.01)}100%{opacity:1;transform:translateY(0) scale(1)}}
+
+/* Back-to-top action appears after the visitor has explored the page */
+.site-motion-back-top{
+  position:fixed;z-index:1400;right:24px;bottom:24px;
+  width:49px;height:49px;display:grid;place-items:center;
+  border:1px solid rgba(245,215,120,.75);border-radius:50%;
+  color:#24172f;background:linear-gradient(145deg,#ffe9ad,#e9a849);
+  box-shadow:0 9px 24px rgba(8,14,26,.25);
+  font-size:23px;font-weight:900;cursor:pointer;
+  opacity:0;visibility:hidden;transform:translateY(14px) scale(.85);
+  transition:opacity .25s,visibility .25s,transform .32s var(--site-motion-ease),box-shadow .25s;
+}
+.site-motion-back-top.is-visible{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+.site-motion-back-top:hover{transform:translateY(-4px) scale(1.07);box-shadow:0 14px 28px rgba(8,14,26,.32)}
+.site-motion-back-top.is-launching{animation:siteRocket .55s ease-in}
+@keyframes siteRocket{to{opacity:0;transform:translateY(-120px) scale(.55) rotate(-15deg)}}
+
+/* Keep the site lively without forcing motion on visitors who opt out. */
+@media(max-width:760px){
+  .site-motion-back-top{right:15px;bottom:15px;width:44px;height:44px}
+  .site-motion-tilt:hover{transform:translateY(-4px)}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .site-motion-ready .site-reveal,.site-motion-ready .site-reveal.site-revealed{
+    opacity:1;filter:none;transform:none;transition:none;will-change:auto
+  }
+  .site-motion-image,.site-motion-tilt,.site-motion-button,.site-motion-back-top,
+  .bharat-marquee-track,.site-motion-button::before{animation:none!important;transition:none!important}
+  .site-motion-back-top{transform:none}
+  .site-ripple{display:none}
+  .navbar{transition:none}
+}
