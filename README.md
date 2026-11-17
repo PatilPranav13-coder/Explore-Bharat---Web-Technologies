@@ -13,6 +13,9 @@ It includes:
 - Destination search with optional live web search and source links.
 - Bharat AI travel assistant powered by the OpenAI Responses API.
 - Optional PostgreSQL enquiry storage, consent checkbox, privacy and terms pages.
+- Persistent cart with traveller quantities, always-visible profile/cart navigation, Supabase passwordless profiles, private travel logs and booking history.
+- Razorpay test-mode checkout with server-calculated totals, payment signature/status verification and payment-confirmed booking records.
+- Horizontal package rail, accessible scroll controls and site-wide section/card motion with reduced-motion support.
 - Mobile-responsive design, accessibility improvements and smoke checks.
 
 ## Run the new website
