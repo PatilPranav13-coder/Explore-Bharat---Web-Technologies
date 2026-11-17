@@ -497,3 +497,32 @@ h1,h2,h3,h4,p{ text-wrap:pretty }
 }
 
 @media(min-width:701px){.package-rail .package-card{flex:0 0 min(420px,38%)}}
+
+
+/* Search visibility safeguard for the published GitHub Pages layout */
+.site-header .nav-search{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  flex:0 1 270px;
+  width:clamp(210px,22vw,300px);
+  min-width:190px;
+  max-width:320px;
+  position:relative;
+  z-index:25;
+}
+.site-header .nav-search input{
+  display:block!important;
+  visibility:visible!important;
+  min-width:0;
+}
+@media(max-width:1100px) and (min-width:701px){
+  .site-header{flex-wrap:wrap;row-gap:12px;justify-content:space-between}
+  .site-header .brand{order:1}
+  .site-header .header-actions{order:2}
+  .site-header .nav-search{order:3;flex:1 1 100%;width:100%;max-width:none;min-width:0}
+  .site-header .main-nav{order:4;flex:1 1 100%;justify-content:center;white-space:normal}
+}
+@media(max-width:700px){
+  .site-header .nav-search{display:flex!important;grid-area:search;width:100%;max-width:none;min-width:0}
+}
