@@ -11,7 +11,8 @@ A responsive India travel discovery site with an interactive destination catalog
 - Search across the destination guide and, when configured, live web search with source links.
 - Bharat AI chat using the OpenAI Responses API. The API key stays on the Node server.
 - Optional PostgreSQL storage for trip enquiries. Without a database, the demo keeps enquiries only in the visitor's browser.
-- FAQ, privacy and terms pages, responsive layout, keyboard-friendly controls, reduced-motion support and basic security headers.\n- Explicit enquiry consent and clear demo-versus-server storage messaging.
+- FAQ, privacy and terms pages, responsive layout, keyboard-friendly controls, reduced-motion support and basic security headers.
+- Explicit enquiry consent and clear demo-versus-server storage messaging.
 
 ## Run locally
 
