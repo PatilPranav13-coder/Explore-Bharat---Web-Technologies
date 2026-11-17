@@ -23,7 +23,7 @@ assert.ok(server.includes('type: "web_search"'), "Live web search tool is not co
 assert.ok(server.includes("trip_enquiries"), "PostgreSQL enquiry persistence is missing.");
 assert.ok(server.includes("/api/payments/webhook"), "Razorpay captured-payment webhook endpoint is missing.");
 assert.ok(!app.includes("process.env.OPENAI_API_KEY") && !/sk-[A-Za-z0-9_-]{20,}/.test(app), "Never expose an API key in browser JavaScript.");
-assert.ok(html.includes("Package prices are illustrative"), "Package estimate disclaimer is missing.");
+assert.ok(html.includes("The amounts above are sample values"), "Package estimate disclaimer is missing.");
 assert.ok(html.includes('name="preferredContact"'), "Traveller contact preference is missing.");
 assert.ok(html.includes('name="phoneCountryCode"'), "Traveller phone country code is missing.");
 assert.ok(app.includes("updatePreferredContact"), "Dynamic contact validation is missing.");
