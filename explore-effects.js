@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const key = card.dataset.destination || "";
     addEntry({
       title,
-      description: card.querySelector(".card-content")?.textContent.replace(/\\s+/g, " ").trim() || "Explore this destination.",
+      description: card.querySelector(".card-content")?.textContent.replace(/\s+/g, " ").trim() || "Explore this destination.",
       type: "Destination",
       icon: "📍",
       target: "#destinations",
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".featured-card").forEach((card) => {
     addEntry({
       title: card.querySelector("h3")?.textContent.trim() || "Tour package",
-      description: card.textContent.replace(/\\s+/g, " ").trim(),
+      description: card.textContent.replace(/\s+/g, " ").trim(),
       type: "Tour package",
       icon: "🧳",
       target: "#packages",
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".travel-style-card").forEach((card) => {
     addEntry({
       title: card.querySelector("h3")?.textContent.trim() || "Travel style",
-      description: card.textContent.replace(/\\s+/g, " ").trim(),
+      description: card.textContent.replace(/\s+/g, " ").trim(),
       type: "Trip idea",
       icon: "✨",
       target: "#trip-planner",
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderResults(query) {
     if (!searchResults) return;
     const normalized = query.trim().toLocaleLowerCase("en-IN");
-    const terms = normalized.split(/\\s+/).filter(Boolean);
+    const terms = normalized.split(/\s+/).filter(Boolean);
     const matches = !normalized
       ? entries.filter((item) => ["Explore destinations","Culture and traditions","Tour packages","Build your own trip"].includes(item.title))
       : entries.filter((item) => {
