@@ -299,7 +299,7 @@ $("#commerceCheckoutForm").addEventListener("submit",async event=>{
   try{
     const orderResponse=await fetch("/api/payments/order",{
       method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({items:cart.map(({id,quantity})=>({id,quantity})),customer:{name:values.name,email:values.email,phone:values.phone,travelDate:values.travelDate}})
+      body:JSON.stringify({acceptedTestTerms:values.terms==="on",items:cart.map(({id,quantity})=>({id,quantity})),customer:{name:values.name,email:values.email,phone:values.phone,travelDate:values.travelDate}})
     });
     const orderData=await orderResponse.json();
     if(!orderResponse.ok)throw new Error(orderData.error||"Unable to start checkout.");
