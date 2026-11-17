@@ -109,7 +109,6 @@ $$("[data-search-jump]",$("#searchPanel")).forEach(btn=>btn.addEventListener("cl
 $$("[data-search-suggest]").forEach(btn=>btn.addEventListener("click",()=>{$("#siteSearch").value=btn.dataset.searchSuggest;runSearch();}));
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape"){closeSearchPanel();$("#siteSearch").blur();}
-  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openSearchPanel();$("#siteSearch").focus();}
 });
 $("#menuToggle").addEventListener("click",()=>$(".main-nav").classList.toggle("open"));$$(".main-nav a").forEach(a=>a.addEventListener("click",()=>$(".main-nav").classList.remove("open")));
 $("#modalClose").addEventListener("click",()=>$("#tripModal").classList.remove("open"));$("#editTrip").addEventListener("click",()=>{$("#tripModal").classList.remove("open");setStep(3);$("#planner").scrollIntoView({behavior:"smooth"});});$("#tripModal").addEventListener("click",e=>{if(e.target.id==="tripModal")e.currentTarget.classList.remove("open")});
