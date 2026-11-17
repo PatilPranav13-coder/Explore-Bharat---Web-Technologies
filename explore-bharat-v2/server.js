@@ -271,6 +271,7 @@ app.post("/api/payments/order", async (req, res) => {
   if (!razorpayReady || !database) return res.status(503).json({ error: "Test checkout is not configured. The site owner must add Razorpay test credentials and DATABASE_URL." });
   const items = Array.isArray(req.body?.items) ? req.body.items : [];
   const customer = req.body?.customer || {};
+  if (req.body?.acceptedTestTerms !== true) return res.status(400).json({ error: "Please confirm the test checkout terms before continuing." });
   const name = typeof customer.name === "string" ? customer.name.trim().slice(0, 100) : "";
   const email = typeof customer.email === "string" ? customer.email.trim().toLowerCase().slice(0, 254) : "";
   const phone = typeof customer.phone === "string" ? customer.phone.trim().slice(0, 24) : "";
