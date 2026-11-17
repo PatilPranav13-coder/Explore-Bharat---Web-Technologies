@@ -21,6 +21,7 @@ const database = process.env.DATABASE_URL
 let schemaReady = false;
 
 app.disable("x-powered-by");
+app.set("trust proxy", process.env.NODE_ENV === "production" ? 1 : false);
 app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
 app.use(express.json({ limit: "16kb" }));
 app.use(express.static(__dirname));
@@ -59,10 +60,12 @@ async function ensureEnquiryTable() {
       name TEXT NOT NULL,
       email TEXT NOT NULL,
       phone TEXT,
+      consent BOOLEAN NOT NULL DEFAULT FALSE,
       trip JSONB NOT NULL,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `);
+  await database.query("ALTER TABLE trip_enquiries ADD COLUMN IF NOT EXISTS consent BOOLEAN NOT NULL DEFAULT FALSE");
   schemaReady = true;
 }
 
@@ -132,6 +135,9 @@ app.post("/api/enquiries", async (req, res) => {
   if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: "Please provide a valid name and email address." });
   }
+  if (contact.consent !== true) {
+    return res.status(400).json({ error: "Please confirm that you agree to be contacted about this trip enquiry." });
+  }
   if (!Array.isArray(trip.places) || trip.places.length === 0 || trip.places.length > 20) {
     return res.status(400).json({ error: "Please choose between 1 and 20 destinations." });
   }
@@ -141,8 +147,8 @@ app.post("/api/enquiries", async (req, res) => {
   try {
     await ensureEnquiryTable();
     const saved = await database.query(
-      "INSERT INTO trip_enquiries (name, email, phone, trip) VALUES ($1, $2, $3, $4::jsonb) RETURNING id, created_at",
-      [name, email, phone || null, JSON.stringify(trip)]
+      "INSERT INTO trip_enquiries (name, email, phone, consent, trip) VALUES ($1, $2, $3, $4, $5::jsonb) RETURNING id, created_at",
+      [name, email, phone || null, true, JSON.stringify(trip)]
     );
     res.status(201).json({ saved: true, enquiryId: saved.rows[0].id, createdAt: saved.rows[0].created_at });
   } catch (error) {
