@@ -1,11 +1,18 @@
-const CACHE_NAME = "veya-shell-v3";
+const CACHE_NAME = "bharat-veya-shell-v4";
 const BASE_URL = new URL(".", self.registration.scope);
 const API_PATH = new URL("api/", BASE_URL).pathname;
 const APP_SHELL = [
-  "./", "index.html", "style.css", "studio.html", "studio.css", "manifest.webmanifest",
-  "assets/veya-mark.svg", "images/Kashmir%20for%20project.jpg",
-  "src/main.js", "src/core/csv.js", "src/core/ingest.js", "src/core/analysis.js",
-  "src/core/chart.js", "src/core/storage.js", "src/core/pencil.js", "src/core/export.js"
+  "./", "index.html", "style.css", "script.js", "explore-effects.js", "profile-log.js",
+  "site-motion.css", "site-motion.js", "site-motion-plus.js", "bharat-ai.css", "bharat-ai.js",
+  "architecture-modal.css", "architecture-modal.js", "bharat-features.css", "bharat-features.js",
+  "pwa-init.js", "image-credits.html", "privacy.html", "terms.html",
+  "explore-bharat.webmanifest", "manifest.webmanifest",
+  "assets/veya-mark.svg", "assets/explore-bharat-mark.svg",
+  "images/hero-collage.jpg", "images/kashmir.jpg", "images/kerala.jpg",
+  "images/maharashtra.jpg", "images/rajasthan.jpg", "images/Kashmir%20for%20project.jpg",
+  "studio.html", "studio.css", "src/main.js", "src/core/csv.js", "src/core/ingest.js",
+  "src/core/analysis.js", "src/core/chart.js", "src/core/storage.js",
+  "src/core/pencil.js", "src/core/export.js"
 ];
 
 self.addEventListener("install", event => {
