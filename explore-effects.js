@@ -221,4 +221,44 @@ document.addEventListener("DOMContentLoaded", () => {
     },{threshold:.12,rootMargin:"0px 0px -35px 0px"});
     revealTargets.forEach((element) => observer.observe(element));
   }
+
+
+  // Animate homepage feature counts when the ribbon first enters view.
+  const counters=document.querySelectorAll(".highlight-counter[data-count]");
+  const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function runCounter(element){
+    const target=Number(element.dataset.count);
+    if(!Number.isFinite(target))return;
+    if(reduceMotion){element.textContent=String(target);return;}
+    const duration=1050,start=performance.now();
+    function tick(now){
+      const progress=Math.min(1,(now-start)/duration),eased=1-Math.pow(1-progress,3);
+      element.textContent=String(Math.round(target*eased));
+      if(progress<1)requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  if(counters.length&&"IntersectionObserver" in window&&!reduceMotion){
+    const countObserver=new IntersectionObserver((entries,observer)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){runCounter(entry.target);observer.unobserve(entry.target);}
+      });
+    },{threshold:.65});
+    counters.forEach(counter=>countObserver.observe(counter));
+  }
+
+  // A soft pointer-responsive light over the hero photograph on desktop.
+  const heroVisual=document.querySelector(".hero-visual");
+  if(heroVisual&&!reduceMotion&&window.matchMedia("(pointer:fine)").matches){
+    const glow=document.createElement("div");
+    glow.className="hero-pointer-glow";glow.setAttribute("aria-hidden","true");heroVisual.appendChild(glow);
+    heroVisual.addEventListener("pointermove",event=>{
+      const rect=heroVisual.getBoundingClientRect();
+      glow.style.setProperty("--glow-x",((event.clientX-rect.left)/rect.width*100)+"%");
+      glow.style.setProperty("--glow-y",((event.clientY-rect.top)/rect.height*100)+"%");
+      glow.classList.add("active");
+    });
+    heroVisual.addEventListener("pointerleave",()=>glow.classList.remove("active"));
+  }
+
 });
