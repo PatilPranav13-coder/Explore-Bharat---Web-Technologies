@@ -80,11 +80,23 @@ document.addEventListener("DOMContentLoaded",()=>{
       avatar.setAttribute("aria-hidden","true");avatar.textContent="✦";wrapper.appendChild(avatar);
     }
     const bubble=document.createElement("div");bubble.className="bharat-ai-bubble";
-    const paragraph=document.createElement("p");paragraph.textContent=text;bubble.appendChild(paragraph);
+    const paragraph=document.createElement("p");bubble.appendChild(paragraph);
     if(role!=="user"){
       const meta=document.createElement("span");meta.className="bharat-ai-message-meta";meta.textContent="Bharat AI · Website guide";bubble.appendChild(meta);
     }
-    wrapper.appendChild(bubble);messages.appendChild(wrapper);messages.scrollTop=messages.scrollHeight;
+    wrapper.appendChild(bubble);messages.appendChild(wrapper);
+    const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if(role==="user"||reduced){paragraph.textContent=text;messages.scrollTop=messages.scrollHeight;return;}
+    // Typewriter-style progressive reveal for the static website guide.
+    // This is a presentation effect, not token streaming from a hosted language model.
+    let offset=0;
+    function revealChunk(){
+      offset=Math.min(text.length,offset+3);
+      paragraph.textContent=text.slice(0,offset);
+      messages.scrollTop=messages.scrollHeight;
+      if(offset<text.length)window.setTimeout(revealChunk,18);
+    }
+    revealChunk();
   }
   function setPanel(open){
     panel.hidden=!open;panel.setAttribute("aria-hidden",String(!open));
