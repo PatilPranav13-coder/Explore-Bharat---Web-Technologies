@@ -11,7 +11,7 @@ const server = read("server.js");
 for (const file of ["index.html", "styles.css", "app.js", "server.js", "package.json", ".env.example", "privacy.html", "terms.html"]) {
   assert.ok(fs.existsSync(path.join(root, "..", file)), `Missing required file: ${file}`);
 }
-for (const id of ["main-content", "destinationGrid", "planner", "tripForm", "contactForm", "searchToggle", "chatLauncher", "faq"]) {
+for (const id of ["main-content", "destinationGrid", "planner", "tripForm", "contactForm", "searchToggle", "chatLauncher", "faq", "registrationTitle"]) {
   assert.ok(html.includes(`id="${id}"`), `Missing required UI element: ${id}`);
 }
 for (const endpoint of ["/api/chat", "/api/search", "/api/enquiries"]) {
@@ -23,4 +23,8 @@ assert.ok(server.includes('type: "web_search"'), "Live web search tool is not co
 assert.ok(server.includes("trip_enquiries"), "PostgreSQL enquiry persistence is missing.");
 assert.ok(!app.includes("process.env.OPENAI_API_KEY") && !/sk-[A-Za-z0-9_-]{20,}/.test(app), "Never expose an API key in browser JavaScript.");
 assert.ok(html.includes("Package prices are illustrative"), "Package estimate disclaimer is missing.");
+assert.ok(html.includes('name="preferredContact"'), "Traveller contact preference is missing.");
+assert.ok(html.includes('name="phoneCountryCode"'), "Traveller phone country code is missing.");
+assert.ok(app.includes("updatePreferredContact"), "Dynamic contact validation is missing.");
+assert.ok(server.includes("preferred_contact"), "Server does not store traveller contact preference.");
 console.log("Explore Bharat smoke checks passed.");
