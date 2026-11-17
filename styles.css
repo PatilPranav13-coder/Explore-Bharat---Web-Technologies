@@ -526,3 +526,12 @@ h1,h2,h3,h4,p{ text-wrap:pretty }
 @media(max-width:700px){
   .site-header .nav-search{display:flex!important;grid-area:search;width:100%;max-width:none;min-width:0}
 }
+
+/* Keep the visible search field from being squeezed out on narrower laptop widths */
+@media(max-width:1350px) and (min-width:701px){
+  .site-header{flex-wrap:wrap;row-gap:12px;justify-content:space-between}
+  .site-header .brand{order:1}
+  .site-header .header-actions{order:2}
+  .site-header .nav-search{order:3;flex:1 1 100%;width:100%;max-width:none;min-width:0}
+  .site-header .main-nav{order:4;flex:1 1 100%;justify-content:center;white-space:normal}
+}
