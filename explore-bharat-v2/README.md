@@ -1,12 +1,13 @@
 # Explore Bharat v2
 
-A responsive India travel discovery site with an interactive destination catalogue, custom trip builder, package starting points, server-side AI travel assistant and web search.
+A refined India travel discovery site with an interactive destination catalogue, custom trip builder, guided traveller registration, server-side AI travel assistant and web search. The visual language is inspired by the restrained typography, silver finishes, soft blue accents and generous spacing of premium hardware product pages.
 
 ## Features
 
 - Editorial-style homepage, responsive navigation and a moving announcement ticker.
 - Destination category filters and expandable place cards with planning notes.
 - Three-step trip builder for destinations, dates, duration, group size, interests, budget and travel style.
+- Guided traveller registration with contact channel preference, phone country code, consent, validation and an itinerary summary.
 - Package cards that prefill the trip builder.
 - Search across the destination guide and, when configured, live web search with source links.
 - Bharat AI chat using the OpenAI Responses API. The API key stays on the Node server.
