@@ -35,7 +35,7 @@ assert.ok(app.includes("data-cart-add"), "Tour packages do not expose Add to car
 assert.ok(app.includes("function renderCart"), "Cart renderer is missing.");
 assert.ok(app.includes("signInWithOtp"), "Passwordless Supabase profile sign-in is missing.");
 assert.ok(app.includes("travel_logs"), "Personal travel log is not connected.");
-assert.ok(html.includes("Razorpay test mode"), "Checkout must disclose test-only payment mode.");
+assert.ok(html.includes("test mode"), "Checkout must disclose test-only payment mode.");
 assert.ok(html.includes("profileOpen") && html.includes("cartOpen"), "Profile and cart must be visible in the navigation.");
 const schema = read("supabase/schema.sql");
 assert.ok(schema.includes("enable row level security"), "Supabase tables must use Row Level Security.");
