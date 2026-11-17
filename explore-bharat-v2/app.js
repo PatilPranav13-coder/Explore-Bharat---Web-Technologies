@@ -30,8 +30,52 @@ $("#searchToggle").addEventListener("click",()=>{$("#searchPanel").classList.tog
 async function runSearch(){const query=$("#siteSearch").value.trim();if(!query){$("#searchResults").textContent="Try a destination, region, activity or travel question.";return;}$("#searchResults").textContent="Searching the web…";try{const response=await fetch("/api/search",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query})});if(!response.ok)throw new Error("Live search is not configured");const data=await response.json();const results=$("#searchResults");results.innerHTML="";const answer=document.createElement("p");answer.className="search-answer";answer.textContent=data.answer||"No answer found.";results.appendChild(answer);if(data.sources?.length){const sources=document.createElement("div");sources.className="search-source-list";data.sources.forEach(source=>{const url=String(source.url||"");if(!url.startsWith("https://"))return;const link=document.createElement("a");link.href=url;link.target="_blank";link.rel="noopener noreferrer";link.textContent=source.title||"Source";sources.appendChild(link);});results.appendChild(sources);}}catch(error){const q=query.toLowerCase();const matches=destinations.filter(p=>p.toLowerCase().includes(q)||infoFor(p).toLowerCase().includes(q));const results=$("#searchResults");results.innerHTML='<p class="search-answer">Live web search is not connected yet. Here are matches from the Explore Bharat destination guide:</p>'+(matches.length?matches.slice(0,7).map(p=>'<button data-result="'+escapeHtml(p)+'">'+escapeHtml(p)+' ↗</button>').join(""):"No destination matches in the local guide. Configure OPENAI_API_KEY for live web search.");}}
 $("#searchButton").addEventListener("click",runSearch);$("#siteSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSearch();}});$("#searchResults").addEventListener("click",e=>{const b=e.target.closest("[data-result]");if(b){addPlace(b.dataset.result);$("#searchPanel").classList.remove("open");}});
 $("#menuToggle").addEventListener("click",()=>$(".main-nav").classList.toggle("open"));$$(".main-nav a").forEach(a=>a.addEventListener("click",()=>$(".main-nav").classList.remove("open")));
-$("#modalClose").addEventListener("click",()=>$("#tripModal").classList.remove("open"));$("#editTrip").addEventListener("click",()=>$("#tripModal").classList.remove("open"));$("#tripModal").addEventListener("click",e=>{if(e.target.id==="tripModal")e.currentTarget.classList.remove("open")});
-$("#contactForm").addEventListener("submit",async e=>{e.preventDefault();const submit=e.currentTarget.querySelector('button[type="submit"]');submit.disabled=true;submit.textContent="Saving…";const contact=Object.fromEntries(new FormData(e.currentTarget));contact.consent=contact.consent==="on";const record={...tripState.formData,contact,createdAt:new Date().toISOString()};try{const response=await fetch("/api/enquiries",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contact,trip:tripState.formData})});if(!response.ok)throw new Error("Server storage is not configured or could not save the enquiry.");const result=await response.json();$("#tripSummary").innerHTML='<div class="saved-state"><b>Your trip enquiry has been sent successfully.</b><br>Thank you, '+escapeHtml(contact.name)+'. Your reference is EB-'+escapeHtml(result.enquiryId)+'. The trip details are saved securely on the website server.</div>';e.currentTarget.style.display="none";}catch(err){try{const old=JSON.parse(localStorage.getItem("exploreBharatEnquiries")||"[]");old.push(record);localStorage.setItem("exploreBharatEnquiries",JSON.stringify(old));}catch(storageError){console.warn("Local storage unavailable",storageError);}$("#tripSummary").innerHTML='<div class="saved-state"><b>Your trip details are saved on this device only.</b><br>Thank you, '+escapeHtml(contact.name)+'. The website server did not receive this enquiry. To enable online submissions, the site owner must connect PostgreSQL using DATABASE_URL.</div>';e.currentTarget.style.display="none";}finally{submit.disabled=false;}});
+$("#modalClose").addEventListener("click",()=>$("#tripModal").classList.remove("open"));$("#editTrip").addEventListener("click",()=>{$("#tripModal").classList.remove("open");setStep(3);$("#planner").scrollIntoView({behavior:"smooth"});});$("#tripModal").addEventListener("click",e=>{if(e.target.id==="tripModal")e.currentTarget.classList.remove("open")});
+const phoneInput=$("#contactForm [name=phone]");
+const phoneCode=$("#contactForm [name=phoneCountryCode]");
+function updatePreferredContact(){
+  const preference=$('#contactForm input[name="preferredContact"]:checked')?.value||"Email";
+  const needsPhone=preference!=="Email";
+  phoneInput.required=needsPhone;
+  phoneInput.setCustomValidity(needsPhone&&phoneInput.value.replace(/\\D/g,"").length<7?"Enter a valid mobile number for this contact method.":"");
+  phoneInput.closest(".register-field").querySelector("span small").textContent=needsPhone?"Required":"Optional";
+}
+$$('#contactForm input[name="preferredContact"]').forEach(input=>input.addEventListener("change",updatePreferredContact));
+phoneInput.addEventListener("input",updatePreferredContact);
+updatePreferredContact();
+$("#contactForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  updatePreferredContact();
+  if(!e.currentTarget.reportValidity())return;
+  const submit=e.currentTarget.querySelector('button[type="submit"]');
+  submit.disabled=true;
+  submit.textContent="Sending…";
+  const contact=Object.fromEntries(new FormData(e.currentTarget));
+  contact.consent=contact.consent==="on";
+  contact.phone=contact.phone?phoneCode.value+" "+contact.phone.trim():"";
+  const record={...tripState.formData,contact,createdAt:new Date().toISOString()};
+  try{
+    const response=await fetch("/api/enquiries",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contact,trip:tripState.formData})});
+    if(!response.ok)throw new Error("Server storage is not configured or could not save the enquiry.");
+    const result=await response.json();
+    $("#tripSummary").innerHTML='<div class="saved-state"><b>Your trip enquiry has been sent.</b><br>Thank you, '+escapeHtml(contact.name)+'. Your reference is EB-'+escapeHtml(result.enquiryId)+'. Your preferences are saved securely on the website server.</div>';
+    e.currentTarget.style.display="none";
+    $(".registration-assurance b").textContent="Enquiry received";
+    $(".registration-assurance small").textContent="Your trip preferences are now with our team.";
+  }catch(err){
+    try{
+      const old=JSON.parse(localStorage.getItem("exploreBharatEnquiries")||"[]");
+      old.push(record);
+      localStorage.setItem("exploreBharatEnquiries",JSON.stringify(old));
+    }catch(storageError){console.warn("Local storage unavailable",storageError);}
+    $("#tripSummary").innerHTML='<div class="saved-state"><b>Your trip details are saved on this device.</b><br>Thank you, '+escapeHtml(contact.name)+'. The website server did not receive this enquiry. It is saved locally in this browser only.</div>';
+    e.currentTarget.style.display="none";
+    $(".registration-assurance b").textContent="Saved on this device";
+    $(".registration-assurance small").textContent="This demo did not send your details to a travel operator.";
+  }finally{
+    submit.disabled=false;
+  }
+});
 $("#newsletterForm").addEventListener("submit",e=>{e.preventDefault();$("#newsletterMessage").textContent="Thanks! Newsletter sign-up is in demo mode and has not been sent.";});
 const chatPanel=$("#chatPanel"),chatMessages=$("#chatMessages");function addMessage(text,who){const div=document.createElement("div");div.className="chat-bubble "+who;div.textContent=text;chatMessages.appendChild(div);chatMessages.scrollTop=chatMessages.scrollHeight;}
 $("#chatLauncher").addEventListener("click",()=>{chatPanel.classList.add("open");chatPanel.setAttribute("aria-hidden","false");$("#chatInput").focus();});$("#chatClose").addEventListener("click",()=>{chatPanel.classList.remove("open");chatPanel.setAttribute("aria-hidden","true");});
