@@ -3,12 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b1426">
+    <link rel="manifest" href="explore-bharat.webmanifest">
     <meta name="description" content="Explore Bharat — Discover India's destinations, culture, heritage and travel experiences.">
     <title>Explore Bharat | One Nation. Endless Journeys.</title>
     <link rel="stylesheet" href="style.css?v=20261117-home-pro">
     <link rel="stylesheet" href="site-motion.css?v=20261117-immersive">
     <link rel="stylesheet" href="bharat-ai.css?v=20261117-guide">
     <link rel="stylesheet" href="architecture-modal.css?v=20261117-architecture">
+    <link rel="stylesheet" href="bharat-features.css?v=20261118-features">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Explore Bharat",
+      "url": "https://patilpranav13-coder.github.io/Explore-Bharat---Web-Technologies/",
+      "description": "A student-built guide to India's destinations, architecture, culture, travel inspiration and trip planning.",
+      "inLanguage": "en-IN",
+      "about": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Explore Bharat Student Project"
+      }
+    }
+    </script>
 </head>
 
 <body>
@@ -752,5 +774,22 @@
 <script src="site-motion-plus.js?v=20261117-immersive"></script>
 <script src="bharat-ai.js?v=20261117-guide"></script>
 <script src="architecture-modal.js?v=20261117-architecture"></script>
+<script src="bharat-features.js?v=20261118-features"></script>
+<script src="pwa-init.js?v=20261118-pwa"></script>
+
+<!-- COMMAND PALETTE -->
+<div class="bharat-command-overlay" id="bharatCommandOverlay" hidden>
+  <section class="bharat-command-panel" role="dialog" aria-modal="true" aria-labelledby="bharatCommandTitle">
+    <div class="bharat-command-top">
+      <span class="bharat-command-mark" aria-hidden="true">⌘</span>
+      <div><h2 id="bharatCommandTitle">Explore Bharat</h2><p>Jump to a destination, discovery or tool</p></div>
+      <kbd>ESC</kbd>
+    </div>
+    <label class="visually-hidden" for="bharatCommandInput">Search website commands</label>
+    <input id="bharatCommandInput" type="search" placeholder="Where would you like to go?" autocomplete="off">
+    <div class="bharat-command-results" id="bharatCommandResults" role="listbox" aria-label="Website commands"></div>
+    <div class="bharat-command-footer"><span>↑ ↓ Navigate</span><span>↵ Open</span><span>⌘ K / Ctrl K</span></div>
+  </section>
+</div>
 </body>
 </html>
