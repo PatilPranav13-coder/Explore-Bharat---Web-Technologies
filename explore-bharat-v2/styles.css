@@ -473,3 +473,25 @@ h1,h2,h3,h4,p{ text-wrap:pretty }
   .package-rail{scroll-behavior:auto}
   .nav-tool,.add-cart-btn,.package-card,.dest-photo{transition:none}
 }
+
+
+/* Fine motion and commerce details */
+.nav-tool-icon{width:18px;height:18px;display:block;flex:0 0 18px}
+.nav-tool:hover .nav-tool-icon{transform:scale(1.06)}
+.nav-tool-icon{transition:transform .22s cubic-bezier(.2,.8,.2,1)}
+.package-card .package-actions{padding:0 23px 21px}
+.package-card .add-cart-btn.added{background:#287a4c;border-color:#287a4c}
+.cart-thumb.pack-rajasthan{background-image:url("https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=300&q=75")}
+.cart-thumb.pack-kerala{background-image:url("https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=300&q=75")}
+.cart-thumb.pack-himalaya{background-image:url("https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=300&q=75")}
+.profile-panel .commerce-form .text-input,.checkout-panel .commerce-form .text-input{background:#fff!important}
+.commerce-form .text-input:disabled{background:#f1f1f4!important;color:#8a8a90}
+.history-card{animation:historyIn .35s ease both}
+@keyframes historyIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.hero-content{animation:heroCopyIn .85s cubic-bezier(.2,.7,.2,1) both}
+@keyframes heroCopyIn{from{opacity:0;transform:translateY(17px)}to{opacity:1;transform:translateY(0)}}
+.destination-card,.package-card,.faq-list details,.nav-tool,.btn,.chip{will-change:transform}
+@media(prefers-reduced-motion:reduce){
+  .hero-content,.history-card{animation:none}
+  .destination-card,.package-card,.faq-list details,.nav-tool,.btn,.chip{will-change:auto}
+}
