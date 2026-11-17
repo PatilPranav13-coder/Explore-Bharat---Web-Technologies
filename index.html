@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css?v=20261117-home-pro">
     <link rel="stylesheet" href="site-motion.css?v=20261117-immersive">
     <link rel="stylesheet" href="bharat-ai.css?v=20261117-guide">
+    <link rel="stylesheet" href="architecture-modal.css?v=20261117-architecture">
 </head>
 
 <body>
@@ -692,6 +693,47 @@
 
 </main>
 
+<!-- ARCHITECTURE LIQUID-GLASS DETAIL VIEW -->
+<div class="architecture-modal" id="architectureModal" aria-hidden="true" hidden>
+    <button class="architecture-modal-backdrop" type="button" data-architecture-close aria-label="Close monument details"></button>
+    <section class="architecture-glass-panel" role="dialog" aria-modal="true" aria-labelledby="architectureModalTitle" aria-describedby="architectureModalDescription">
+        <button class="architecture-modal-close" type="button" data-architecture-close aria-label="Close details">×</button>
+        <div class="architecture-modal-hero">
+            <img id="architectureModalImage" src="" alt="" decoding="async">
+            <div class="architecture-modal-hero-shade"></div>
+            <div class="architecture-modal-hero-copy">
+                <span class="architecture-modal-kicker" id="architectureModalKicker">ARCHITECTURAL HERITAGE</span>
+                <h2 id="architectureModalTitle">Monument name</h2>
+                <p id="architectureModalLocation">Location, Bharat</p>
+            </div>
+        </div>
+        <div class="architecture-modal-content">
+            <div class="architecture-fact-row">
+                <div><span>PERIOD</span><strong id="architectureModalPeriod">—</strong></div>
+                <div><span>STYLE</span><strong id="architectureModalStyle">—</strong></div>
+                <div><span>REGION</span><strong id="architectureModalRegion">—</strong></div>
+            </div>
+            <p class="architecture-modal-description" id="architectureModalDescription"></p>
+            <div class="architecture-modal-columns">
+                <div>
+                    <p class="architecture-modal-label">WHAT TO NOTICE</p>
+                    <ul id="architectureModalHighlights"></ul>
+                </div>
+                <div class="architecture-modal-visit">
+                    <p class="architecture-modal-label">EXPERIENCE</p>
+                    <p id="architectureModalExperience"></p>
+                    <span id="architectureModalHeritageBadge"></span>
+                </div>
+            </div>
+            <div class="architecture-modal-footer">
+                <div class="architecture-source-list" id="architectureModalSources"></div>
+                <button class="architecture-plan-button" id="architecturePlanVisit" type="button">Plan a heritage trip <span aria-hidden="true">↗</span></button>
+            </div>
+        </div>
+    </section>
+</div>
+
+
 
 <!-- FOOTER -->
 <footer class="footer">
@@ -709,5 +751,6 @@
     <script src="site-motion.js?v=20261117-sitewide"></script>
 <script src="site-motion-plus.js?v=20261117-immersive"></script>
 <script src="bharat-ai.js?v=20261117-guide"></script>
+<script src="architecture-modal.js?v=20261117-architecture"></script>
 </body>
 </html>
