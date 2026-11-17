@@ -1,0 +1,23 @@
+{
+  "name": "explore-bharat-v2",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Explore Bharat travel discovery and custom trip planner",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "check": "node --check server.js && node --check app.js && node scripts/smoke-check.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "helmet": "^8.1.0",
+    "openai": "^6.0.0",
+    "pg": "^8.13.1",
+    "razorpay": "^2.9.6"
+  }
+}
