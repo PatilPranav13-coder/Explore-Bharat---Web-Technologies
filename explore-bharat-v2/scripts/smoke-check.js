@@ -14,13 +14,13 @@ for (const file of ["index.html", "styles.css", "app.js", "server.js", "package.
 for (const id of ["main-content", "destinationGrid", "planner", "tripForm", "contactForm", "navSearchForm", "siteSearch", "searchPanel", "chatLauncher", "chatPanel", "faq", "registrationTitle", "profileOpen", "cartOpen", "packageRail", "cartPanel", "profilePanel", "checkoutPanel", "profileSignInForm", "profileEditForm", "travelLogForm", "commerceCheckoutForm"]) {
   assert.ok(html.includes(`id="${id}"`), `Missing required UI element: ${id}`);
 }
-for (const endpoint of ["/api/chat", "/api/search", "/api/enquiries", "/api/payments/order", "/api/payments/verify", "/api/payments/webhook"]) {
+for (const endpoint of ["/api/chat", "/api/search", "/api/enquiries", "/api/payments/order", "/api/payments/verify"]) {
   assert.ok(app.includes(endpoint), `Frontend does not call ${endpoint}`);
   assert.ok(server.includes(endpoint), `Backend does not implement ${endpoint}`);
 }
 assert.ok(server.includes("process.env.OPENAI_API_KEY"), "Server must read the OpenAI key from the environment.");
 assert.ok(server.includes('type: "web_search"'), "Live web search tool is not configured.");
-assert.ok(server.includes("trip_enquiries"), "PostgreSQL enquiry persistence is missing.");
+assert.ok(server.includes("trip_enquiries"), "PostgreSQL enquiry persistence is missing.");\nassert.ok(server.includes("/api/payments/webhook"), "Razorpay captured-payment webhook endpoint is missing.");
 assert.ok(!app.includes("process.env.OPENAI_API_KEY") && !/sk-[A-Za-z0-9_-]{20,}/.test(app), "Never expose an API key in browser JavaScript.");
 assert.ok(html.includes("Package prices are illustrative"), "Package estimate disclaimer is missing.");
 assert.ok(html.includes('name="preferredContact"'), "Traveller contact preference is missing.");
