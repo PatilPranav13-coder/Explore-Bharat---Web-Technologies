@@ -406,6 +406,7 @@ async function loadUserProfile(user){
 $("#profileSignInForm").addEventListener("submit",async event=>{
   event.preventDefault();
   const values=Object.fromEntries(new FormData(event.currentTarget));
+  if(String(values.phone||"").replace(/\D/g,"").length<7){showAuthStatus("Enter a valid mobile number so your traveller profile has complete contact details.");return;}
   if(!supabaseClient){showAuthStatus("Account sign-in is not configured yet. The site owner must add the Supabase URL and public anon key, then enable email OTP in Supabase Auth.");return;}
   const submit=event.currentTarget.querySelector("button[type=submit]");
   submit.disabled=true;showAuthStatus("Sending your secure sign-in link…");
@@ -422,6 +423,7 @@ $("#profileSignInForm").addEventListener("submit",async event=>{
 $("#profileEditForm").addEventListener("submit",async event=>{
   event.preventDefault();if(!supabaseClient||!authUser)return;
   const form=event.currentTarget;
+  if(form.elements.phone.value.replace(/\D/g,"").length<7){$("#profileSaveMessage").textContent="Enter a valid mobile number.";return;}
   const payload={id:authUser.id,email:authUser.email,full_name:form.elements.name.value.trim(),phone:form.elements.phone.value.trim(),updated_at:new Date().toISOString()};
   const {error}=await supabaseClient.from("profiles").upsert(payload);
   $("#profileSaveMessage").textContent=error?error.message:"Your profile has been updated.";
