@@ -26,9 +26,91 @@ $$(".expand-btn").forEach(btn=>btn.addEventListener("click",()=>{const card=btn.
 $$(".detail-add").forEach(btn=>btn.addEventListener("click",()=>addPlace(btn.dataset.add)));
 $$(".package-pick").forEach(btn=>btn.addEventListener("click",()=>{btn.dataset.places.split(",").forEach(addPlace);$("#tripForm [name=notes]").value="Interested in the "+btn.dataset.package+" package as a starting point.";setStep(1);$("#planner").scrollIntoView({behavior:"smooth"});}));
 $("#destinationFilters").addEventListener("click",e=>{const btn=e.target.closest("[data-filter]");if(!btn)return;$$(".chip").forEach(c=>c.classList.toggle("active",c===btn));let visible=0;$$(".destination-card").forEach(card=>{const show=btn.dataset.filter==="All"||card.dataset.category===btn.dataset.filter;card.style.display=show?"":"none";if(show)visible++;});$("#destinationCount").textContent=String(visible).padStart(2,"0")+" destinations";});
-$("#searchToggle").addEventListener("click",()=>{$("#searchPanel").classList.toggle("open");if($("#searchPanel").classList.contains("open"))$("#siteSearch").focus();});
-async function runSearch(){const query=$("#siteSearch").value.trim();if(!query){$("#searchResults").textContent="Try a destination, region, activity or travel question.";return;}$("#searchResults").textContent="Searching the web…";try{const response=await fetch("/api/search",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query})});if(!response.ok)throw new Error("Live search is not configured");const data=await response.json();const results=$("#searchResults");results.innerHTML="";const answer=document.createElement("p");answer.className="search-answer";answer.textContent=data.answer||"No answer found.";results.appendChild(answer);if(data.sources?.length){const sources=document.createElement("div");sources.className="search-source-list";data.sources.forEach(source=>{const url=String(source.url||"");if(!url.startsWith("https://"))return;const link=document.createElement("a");link.href=url;link.target="_blank";link.rel="noopener noreferrer";link.textContent=source.title||"Source";sources.appendChild(link);});results.appendChild(sources);}}catch(error){const q=query.toLowerCase();const matches=destinations.filter(p=>p.toLowerCase().includes(q)||infoFor(p).toLowerCase().includes(q));const results=$("#searchResults");results.innerHTML='<p class="search-answer">Live web search is not connected yet. Here are matches from the Explore Bharat destination guide:</p>'+(matches.length?matches.slice(0,7).map(p=>'<button data-result="'+escapeHtml(p)+'">'+escapeHtml(p)+' ↗</button>').join(""):"No destination matches in the local guide. Configure OPENAI_API_KEY for live web search.");}}
-$("#searchButton").addEventListener("click",runSearch);$("#siteSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSearch();}});$("#searchResults").addEventListener("click",e=>{const b=e.target.closest("[data-result]");if(b){addPlace(b.dataset.result);$("#searchPanel").classList.remove("open");}});
+function openSearchPanel(){
+  $("#searchPanel").classList.add("open");
+}
+function closeSearchPanel(){
+  $("#searchPanel").classList.remove("open");
+}
+function pageSearchHelp(query){
+  const q=query.toLowerCase();
+  if(/build|custom|planner|itinerary|plan my|make a trip|create a trip/.test(q))return {answer:"Build a trip in three simple steps. First choose one or more destinations. Next add dates, trip length and traveller counts. Finally choose interests, budget and travel style, then review the itinerary and enter your contact details. Your choices stay together as you move through the form.",href:"#planner",label:"Open the trip builder"};
+  if(/package|tour|offer|discount|price|cost/.test(q))return {answer:"Explore the Tour packages section for three example journeys: Rajasthan, Kerala and the Himalayas. Select the arrow on a package to use it as a starting point in the custom trip planner. Prices are illustrative, not live quotes or confirmed offers.",href:"#packages",label:"Explore tour packages"};
+  if(/register|registration|enquiry|enquire|contact|submit|booking form|name and email/.test(q))return {answer:"To send a trip enquiry, complete all three trip-builder steps and choose Review my trip. Check the summary, then enter your name and email, select how you'd like to be contacted and agree to the privacy note. This submits an enquiry, not a confirmed booking. No payment is taken.",href:"#planner",label:"Start a trip enquiry"};
+  if(/destination|place|expand|tile|card|mountain|beach|kerala|ladakh|jaipur|meghalaya|varanasi|andaman|hampi|mumbai/.test(q))return {answer:"Browse destination cards in the Destinations section. Use the category filters to narrow the list, then select the plus button on a card to reveal highlights, suggested season and stay length. Choose Add to my trip to carry that place into the planner.",href:"#destinations",label:"Browse destinations"};
+  if(/search|find|look for/.test(q))return {answer:"Use the search field in the top navigation. Search for a destination, travel idea or question. Website topics show a direct section link; travel questions can use live web search when the site owner has configured the AI service.",href:"#destinations",label:"Explore the website"};
+  if(/ai|chatbot|bharat ai|assistant|help/.test(q))return {answer:"Bharat AI is the website guide. Ask how to use the destination explorer, trip builder, packages or enquiry form. It can also help brainstorm India travel ideas. AI suggestions are not bookings or verified live availability.",href:"#planner",label:"Open trip planner"};
+  return null;
+}
+async function runSearch(){
+  const query=$("#siteSearch").value.trim();
+  if(!query){$("#searchResults").textContent="Try a destination, website feature or travel question.";return;}
+  openSearchPanel();
+  const pageHelp=pageSearchHelp(query);
+  if(pageHelp){
+    const results=$("#searchResults");
+    results.innerHTML="";
+    const answer=document.createElement("p");
+    answer.className="search-answer";
+    answer.textContent=pageHelp.answer;
+    const jump=document.createElement("button");
+    jump.type="button";
+    jump.className="search-jump";
+    jump.dataset.searchJump=pageHelp.href;
+    jump.textContent=pageHelp.label+" ↗";
+    results.append(answer,jump);
+    return;
+  }
+  $("#searchResults").textContent="Searching…";
+  try{
+    const response=await fetch("/api/search",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query})});
+    if(!response.ok)throw new Error("Live search is not configured");
+    const data=await response.json();
+    const results=$("#searchResults");
+    results.innerHTML="";
+    const answer=document.createElement("p");
+    answer.className="search-answer";
+    answer.textContent=data.answer||"No answer found.";
+    results.appendChild(answer);
+    if(data.sources?.length){
+      const sources=document.createElement("div");
+      sources.className="search-source-list";
+      data.sources.forEach(source=>{
+        const url=String(source.url||"");
+        if(!url.startsWith("https://"))return;
+        const link=document.createElement("a");
+        link.href=url;link.target="_blank";link.rel="noopener noreferrer";
+        link.textContent=source.title||"Source";
+        sources.appendChild(link);
+      });
+      results.appendChild(sources);
+    }
+  }catch(error){
+    const q=query.toLowerCase();
+    const matches=destinations.filter(p=>p.toLowerCase().includes(q)||infoFor(p).toLowerCase().includes(q));
+    const results=$("#searchResults");
+    results.innerHTML='<p class="search-answer">Live web search is unavailable. Here are matches from the Explore Bharat destination guide:</p>'+
+      (matches.length?matches.slice(0,7).map(p=>'<button type="button" data-result="'+escapeHtml(p)+'">'+escapeHtml(p)+' ↗</button>').join(""):"No destination matches in the local guide. Try a website section or configure live search.");
+  }
+}
+$("#navSearchForm").addEventListener("submit",e=>{e.preventDefault();runSearch();});
+$("#siteSearch").addEventListener("focus",()=>{
+  openSearchPanel();
+  if(!$("#siteSearch").value.trim())$("#searchResults").textContent="Search destinations, discover places or ask how to use the site.";
+});
+$("#searchClose").addEventListener("click",closeSearchPanel);
+$("#searchResults").addEventListener("click",e=>{
+  const jump=e.target.closest("[data-search-jump]");
+  if(jump){const target=$(jump.dataset.searchJump);closeSearchPanel();if(target)target.scrollIntoView({behavior:"smooth"});return;}
+  const result=e.target.closest("[data-result]");
+  if(result){addPlace(result.dataset.result);closeSearchPanel();}
+});
+$$("[data-search-jump]",$("#searchPanel")).forEach(btn=>btn.addEventListener("click",()=>{const target=$(btn.dataset.searchJump);closeSearchPanel();if(target)target.scrollIntoView({behavior:"smooth"});}));
+$$("[data-search-suggest]").forEach(btn=>btn.addEventListener("click",()=>{$("#siteSearch").value=btn.dataset.searchSuggest;runSearch();}));
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){closeSearchPanel();$("#siteSearch").blur();}
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openSearchPanel();$("#siteSearch").focus();}
+});
 $("#menuToggle").addEventListener("click",()=>$(".main-nav").classList.toggle("open"));$$(".main-nav a").forEach(a=>a.addEventListener("click",()=>$(".main-nav").classList.remove("open")));
 $("#modalClose").addEventListener("click",()=>$("#tripModal").classList.remove("open"));$("#editTrip").addEventListener("click",()=>{$("#tripModal").classList.remove("open");setStep(3);$("#planner").scrollIntoView({behavior:"smooth"});});$("#tripModal").addEventListener("click",e=>{if(e.target.id==="tripModal")e.currentTarget.classList.remove("open")});
 const phoneInput=$("#contactForm [name=phone]");
@@ -80,8 +162,21 @@ $("#newsletterForm").addEventListener("submit",e=>{e.preventDefault();$("#newsle
 const chatPanel=$("#chatPanel"),chatMessages=$("#chatMessages");function addMessage(text,who){const div=document.createElement("div");div.className="chat-bubble "+who;div.textContent=text;chatMessages.appendChild(div);chatMessages.scrollTop=chatMessages.scrollHeight;}
 $("#chatLauncher").addEventListener("click",()=>{chatPanel.classList.add("open");chatPanel.setAttribute("aria-hidden","false");$("#chatInput").focus();});$("#chatClose").addEventListener("click",()=>{chatPanel.classList.remove("open");chatPanel.setAttribute("aria-hidden","true");});
 $$(".chat-suggestions button").forEach(b=>b.addEventListener("click",()=>{sendChat(b.textContent);}));
-function localAnswer(query){const q=query.toLowerCase();const place=destinations.find(p=>q.includes(p.toLowerCase()));if(place)return infoFor(place);if(/website|explore bharat|this site|features/.test(q))return"Explore Bharat helps you discover destinations, expand destination cards for details, search places, customise a trip across three steps and explore indicative tour packages. Use the Build a trip form to collect your choices in one enquiry.";if(/plan|itinerary|trip|days/.test(q))return"Let's shape a trip around your interests. Start in the Build a trip section: choose destinations, dates, trip length, group size, activities and a budget. I can help brainstorm ideas, but please verify transport, opening hours and availability before booking.";if(/budget|cost|price/.test(q))return"Costs vary by season, route, accommodation and transport. The package figures on this concept site are illustrative estimates, not live prices or offers. Use the budget selector in the trip builder to share your range.";if(/best time|season|weather/.test(q))return"Season depends on the region. Himalayan routes are usually most accessible in warmer months, while many Rajasthan and north Indian heritage trips are more comfortable in cooler months. Monsoon can affect hill roads, trails and ferry services. Tell me the destination for more targeted guidance.";return"Happy to help with your India journey! Ask me about a destination, travel season, the trip builder, or tour packages. For a tailored starting point, tell me where you'd like to go and what you enjoy.";}
-async function sendChat(message){const text=message.trim();if(!text)return;addMessage(text,"user");$("#chatInput").value="";const pending=document.createElement("div");pending.className="chat-bubble bot";pending.textContent="Thinking…";chatMessages.appendChild(pending);chatMessages.scrollTop=chatMessages.scrollHeight;try{const response=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:text,context:"You are Bharat AI, the friendly travel assistant for Explore Bharat, a travel discovery and trip enquiry website focused on India. Answer questions about Indian destinations, the Explore Bharat website, destination cards, trip planning and packages. Be concise, useful and culturally respectful. Do not invent live availability, booking confirmations, exact travel prices or current opening times. Encourage users to verify safety, permits, weather and transport with official/local sources."})});if(!response.ok)throw new Error("AI endpoint unavailable");const data=await response.json();pending.remove();addMessage(data.reply||"I couldn't prepare an answer just now.","bot");}catch(err){pending.remove();addMessage(localAnswer(text)+"\n\n(Website guide mode is active. Add an OpenAI API key and run the backend to enable AI responses.)","bot");}}
+function localAnswer(query){
+  const q=query.toLowerCase();
+  if(/build|custom|planner|itinerary|how.*trip|plan a trip/.test(q))return"Here's how to build a trip on Explore Bharat:\n1. Choose one or more destinations, or type your own.\n2. Add travel dates, duration and the number of adults and children.\n3. Pick interests, budget and travel style, then review your trip.\nYour selections carry into the final traveller form. You can edit the trip before sending the enquiry.";
+  if(/package|tour|offer|discount|price|cost/.test(q))return"Open Tour packages to see the Rajasthan, Kerala and Himalayan examples. Select a package arrow to pre-fill those locations in your own trip. The displayed prices are illustrative estimates, not live offers or bookable quotes.";
+  if(/register|registration|enquiry|enquire|contact|submit|booking form/.test(q))return"To register a trip enquiry, finish the three planner steps and select Review my trip. Check the itinerary summary, enter your name and email, choose Email, WhatsApp or phone, and accept the privacy note. A valid mobile number is needed for WhatsApp or phone contact. This is an enquiry, not a booking, and no payment is taken.";
+  if(/expand|tile|card|destination|places|browse/.test(q))return"Go to Destinations. Use the category filters, then click the plus button on a destination card to reveal its description, suggested travel season and stay length. Select Add to my trip to include that place in your planner.";
+  if(/search|find|look for/.test(q))return"Use the search bar in the top navigation. Search for a destination or a website feature. You can also press Ctrl+K (or Command+K on Mac) to focus the search field.";
+  if(/website|explore bharat|this site|features|how.*work|navigate/.test(q))return"Explore Bharat is an India travel discovery and trip enquiry website. Use Destinations to explore places, the navigation search to find information, Tour packages for example routes, and Build a trip to create your own itinerary. Bharat AI can explain each section. The website does not take payments or confirm bookings.";
+  const place=destinations.find(p=>q.includes(p.toLowerCase()));
+  if(place)return infoFor(place)+"\n\nTo include it in your itinerary, open its destination card and select Add to my trip.";
+  if(/ai|chatbot|bharat ai|assistant|help/.test(q))return"I'm Bharat AI, the Explore Bharat website guide. I can explain how to search, explore destinations, customise a trip, choose a package and submit an enquiry. Ask me about any section.";
+  if(/best time|season|weather/.test(q))return"Travel seasons vary by destination. Open a destination card for a suggested season, then verify current weather, access, permits and local travel advice before you go.";
+  return"Welcome to Explore Bharat! Ask me how to use the website, find destinations, expand a destination card, build your own trip, understand tour packages or submit an enquiry.";
+}
+async function sendChat(message){const text=message.trim();if(!text)return;addMessage(text,"user");$("#chatInput").value="";const pending=document.createElement("div");pending.className="chat-bubble bot";pending.textContent="Thinking…";chatMessages.appendChild(pending);chatMessages.scrollTop=chatMessages.scrollHeight;try{const response=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:text,context:"You are Bharat AI, the website guide and travel assistant for Explore Bharat. Explain how to use the website first: top navigation search, destination category filters, expandable destination cards and Add to my trip, the three-step custom trip builder, package prefill buttons, traveller registration, contact preferences, privacy consent and enquiry submission. The builder steps are: (1) destinations/custom places; (2) dates, duration and traveller counts; (3) interests, budget, style and notes. Explain that choices carry into the trip summary and traveller form. A trip enquiry is not a confirmed booking and no payment is taken. Package prices are illustrative, not live. Explain that server-side AI/live search require owner configuration. Also answer India travel questions carefully; never invent live availability, prices, opening hours or bookings. Verify safety, permits, weather and transport with official/local sources."})});if(!response.ok)throw new Error("AI endpoint unavailable");const data=await response.json();pending.remove();addMessage(data.reply||"I couldn't prepare an answer just now.","bot");}catch(err){pending.remove();addMessage(localAnswer(text)+"\n\n(Website guide mode is active. Add an OpenAI API key and run the backend to enable AI responses.)","bot");}}
 $("#chatForm").addEventListener("submit",e=>{e.preventDefault();sendChat($("#chatInput").value);});
 // Initialise date constraints to avoid selecting dates in the past.
 const today=new Date();const iso=new Date(today.getTime()-today.getTimezoneOffset()*60000).toISOString().slice(0,10);$$('input[type="date"]').forEach(input=>input.min=iso);
