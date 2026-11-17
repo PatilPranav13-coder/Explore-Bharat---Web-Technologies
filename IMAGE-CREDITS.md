@@ -46,9 +46,9 @@ The architecture category now uses eight distinct Wikimedia Commons photographs.
 | Amber Fort | Rijin S | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Amber_Fort_Jaipur_01.jpg |
 | Ajanta Caves | Jayesh Paranjape | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:Ajanta_Caves_as_seen_from_the_view-point.JPG |
 | Meenakshi Amman Temple | Ilya Mauter | CC BY 3.0 | https://commons.wikimedia.org/wiki/File:Meenakshi_Amman_temple_in_Madurai.JPG |
-| Konark Sun Temple | Bhubaneswar2009 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Konark_Sun_Temple,_Konark,_Odisha,_India.jpg |
+| Konark Sun Temple | Bhubaneswar2009 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Konark_Sun_Temple_%2C_Konark_%2C_Odisha_%2C_India.jpg |
 | Hampi stone chariot | Hardeep Asrani | CC0 1.0 | https://commons.wikimedia.org/wiki/File:Hampi_stone_chariot.jpg |
-| Sanchi Stupa | See source page | Check source page | https://commons.wikimedia.org/wiki/File:SANCHI_STUPA_AT_SAN_CHI_IN_RAISEN.jpg |
+| Sanchi Stupa | Sumit12smart | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:SANCHI_STUPA_AT_SANCHI_IN_RAISEN.jpg |
 | Rani ki Vav | Bernard Gagnon | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:Rani_ki_vav_04.jpg |
 
 Photographs are linked as remote Wikimedia Commons files. Licence terms and attribution are provided by the linked source pages; check those pages before redistributing images outside this website.
