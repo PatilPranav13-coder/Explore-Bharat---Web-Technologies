@@ -21,6 +21,6 @@ for (const endpoint of ["/api/chat", "/api/search", "/api/enquiries"]) {
 assert.ok(server.includes("process.env.OPENAI_API_KEY"), "Server must read the OpenAI key from the environment.");
 assert.ok(server.includes('type: "web_search"'), "Live web search tool is not configured.");
 assert.ok(server.includes("trip_enquiries"), "PostgreSQL enquiry persistence is missing.");
-assert.ok(!app.includes("OPENAI_API_KEY"), "Never put the API key in browser JavaScript.");
+assert.ok(!app.includes("process.env.OPENAI_API_KEY") && !/sk-[A-Za-z0-9_-]{20,}/.test(app), "Never expose an API key in browser JavaScript.");
 assert.ok(html.includes("Package prices are illustrative"), "Package estimate disclaimer is missing.");
 console.log("Explore Bharat smoke checks passed.");
