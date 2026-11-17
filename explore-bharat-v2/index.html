@@ -113,7 +113,7 @@
           <form id="profileSignInForm" class="commerce-form">
             <label>Full name<input class="text-input" name="name" autocomplete="name" required maxlength="100" placeholder="Your name"></label>
             <label>Email address<input class="text-input" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com"></label>
-            <label>Mobile number <small>Optional</small><input class="text-input" name="phone" type="tel" autocomplete="tel" maxlength="24" placeholder="+91 98765 43210"></label>
+            <label>Mobile number<input class="text-input" name="phone" type="tel" autocomplete="tel" required pattern="[+0-9() -]{7,24}" maxlength="24" placeholder="+91 98765 43210"></label>
             <button class="btn btn-dark full-btn" type="submit">Email me a secure sign-in link ↗</button>
             <p class="form-footnote" id="profileAuthMessage">No password to remember. Your travel history is private to your account.</p>
           </form>
@@ -124,7 +124,7 @@
             <h3>Personal details</h3>
             <label>Full name<input class="text-input" name="name" required maxlength="100"></label>
             <label>Email address<input class="text-input" name="email" type="email" disabled></label>
-            <label>Mobile number<input class="text-input" name="phone" type="tel" maxlength="24" placeholder="+91 98765 43210"></label>
+            <label>Mobile number<input class="text-input" name="phone" type="tel" required pattern="[+0-9() -]{7,24}" maxlength="24" placeholder="+91 98765 43210"></label>
             <button class="soft-button" type="submit">Save profile changes</button><small id="profileSaveMessage"></small>
           </form>
           <div class="profile-section"><div class="profile-section-title"><div><p class="eyebrow">YOUR BOOKINGS</p><h3>Travel history</h3></div><span class="history-count" id="historyCount">0</span></div><div id="bookingHistory" class="history-list"><p class="subtle-note">Your confirmed bookings will appear here.</p></div></div>
