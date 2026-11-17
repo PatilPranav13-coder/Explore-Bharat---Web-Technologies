@@ -9,8 +9,8 @@ A refined India travel discovery site with an interactive destination catalogue,
 - Three-step trip builder for destinations, dates, duration, group size, interests, budget and travel style.
 - Guided traveller registration with contact channel preference, phone country code, consent, validation and an itinerary summary.
 - Package cards that prefill the trip builder.
-- Search across the destination guide and, when configured, live web search with source links.
-- Bharat AI chat using the OpenAI Responses API. The API key stays on the Node server.
+- Always-visible navigation search with quick section links, website-feature guidance and, when configured, live web search with source links.
+- Bharat AI website guide using the OpenAI Responses API. It explains navigation, destination cards, the trip builder, packages and the traveller enquiry flow; the API key stays on the Node server.
 - Optional PostgreSQL storage for trip enquiries. Without a database, the demo keeps enquiries only in the visitor's browser.
 - FAQ, privacy and terms pages, responsive layout, keyboard-friendly controls, reduced-motion support and basic security headers.
 - Explicit enquiry consent and clear demo-versus-server storage messaging.
