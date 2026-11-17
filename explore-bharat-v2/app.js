@@ -300,6 +300,7 @@ $("#commerceCheckoutForm").addEventListener("submit",async event=>{
       name:"Explore Bharat",
       description:"Sample travel package · test mode",
       order_id:orderData.orderId,
+      handler:async paymentResponse=>{await verifyRazorpayPayment(paymentResponse);},
       prefill:{name:values.name,email:values.email,contact:values.phone},
       notes:{travel_date:values.travelDate,checkout_mode:"test"},
       theme:{color:"#1677d2"},
@@ -328,7 +329,6 @@ function saveVerifiedBooking(booking){
   toast("Test booking "+booking.reference+" recorded.");
   refreshBookings();
 }
-const paymentHandlerOriginal=window.Razorpay;
 async function verifyRazorpayPayment(response){
   if(checkoutBusy)return;
   checkoutBusy=true;
@@ -342,21 +342,7 @@ async function verifyRazorpayPayment(response){
     $("#paymentStatus").textContent=error.message+" Do not retry payment until you have checked whether the payment was captured.";
   }finally{checkoutBusy=false;}
 }
-const originalCheckoutSubmit=$("#commerceCheckoutForm");
-originalCheckoutSubmit.addEventListener("submit",()=>{}, {once:true});
-// Razorpay handler is attached through the shared constructor wrapper below.
-const realOrderFetch=window.fetch.bind(window);
-window.fetch=async function(input,init){
-  const result=await realOrderFetch(input,init);
-  return result;
-};
-
 // Wrap checkout creation to attach server verification before opening the provider checkout.
-const checkoutFormHandler=originalCheckoutForm;
-checkoutFormHandler.addEventListener("submit",async event=>{
-  if(event.defaultPrevented||checkoutBusy)return;
-  // The first listener creates the order. This listener attaches verification to the provider on the next event loop.
-},{once:true});
 
 // Profile and private travel journal. This uses Supabase Auth + Row Level Security when configured.
 const publicConfig=window.EXPLORE_BHARAT_CONFIG||{};
