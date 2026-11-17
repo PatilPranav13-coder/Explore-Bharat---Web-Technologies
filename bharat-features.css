@@ -1,0 +1,47 @@
+/* Command palette and blur-up media loading */
+.bharat-command-overlay{
+ position:fixed;z-index:7000;inset:0;display:grid;place-items:start center;
+ padding:clamp(60px,13vh,130px) 14px 24px;background:rgba(3,9,20,.72);
+ backdrop-filter:blur(12px) saturate(120%);animation:commandFade .18s ease both
+}
+.bharat-command-overlay[hidden]{display:none}
+@keyframes commandFade{from{opacity:0}to{opacity:1}}
+.bharat-command-panel{
+ width:min(650px,100%);overflow:hidden;border:1px solid rgba(255,255,255,.28);
+ border-radius:22px;color:#f8f3e8;
+ background:linear-gradient(145deg,rgba(31,48,70,.96),rgba(9,17,32,.97));
+ box-shadow:0 34px 95px rgba(0,0,0,.5),inset 0 1px rgba(255,255,255,.16);
+ animation:commandSpring .34s cubic-bezier(.2,.8,.25,1) both
+}
+@keyframes commandSpring{from{transform:translateY(-13px) scale(.97);opacity:.5}to{transform:translateY(0) scale(1);opacity:1}}
+.bharat-command-top{display:flex;align-items:center;gap:12px;padding:17px 19px;border-bottom:1px solid rgba(255,255,255,.1)}
+.bharat-command-mark{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;color:#2a1b31;background:linear-gradient(140deg,#fff0bd,#e5a13f);font-size:23px}
+.bharat-command-top h2{margin:0;color:white;font:700 17px Georgia,serif}
+.bharat-command-top p{margin:4px 0 0;color:#d8c9a7;font-size:10px}
+.bharat-command-top kbd{margin-left:auto;padding:5px 8px;border:1px solid rgba(255,255,255,.19);border-radius:7px;color:#e6d6ac;font:10px system-ui}
+#bharatCommandInput{display:block;width:calc(100% - 32px);margin:16px;padding:13px 15px;border:1px solid rgba(245,215,120,.46)!important;border-radius:12px;background:rgba(255,255,255,.08)!important;color:#fff!important;font-size:14px;outline:0}
+#bharatCommandInput::placeholder{color:rgba(255,255,255,.48)}
+#bharatCommandInput:focus{border-color:#f5d778!important;box-shadow:0 0 0 4px rgba(245,215,120,.11)!important}
+.bharat-command-results{max-height:min(48vh,400px);overflow:auto;padding:0 9px 10px}
+.bharat-command-item{
+ width:100%;display:flex;align-items:center;gap:12px;padding:11px 12px;
+ border:0;border-radius:11px;text-align:left;color:#fff;background:transparent;
+ cursor:pointer;transition:background .16s,transform .16s
+}
+.bharat-command-item:hover,.bharat-command-item[aria-selected="true"]{background:rgba(245,215,120,.12);transform:translateX(2px)}
+.bharat-command-item-icon{width:31px;height:31px;flex:0 0 31px;display:grid;place-items:center;border-radius:9px;background:rgba(255,255,255,.1);color:#f5d778;font-size:15px}
+.bharat-command-item-copy{flex:1;min-width:0}
+.bharat-command-item-copy strong,.bharat-command-item-copy small{display:block}
+.bharat-command-item-copy strong{font-size:11px}.bharat-command-item-copy small{margin-top:3px;color:#d7c7a5;font-size:9px}
+.bharat-command-item kbd{color:#d6c08c;font:10px system-ui}
+.bharat-command-empty{padding:22px 15px;color:#e5d8bd;text-align:center;font-size:11px}
+.bharat-command-footer{display:flex;justify-content:space-between;gap:10px;padding:11px 18px;border-top:1px solid rgba(255,255,255,.1);color:#b8ab92;font-size:9px}
+.blur-up-media{
+ filter:blur(16px) saturate(.8);transform:scale(1.025);
+ opacity:.75;background:linear-gradient(110deg,#d9d0c1,#f3ead9,#d9d0c1);
+ transition:filter .65s ease,transform .65s ease,opacity .45s ease
+}
+.blur-up-media.is-loaded{filter:blur(0) saturate(1);transform:scale(1);opacity:1}
+.blur-up-media.is-unavailable{filter:none;opacity:.45}
+@media(max-width:560px){.bharat-command-overlay{padding-top:70px}.bharat-command-footer{font-size:8px}.bharat-command-panel{border-radius:17px}}
+@media(prefers-reduced-motion:reduce){.bharat-command-overlay,.bharat-command-panel{animation:none}.bharat-command-item{transition:none}.blur-up-media{transition:none}}
