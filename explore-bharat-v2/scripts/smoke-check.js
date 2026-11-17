@@ -11,7 +11,7 @@ const server = read("server.js");
 for (const file of ["index.html", "styles.css", "app.js", "server.js", "package.json", ".env.example", "privacy.html", "terms.html"]) {
   assert.ok(fs.existsSync(path.join(root, "..", file)), `Missing required file: ${file}`);
 }
-for (const id of ["main-content", "destinationGrid", "planner", "tripForm", "contactForm", "searchToggle", "chatLauncher", "faq", "registrationTitle"]) {
+for (const id of ["main-content", "destinationGrid", "planner", "tripForm", "contactForm", "navSearchForm", "siteSearch", "searchPanel", "chatLauncher", "chatPanel", "faq", "registrationTitle"]) {
   assert.ok(html.includes(`id="${id}"`), `Missing required UI element: ${id}`);
 }
 for (const endpoint of ["/api/chat", "/api/search", "/api/enquiries"]) {
@@ -27,4 +27,9 @@ assert.ok(html.includes('name="preferredContact"'), "Traveller contact preferenc
 assert.ok(html.includes('name="phoneCountryCode"'), "Traveller phone country code is missing.");
 assert.ok(app.includes("updatePreferredContact"), "Dynamic contact validation is missing.");
 assert.ok(server.includes("preferred_contact"), "Server does not store traveller contact preference.");
+assert.ok(html.includes("Search destinations, trips"), "Persistent navigation search is missing.");
+assert.ok(html.includes("How do I build a trip?"), "Website guide quick prompts are missing.");
+assert.ok(app.includes("function pageSearchHelp"), "Navigation search does not explain website features.");
+assert.ok(app.includes("function localAnswer"), "Local website guide fallback is missing.");
+assert.ok(server.includes("interactive website guide for Explore Bharat"), "AI system prompt is not focused on explaining the website.");
 console.log("Explore Bharat smoke checks passed.");
