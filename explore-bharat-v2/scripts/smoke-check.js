@@ -8,7 +8,7 @@ const html = read("index.html");
 const app = read("app.js");
 const server = read("server.js");
 
-for (const file of ["index.html", "styles.css", "app.js", "server.js", "package.json", ".env.example"]) {
+for (const file of ["index.html", "styles.css", "app.js", "server.js", "package.json", ".env.example", "privacy.html", "terms.html"]) {
   assert.ok(fs.existsSync(path.join(root, "..", file)), `Missing required file: ${file}`);
 }
 for (const id of ["main-content", "destinationGrid", "planner", "tripForm", "contactForm", "searchToggle", "chatLauncher", "faq"]) {
