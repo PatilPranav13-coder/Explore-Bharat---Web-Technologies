@@ -37,7 +37,7 @@ function updatePreferredContact(){
   const preference=$('#contactForm input[name="preferredContact"]:checked')?.value||"Email";
   const needsPhone=preference!=="Email";
   phoneInput.required=needsPhone;
-  phoneInput.setCustomValidity(needsPhone&&phoneInput.value.replace(/\\D/g,"").length<7?"Enter a valid mobile number for this contact method.":"");
+  phoneInput.setCustomValidity(needsPhone&&phoneInput.value.replace(/\D/g,"").length<7?"Enter a valid mobile number for this contact method.":"");
   phoneInput.closest(".register-field").querySelector("span small").textContent=needsPhone?"Required":"Optional";
 }
 $$('#contactForm input[name="preferredContact"]').forEach(input=>input.addEventListener("change",updatePreferredContact));
