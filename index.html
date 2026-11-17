@@ -7,6 +7,7 @@
     <title>Explore Bharat | One Nation. Endless Journeys.</title>
     <link rel="stylesheet" href="style.css?v=20261117-home-pro">
     <link rel="stylesheet" href="site-motion.css?v=20261117-sitewide">
+    <link rel="stylesheet" href="bharat-ai.css?v=20261117-guide">
 </head>
 
 <body>
@@ -42,6 +43,11 @@
         </div>
         <div class="site-search-results" id="siteSearchResults" role="listbox" aria-label="Search suggestions" hidden></div>
     </form>
+    <button class="bharat-ai-toggle" id="bharatAiToggle" type="button" aria-expanded="false" aria-controls="bharatAiPanel" aria-label="Open Bharat AI website guide">
+        <span class="bharat-ai-orbit" aria-hidden="true">✦</span>
+        <span class="bharat-ai-toggle-copy"><strong>Bharat AI</strong><small>Ask &amp; explore</small></span>
+        <span class="bharat-ai-live-dot" aria-hidden="true"></span>
+    </button>
 </div>
 </header>
 
@@ -94,6 +100,44 @@
 </div>
 
 
+
+
+<!-- BHARAT AI WEBSITE GUIDE -->
+<section class="bharat-ai-panel" id="bharatAiPanel" role="dialog" aria-modal="false" aria-labelledby="bharatAiTitle" aria-hidden="true" hidden>
+    <header class="bharat-ai-header">
+        <div class="bharat-ai-avatar" aria-hidden="true"><span>✦</span></div>
+        <div class="bharat-ai-heading">
+            <h2 id="bharatAiTitle">Bharat AI</h2>
+            <p><span class="bharat-ai-status-dot"></span> Explore Bharat website guide</p>
+        </div>
+        <button class="bharat-ai-close" id="bharatAiClose" type="button" aria-label="Close Bharat AI">×</button>
+    </header>
+    <div class="bharat-ai-intro">
+        <span class="bharat-ai-intro-kicker">YOUR PERSONAL GUIDE TO BHARAT</span>
+        <p>Tell me what you want to explore. I can take you to destinations, culture, tour packages or the trip planner.</p>
+    </div>
+    <div class="bharat-ai-messages" id="bharatAiMessages" role="log" aria-live="polite" aria-relevant="additions text">
+        <div class="bharat-ai-message bharat-ai-bot">
+            <span class="bharat-ai-message-avatar" aria-hidden="true">✦</span>
+            <div class="bharat-ai-bubble">
+                <p>Namaste! I'm your Explore Bharat guide. Where would you like to go?</p>
+                <span class="bharat-ai-message-meta">Bharat AI · Website guide</span>
+            </div>
+        </div>
+    </div>
+    <div class="bharat-ai-suggestions" id="bharatAiSuggestions">
+        <button type="button" data-prompt="I want to explore Bharat's culture">Explore culture</button>
+        <button type="button" data-prompt="I want a Kashmir trip">Kashmir trip</button>
+        <button type="button" data-prompt="Show me tour packages">Tour packages</button>
+        <button type="button" data-prompt="Help me build my own trip">Build my trip</button>
+    </div>
+    <form class="bharat-ai-form" id="bharatAiForm">
+        <label class="visually-hidden" for="bharatAiInput">Ask Bharat AI to navigate Explore Bharat</label>
+        <input id="bharatAiInput" type="text" maxlength="280" autocomplete="off" placeholder="Ask me where you want to go..." required>
+        <button type="submit" aria-label="Send message"><span aria-hidden="true">➤</span></button>
+    </form>
+    <p class="bharat-ai-footnote">Uses Explore Bharat's built-in website content. No external AI service or API key is connected.</p>
+</section>
 
 <main>
 
@@ -658,5 +702,6 @@
 <script src="explore-effects.js?v=20261117-home-pro"></script>
 <script src="profile-log.js?v=20261117-profile"></script>
     <script src="site-motion.js?v=20261117-sitewide"></script>
+<script src="bharat-ai.js?v=20261117-guide"></script>
 </body>
 </html>
