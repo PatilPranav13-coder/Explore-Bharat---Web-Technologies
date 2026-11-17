@@ -553,14 +553,14 @@ function showCulture(category) {
             introduction = "Open a monument to explore its story, architectural language, craftsmanship and place in history.";
 
             items = [
-                ["Taj Mahal", "Agra, Uttar Pradesh", "A white-marble Mughal mausoleum set within a formal garden.", "https://commons.wikimedia.org/wiki/Special:FilePath/The_Taj_Mahal%2C_Agra_Photography.jpg?width=1100"],
-                ["Forts of Rajasthan", "Amber, Jaipur, Rajasthan", "Rajput fortification and palace architecture shaped by the Aravalli landscape.", "https://commons.wikimedia.org/wiki/Special:FilePath/Amber_Fort%2C_Jaipur_%28Rajasthan%29.jpg?width=1100"],
-                ["Ajanta & Ellora Caves", "Aurangabad region, Maharashtra", "Rock-cut Buddhist, Hindu and Jain monuments with remarkable sculpture and painting.", "https://commons.wikimedia.org/wiki/Special:FilePath/Ajanta_Caves%2C_Maharashtra%2C_India.jpg?width=1100"],
-                ["Meenakshi Amman Temple", "Madurai, Tamil Nadu", "A celebrated temple complex with sculpted Dravidian gateway towers.", "https://commons.wikimedia.org/wiki/Special:FilePath/Meenakshi_Amman_Temple%2C_Madurai.jpg?width=1100"],
-                ["Konark Sun Temple", "Konark, Odisha", "A monumental stone representation of Surya's celestial chariot.", "https://commons.wikimedia.org/wiki/Special:FilePath/Konark_Sun_Temple_of_Orissa.jpg?width=1100"],
-                ["Hampi", "Vijayanagara region, Karnataka", "The remains of a powerful capital, with sacred complexes, bazaars and the famous stone chariot.", "https://commons.wikimedia.org/wiki/Special:FilePath/Hampi_stone_chariot.jpg?width=1100"],
-                ["Sanchi Stupa", "Sanchi, Madhya Pradesh", "A major Buddhist monument with a great hemispherical stupa and carved gateways.", "https://commons.wikimedia.org/wiki/Special:FilePath/SANCHI_STUPA_AT_SANCHI_IN_RAISEN.jpg?width=1100"],
-                ["Rani ki Vav", "Patan, Gujarat", "A seven-level stepwell where water engineering becomes monumental sculpture.", "https://commons.wikimedia.org/wiki/Special:FilePath/Rani_ki_vav_at_Patan.jpg?width=1100"]
+                ["Taj Mahal", "Agra, Uttar Pradesh", "A white-marble Mughal mausoleum set within a formal garden.", "https://commons.wikimedia.org/wiki/Special:FilePath/The_Taj_Mahal,_Agra_Photography.jpg?width=1200"],
+                ["Forts of Rajasthan", "Amber, Jaipur, Rajasthan", "Rajput fortification and palace architecture shaped by the Aravalli landscape.", "https://commons.wikimedia.org/wiki/Special:FilePath/Amber_Fort_Jaipur_01.jpg?width=1200"],
+                ["Ajanta & Ellora Caves", "Aurangabad region, Maharashtra", "Rock-cut Buddhist, Hindu and Jain monuments with remarkable sculpture and painting.", "https://commons.wikimedia.org/wiki/Special:FilePath/Ajanta_Caves_as_seen_from_the_view-point.JPG?width=1200"],
+                ["Meenakshi Amman Temple", "Madurai, Tamil Nadu", "A celebrated temple complex with sculpted Dravidian gateway towers.", "https://commons.wikimedia.org/wiki/Special:FilePath/Meenakshi_Amman_temple_in_Madurai.JPG?width=1200"],
+                ["Konark Sun Temple", "Konark, Odisha", "A monumental stone representation of Surya's celestial chariot.", "https://commons.wikimedia.org/wiki/Special:FilePath/Konark_Sun_Temple%2C_Konark%2C_Odisha%2C_India.jpg?width=1200"],
+                ["Hampi", "Vijayanagara region, Karnataka", "The remains of a powerful capital, with sacred complexes, bazaars and the famous stone chariot.", "https://commons.wikimedia.org/wiki/Special:FilePath/Hampi_stone_chariot.jpg?width=1200"],
+                ["Sanchi Stupa", "Sanchi, Madhya Pradesh", "A major Buddhist monument with a great hemispherical stupa and carved gateways.", "https://commons.wikimedia.org/wiki/Special:FilePath/SANCHI_STUPA_AT_SAN_CHI_IN_RAISEN.jpg?width=1200"],
+                ["Rani ki Vav", "Patan, Gujarat", "A seven-level stepwell where water engineering becomes monumental sculpture.", "https://commons.wikimedia.org/wiki/Special:FilePath/Rani_ki_vav_04.jpg?width=1200"]
             ];
             break;
 
