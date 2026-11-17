@@ -43,6 +43,7 @@ assert.ok(schema.includes("enable row level security"), "Supabase tables must us
 assert.ok(schema.includes("auth.uid()"), "Profile/travel-log policies must scope data to the signed-in user.");
 assert.ok(schema.includes("auth.jwt()"), "Booking history must be scoped to the authenticated email.");
 assert.ok(html.includes("Search destinations, trips"), "Persistent navigation search is missing.");
+assert.ok(!app.includes("metaKey") && !app.includes("ctrlKey"), "Search must not depend on a keyboard shortcut.");
 assert.ok(html.includes("How do I build a trip?"), "Website guide quick prompts are missing.");
 assert.ok(app.includes("function pageSearchHelp"), "Navigation search does not explain website features.");
 assert.ok(app.includes("function localAnswer"), "Local website guide fallback is missing.");
