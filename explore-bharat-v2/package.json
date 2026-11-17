@@ -6,7 +6,8 @@
   "description": "Explore Bharat travel discovery and custom trip planner",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "check": "node --check server.js && node --check app.js && node scripts/smoke-check.js"
   },
   "engines": {
     "node": ">=20"
