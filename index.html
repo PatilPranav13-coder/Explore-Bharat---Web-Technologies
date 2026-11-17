@@ -27,6 +27,11 @@
         <a href="#registration" class="main-link">Registration</a>
     </nav>
 
+    <div class="nav-utility-row">
+    <button class="profile-trigger" id="profileOpen" type="button" aria-haspopup="dialog" aria-controls="profileBackdrop" aria-label="Open your travel profile">
+        <span class="profile-trigger-icon" aria-hidden="true">♙</span>
+        <span class="profile-trigger-copy"><strong>My Profile</strong><small>Travel log</small></span>
+    </button>
     <form class="site-search" id="siteSearchForm" role="search" autocomplete="off">
         <label class="visually-hidden" for="siteSearchInput">Search destinations, culture and travel ideas</label>
         <div class="site-search-box">
@@ -36,7 +41,57 @@
         </div>
         <div class="site-search-results" id="siteSearchResults" role="listbox" aria-label="Search suggestions" hidden></div>
     </form>
+</div>
 </header>
+
+<!-- LOCAL VISITOR PROFILE AND TRAVEL LOG -->
+<div class="profile-backdrop" id="profileBackdrop" hidden>
+  <aside class="profile-drawer" id="profileDrawer" role="dialog" aria-modal="true" aria-labelledby="profileDrawerTitle" aria-describedby="profileStorageNote">
+    <div class="profile-drawer-top">
+      <div>
+        <p class="profile-kicker">YOUR BHARAT JOURNEY</p>
+        <h2 id="profileDrawerTitle">My <span>Profile</span></h2>
+        <p class="profile-drawer-intro">Keep your details, trip ideas and Explore Bharat activity together.</p>
+      </div>
+      <button class="profile-close" id="profileClose" type="button" aria-label="Close profile">×</button>
+    </div>
+    <div class="profile-storage-note" id="profileStorageNote">
+      <span aria-hidden="true">▣</span>
+      <div><strong>Saved on this device</strong><small>Your profile and travel log use this browser's local storage. They are not uploaded to a company database or synced to other devices.</small></div>
+    </div>
+    <div class="profile-summary-strip">
+      <div><strong id="profileActivityCount">0</strong><span>Activities</span></div>
+      <div><strong id="profileTripCount">0</strong><span>Trip plans</span></div>
+      <div><strong id="profileJoinedDate">—</strong><span>Profile since</span></div>
+    </div>
+    <form class="profile-details-form" id="profileDetailsForm">
+      <div class="profile-section-heading"><span>01</span><div><h3>Traveller details</h3><p>These details help personalise your journey.</p></div></div>
+      <label for="profileName">Full name</label>
+      <input id="profileName" name="name" type="text" maxlength="100" autocomplete="name" placeholder="Your full name" required>
+      <label for="profileEmail">Email address</label>
+      <input id="profileEmail" name="email" type="email" maxlength="254" autocomplete="email" placeholder="you@example.com" required>
+      <label for="profilePhone">Mobile number</label>
+      <input id="profilePhone" name="phone" type="tel" maxlength="24" autocomplete="tel" placeholder="Your mobile number">
+      <label class="profile-consent">
+        <input id="profileTrackingConsent" type="checkbox" required>
+        <span><strong>Keep my Explore Bharat travel log.</strong><small>I agree to save actions such as destinations I open, culture categories I explore, trip recommendations and registration activity in this browser. I can export or delete these records whenever I choose.</small></span>
+      </label>
+      <button class="profile-save-button" type="submit">Save my profile <span>✦</span></button>
+      <p class="profile-form-status" id="profileFormStatus" role="status" aria-live="polite"></p>
+    </form>
+    <section class="profile-log-section" aria-labelledby="profileLogTitle">
+      <div class="profile-section-heading"><span>02</span><div><h3 id="profileLogTitle">My travel log</h3><p>A timeline of things you've explored on this website.</p></div></div>
+      <div class="profile-log-list" id="profileLogList"><p class="profile-log-empty">Save your profile and choose to keep your travel log. Your activity will appear here as you explore.</p></div>
+    </section>
+    <div class="profile-data-actions">
+      <button id="profileExportLog" type="button" disabled>↧ Export my data</button>
+      <button id="profileClearLog" type="button" disabled>Clear travel log</button>
+      <button id="profileForget" type="button" disabled>Forget profile on this device</button>
+    </div>
+    <p class="profile-privacy-footnote">Privacy note: this is a local-storage prototype, not an authenticated customer account. Avoid saving personal details on a shared or public computer. A central travel-history system will require secure sign-in and a server database.</p>
+  </aside>
+</div>
+
 
 
 <main>
@@ -549,6 +604,12 @@
         <label for="travelDate">Travel Date</label>
         <input type="date" id="travelDate" required>
 
+        <label class="registration-profile-consent" for="saveRegistrationToProfile">
+            <input type="checkbox" id="saveRegistrationToProfile">
+            <span>Save these details and my trip activity to My Profile on this device. <small>Stored only in this browser. You can delete them from your profile.</small></span>
+        </label>
+
+
         <button type="submit" class="register-button">Register Now →</button>
 
         <p id="registrationMessage" class="registration-message" role="status"></p>
@@ -570,5 +631,6 @@
 
 <script src="script.js?v=20261117-vibrant"></script>
 <script src="explore-effects.js?v=20261117"></script>
+<script src="profile-log.js?v=20261117"></script>
 </body>
 </html>
