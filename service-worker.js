@@ -5,7 +5,7 @@ const APP_SHELL = [
   "./", "index.html", "style.css", "script.js", "explore-effects.js", "profile-log.js",
   "site-motion.css", "site-motion.js", "site-motion-plus.js", "bharat-ai.css", "bharat-ai.js",
   "architecture-modal.css", "architecture-modal.js", "bharat-features.css", "bharat-features.js",
-  "pwa-init.js", "image-credits.html", "privacy.html", "terms.html",
+  "pwa-init.js", "pwa-status.css", "image-credits.html", "privacy.html", "terms.html",
   "explore-bharat.webmanifest", "manifest.webmanifest",
   "assets/veya-mark.svg", "assets/explore-bharat-mark.svg",
   "images/hero-collage.jpg", "images/kashmir.jpg", "images/kerala.jpg",
