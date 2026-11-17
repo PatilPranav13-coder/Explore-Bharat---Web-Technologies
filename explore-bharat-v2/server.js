@@ -60,12 +60,14 @@ async function ensureEnquiryTable() {
       name TEXT NOT NULL,
       email TEXT NOT NULL,
       phone TEXT,
+      preferred_contact TEXT NOT NULL DEFAULT 'Email',
       consent BOOLEAN NOT NULL DEFAULT FALSE,
       trip JSONB NOT NULL,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `);
   await database.query("ALTER TABLE trip_enquiries ADD COLUMN IF NOT EXISTS consent BOOLEAN NOT NULL DEFAULT FALSE");
+  await database.query(`ALTER TABLE trip_enquiries ADD COLUMN IF NOT EXISTS preferred_contact TEXT NOT NULL DEFAULT 'Email'`);
   schemaReady = true;
 }
 
@@ -132,8 +134,12 @@ app.post("/api/enquiries", async (req, res) => {
   const name = typeof contact.name === "string" ? contact.name.trim().slice(0, 100) : "";
   const email = typeof contact.email === "string" ? contact.email.trim().slice(0, 254) : "";
   const phone = typeof contact.phone === "string" ? contact.phone.trim().slice(0, 30) : "";
+  const preferredContact = ["Email", "WhatsApp", "Phone call"].includes(contact.preferredContact) ? contact.preferredContact : "Email";
   if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: "Please provide a valid name and email address." });
+  }
+  if (preferredContact !== "Email" && phone.replace(/\D/g, "").length < 7) {
+    return res.status(400).json({ error: "A valid mobile number is required for WhatsApp or phone contact." });
   }
   if (contact.consent !== true) {
     return res.status(400).json({ error: "Please confirm that you agree to be contacted about this trip enquiry." });
@@ -147,8 +153,8 @@ app.post("/api/enquiries", async (req, res) => {
   try {
     await ensureEnquiryTable();
     const saved = await database.query(
-      "INSERT INTO trip_enquiries (name, email, phone, consent, trip) VALUES ($1, $2, $3, $4, $5::jsonb) RETURNING id, created_at",
-      [name, email, phone || null, true, JSON.stringify(trip)]
+      "INSERT INTO trip_enquiries (name, email, phone, preferred_contact, consent, trip) VALUES ($1, $2, $3, $4, $5, $6::jsonb) RETURNING id, created_at",
+      [name, email, phone || null, preferredContact, true, JSON.stringify(trip)]
     );
     res.status(201).json({ saved: true, enquiryId: saved.rows[0].id, createdAt: saved.rows[0].created_at });
   } catch (error) {
