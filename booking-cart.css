@@ -1,0 +1,63 @@
+/* Explore Bharat trip-cart and registration enhancements */
+.trip-cart-panel{
+  margin:0 7% 74px;padding:28px clamp(18px,3vw,36px);
+  color:#fdf7e9;background:linear-gradient(120deg,#0b1426,#182a42 68%,#20334b);
+  border:1px solid rgba(245,215,120,.42);border-radius:22px;
+  box-shadow:0 18px 44px rgba(11,20,38,.16)
+}
+.trip-cart-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.trip-cart-heading .section-tag{color:#f5d778;margin-bottom:7px}
+.trip-cart-heading h3{font:700 clamp(25px,3vw,34px)/1.1 Georgia,serif;margin:0;color:#fff}
+.trip-cart-heading h3 span{color:#f5d778}
+.trip-cart-heading p:not(.section-tag){max-width:660px;color:#d7e0e9;font-size:13px;line-height:1.7;margin:9px 0 0}
+.trip-cart-count{flex:none;padding:8px 13px;border-radius:999px;background:rgba(245,215,120,.13);border:1px solid rgba(245,215,120,.4);color:#ffe7a1;font-size:12px;font-weight:800}
+.trip-cart-items{display:grid;gap:10px;margin-top:20px}
+.trip-cart-empty{padding:19px;border:1px dashed rgba(255,255,255,.25);border-radius:13px;color:#d9e1e9;font-size:13px;margin:0}
+.trip-cart-item{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 16px;border:1px solid rgba(255,255,255,.13);border-radius:13px;background:rgba(255,255,255,.06)}
+.trip-cart-item strong{display:block;color:#fff;font-size:14px}
+.trip-cart-item p{margin:5px 0 0;color:#d4deeb;font-size:12px;line-height:1.5}
+.trip-cart-remove,.trip-cart-clear{padding:8px 12px;color:#ffe7a1;border:1px solid rgba(245,215,120,.42);border-radius:9px;background:transparent;font-weight:700;font-size:11px;cursor:pointer}
+.trip-cart-remove:hover,.trip-cart-clear:hover{background:rgba(245,215,120,.12)}
+.trip-cart-bottom{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:18px;padding-top:17px;border-top:1px solid rgba(255,255,255,.14)}
+.trip-cart-note{max-width:420px;margin:0;color:#bfcbd8;font-size:11px;line-height:1.6}
+.trip-cart-actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:9px}
+.trip-cart-actions strong{margin-right:5px;color:#ffe7a1;font-size:12px}
+.trip-cart-continue{padding:11px 15px;color:#142137;background:linear-gradient(110deg,#ffe9ab,#f5c75f);border:0;border-radius:10px;font-size:12px;font-weight:850;cursor:pointer}
+.trip-cart-continue:disabled,.trip-cart-clear:disabled{opacity:.45;cursor:not-allowed}
+.package-cart-button{display:inline-flex;align-items:center;justify-content:center;width:100%;min-height:42px;margin-top:15px;padding:11px 14px;color:#142137;background:linear-gradient(110deg,#ffe9ab,#f5c75f);border:1px solid rgba(174,123,34,.25);border-radius:10px;font-size:12px;font-weight:850;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s}
+.package-cart-button:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(142,95,26,.18)}
+.package-cart-button.is-added{color:#f5d778;background:#13243a;border-color:rgba(245,215,120,.5)}
+.package-sample-note{margin:8px 0 0!important;color:#758394!important;font-size:10px!important}
+.registration-form{max-width:760px}
+.registration-form .registration-section-title{grid-column:1/-1;margin:18px 0 0;padding:16px 0 5px;border-top:1px solid rgba(11,20,38,.12);color:#a94725;font:700 16px/1.25 Georgia,serif}
+.registration-form .registration-help{grid-column:1/-1;margin:0;color:#5a6978;font-size:11px;line-height:1.6;text-align:left}
+.registration-form .registration-field{display:grid;gap:7px;min-width:0}
+.registration-form .registration-field label{margin-top:4px}
+.registration-form textarea,.registration-form select{width:100%;padding:13px;color:var(--navy);background:#fff;border:1px solid #b6ced4;border-radius:8px;font:inherit}
+.registration-form textarea{min-height:100px;resize:vertical}
+.registration-form .registration-grid{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px}
+.registration-form .registration-field input[readonly]{background:#edf3f5;color:#425365}
+.registration-form .selected-trip-summary{grid-column:1/-1;padding:16px;border:1px solid rgba(209,154,63,.42);border-radius:13px;background:linear-gradient(130deg,#fff7e8,#f1f6f6)}
+.registration-form .selected-trip-summary strong{display:block;color:#7d411e;font-size:13px}
+.registration-form .selected-trip-summary p{margin:7px 0 0;color:#4b5b6b;font-size:12px;line-height:1.7}
+.registration-form .registration-profile-consent,.registration-form .demo-consent{grid-column:1/-1;display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:10px;background:rgba(11,20,38,.055);font-size:11px;line-height:1.6}
+.registration-form .registration-profile-consent input,.registration-form .demo-consent input{flex:none;width:auto;margin:3px 0 0}
+.registration-form .registration-profile-consent small{display:block;margin-top:4px;color:#5c6b79;font-size:10px;font-weight:400}
+.registration-form .demo-consent{background:rgba(245,215,120,.18);border:1px solid rgba(175,122,34,.18)}
+.registration-form .demo-consent span{font-size:11px;font-weight:600}
+.registration-form .register-button,.registration-form .registration-message{grid-column:1/-1}
+.bharat-ai-bubble p{white-space:pre-line}
+@media(max-width:760px){
+  .trip-cart-panel{margin:0 5% 55px;padding:22px 17px}
+  .trip-cart-heading{flex-direction:column}
+  .trip-cart-bottom{align-items:stretch;flex-direction:column}
+  .trip-cart-actions{justify-content:flex-start}
+  .registration-form{max-width:100%;padding:24px 18px}
+}
+@media(max-width:520px){
+  .registration-form .registration-grid{grid-template-columns:1fr}
+  .trip-cart-item{align-items:flex-start}
+  .trip-cart-actions{align-items:stretch;flex-direction:column}
+  .trip-cart-actions button{width:100%}
+}
+@media(prefers-reduced-motion:reduce){.package-cart-button,.trip-cart-continue{transition:none}}
