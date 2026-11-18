@@ -281,9 +281,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }, true);
   }
 
+  function clearCart() {
+    cart = [];
+    renderCart();
+    announce("Your trip cart has been cleared.");
+    return true;
+  }
+
   window.ExploreBharatCart = {
     add: addToCart,
     remove: removeFromCart,
+    clear: clearCart,
     getItems: cartPackages
   };
 
