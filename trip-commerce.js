@@ -249,6 +249,20 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   $("travellerCount")?.addEventListener("change", syncRegistration);
 
+  // Keep return-date selection consistent with the chosen departure date.
+  const departureDate = $("travelDate");
+  const returnDate = $("returnDate");
+  if (departureDate && returnDate) {
+    function updateReturnDateMinimum() {
+      returnDate.min = departureDate.value || departureDate.min || "";
+      if (departureDate.value && returnDate.value && returnDate.value < departureDate.value) {
+        returnDate.value = "";
+      }
+    }
+    departureDate.addEventListener("change", updateReturnDateMinimum);
+    updateReturnDateMinimum();
+  }
+
   const registrationForm = $("registrationForm");
   if (registrationForm) {
     registrationForm.addEventListener("submit", function () {
