@@ -299,7 +299,9 @@ document.addEventListener("DOMContentLoaded", function () {
     recordAction("Bharat AI information", "Explored the general culture collections" + (region ? " for " + region : "") + ".");
   }
 
+  let lastTourResult = null;
   function showTourAnswer(item) {
+    lastTourResult = item;
     const answer = item.title + "\n" + item.destination + " · " + item.duration +
       "\nSample price: " + formatPrice(item.price) + " per traveller\n\n" + item.overview +
       "\n\nHighlights:\n• " + item.highlights.join("\n• ") +
@@ -331,18 +333,281 @@ document.addEventListener("DOMContentLoaded", function () {
       "\n\nSelect a package to see its highlights and day-by-day sample plan. These are not live bookable offers.";
     addMessage("bot", answer, [{ label: "Open tour packages", run: openTourSection }]);
   }
+  function currentCart() {
+    return window.ExploreBharatCart?.getItems?.() || [];
+  }
   function showCart() {
-    const list = window.ExploreBharatCart?.getItems?.() || [];
+    const list = currentCart();
     if (!list.length) {
-      addMessage("bot", "Your trip cart is empty. Ask me for a Kashmir, Rajasthan, Kerala or Maharashtra package, then add one to your cart.");
+      addMessage("bot", "Your trip cart is empty. You can say “Add Kashmir to my cart”, “Put Kerala in the cart”, or ask me to recommend a tour.");
       return;
     }
     const total = list.reduce(function (sum, item) { return sum + item.price; }, 0);
+    const actions = list.map(function (item) {
+      return { label: "Remove " + item.destination, run: function () {
+        window.ExploreBharatCart?.remove?.(item.id);
+        addMessage("bot", item.title + " has been removed from your cart.");
+        showCart();
+      } };
+    });
+    actions.push({ label: "Clear my cart", run: function () {
+      window.ExploreBharatCart?.clear?.();
+      addMessage("bot", "Your trip cart has been cleared.");
+    } });
+    actions.push({ label: "Continue to registration", run: openRegistration });
     addMessage("bot", "Your trip cart contains:\n\n" +
       list.map(function (item) { return item.title + " — " + formatPrice(item.price) + " per traveller (sample)"; }).join("\n") +
       "\n\nSample total per traveller: " + formatPrice(total) +
-      "\n\nThese selections are saved in this browser only. Continue to registration to submit a trip enquiry; no booking or payment is made.",
-      [{ label: "Continue to registration", run: openRegistration }]);
+      "\n\nThese selections are saved in this browser only. You can remove individual tours or clear the cart. No booking or payment is made.", actions);
+  }
+
+  function mentionedTours(query) {
+    return tours().filter(function (item) {
+      return [item.id, item.title, item.destination].some(function (term) { return includesTerm(query, term); });
+    });
+  }
+  function tellActionSuccess(text, buttons) {
+    addMessage("bot", text, buttons || []);
+  }
+  function addTourToCart(item) {
+    if (!item) return false;
+    const ok = window.ExploreBharatCart?.add?.(item.id);
+    if (ok) {
+      lastTourResult = item;
+      tellActionSuccess(item.title + " has been added to your trip cart. The package, destination, duration and sample estimate are now loaded into the registration form.", [
+        { label: "View my cart", run: showCart },
+        { label: "Continue to registration", run: openRegistration },
+        { label: "Add another package", run: openTourSection }
+      ]);
+    } else {
+      tellActionSuccess("I couldn't update the cart just now. Please use the Add to cart button on the package card.");
+    }
+    return Boolean(ok);
+  }
+  function removeTourFromCart(item) {
+    if (!item) return false;
+    const existed = currentCart().some(function (entry) { return entry.id === item.id; });
+    if (!existed) {
+      tellActionSuccess(item.title + " is not currently in your cart.");
+      return false;
+    }
+    const ok = window.ExploreBharatCart?.remove?.(item.id);
+    if (ok !== false) tellActionSuccess(item.title + " has been removed from your trip cart.", [
+      { label: "View updated cart", run: showCart },
+      { label: "Continue planning", run: openTourSection }
+    ]);
+    return true;
+  }
+  function compareTours(list) {
+    const selected = list && list.length >= 2 ? list : tours();
+    const answer = "Here is a comparison of the sample packages currently listed on Explore Bharat:\n\n" +
+      selected.map(function (item) {
+        return item.title + "\nDestination: " + item.destination +
+          "\nDuration: " + item.duration +
+          "\nSample price: " + formatPrice(item.price) + " per traveller";
+      }).join("\n\n") +
+      "\n\nPrices are sample project values only. They do not include a verified live quotation or availability.";
+    addMessage("bot", answer, selected.slice(0, 4).map(function (item) {
+      return { label: "Add " + item.destination, run: function () { addTourToCart(item); } };
+    }));
+    recordAction("Bharat AI action", "Compared " + selected.map(function (item) { return item.title; }).join(", ") + ".");
+  }
+  function recommendTours(query) {
+    const lower = normalize(query);
+    let ceiling = Infinity;
+    const amount = lower.match(/(?:under|below|upto|up to|max(?:imum)?|budget of)\s*₹?\s*(\d{1,2})(?:\s*(?:k|thousand))?\b/);
+    if (amount) ceiling = Number(amount[1]) * (/k|thousand/.test(amount[0]) || Number(amount[1]) < 100 ? 1000 : 1);
+    if (/under 5000|below 5000|low budget/.test(lower)) ceiling = Math.min(ceiling, 5000);
+    if (/under 10000|below 10000/.test(lower)) ceiling = Math.min(ceiling, 10000);
+    if (/under 15000|below 15000/.test(lower)) ceiling = Math.min(ceiling, 15000);
+    if (/under 20000|below 20000/.test(lower)) ceiling = Math.min(ceiling, 20000);
+
+    const style = /heritage|history|fort|palace|monument/.test(lower) ? "heritage"
+      : /nature|green|backwater|wildlife|relax/.test(lower) ? "nature"
+      : /mountain|snow|adventure|trek|himalaya/.test(lower) ? "mountain"
+      : /beach|coast|sea/.test(lower) ? "coast"
+      : /family|children|kids/.test(lower) ? "family" : "";
+    const length = /weekend|1.?2 days|short trip/.test(lower) ? "short"
+      : /week|6.?8 days|long trip/.test(lower) ? "long" : "";
+
+    const scores = {
+      kashmir: { nature: 5, mountain: 4, family: 3 },
+      rajasthan: { heritage: 5, family: 4 },
+      kerala: { nature: 5, family: 4, coast: 2 },
+      maharashtra: { heritage: 4, short: 5, family: 3 }
+    };
+    const candidates = tours().filter(function (item) { return item.price <= ceiling; })
+      .map(function (item) {
+        let score = (scores[item.id] && style ? (scores[item.id][style] || 0) : 1);
+        if (length === "short" && item.id === "maharashtra") score += 3;
+        if (length === "long" && item.id === "kashmir") score += 2;
+        if (item.price <= ceiling && ceiling !== Infinity) score += 1;
+        return { item: item, score: score };
+      }).sort(function (a, b) { return b.score - a.score || a.item.price - b.item.price; });
+    if (!candidates.length) {
+      addMessage("bot", "The current sample packages do not fit that budget. I can still open the custom trip planner so you can create a lower-budget trip idea.");
+      addMessage("bot", "Please note that the displayed prices are sample estimates, not live quotations.");
+      return;
+    }
+    const chosen = candidates.slice(0, 2).map(function (entry) { return entry.item; });
+    const preference = [style, length].filter(Boolean).join(" and ");
+    addMessage("bot", "Based on " + (preference || "the options on the website") +
+      (ceiling === Infinity ? "" : " and your budget ceiling of " + formatPrice(ceiling)) +
+      ", I recommend:\n\n" + chosen.map(function (item) {
+        return item.title + " — " + item.duration + ", " + formatPrice(item.price) + " per traveller (sample).";
+      }).join("\n") + "\n\nWould you like me to add one to your cart?");
+    chosen.forEach(function (item) {
+      addMessage("bot", item.title + " is ready to select.", [
+        { label: "Add " + item.destination + " to cart", run: function () { addTourToCart(item); } },
+        { label: "See package details", run: function () { showTourAnswer(item); } }
+      ]);
+    });
+  }
+  function setSelectValue(id, candidates) {
+    const field = $(id);
+    if (!field) return false;
+    const options = Array.from(field.options);
+    const match = options.find(function (option) {
+      const value = normalize(option.value + " " + option.textContent);
+      return candidates.some(function (candidate) { return value.includes(normalize(candidate)); });
+    });
+    if (!match) return false;
+    field.value = match.value;
+    field.dispatchEvent(new Event("change", { bubbles: true }));
+    return true;
+  }
+  function fillRegistrationFromMessage(raw, query) {
+    const changes = [];
+    const found = findDestination(query);
+    const selectedTour = findTour(query);
+    if (selectedTour) {
+      window.ExploreBharatCart?.add?.(selectedTour.id);
+      changes.push(selectedTour.title + " added to the trip cart");
+    } else if (found && /registration|register|form|enquiry|trip|travel date|travellers/.test(query)) {
+      if (setSelectValue("registrationDestination", [found.data.name])) changes.push("destination set to " + found.data.name);
+    }
+
+    const count = query.match(/\b([1-9]|10)\s*(?:travellers?|people|persons|adults|members)\b/);
+    if (count && $("travellerCount")) {
+      $("travellerCount").value = count[1];
+      $("travellerCount").dispatchEvent(new Event("change", { bubbles: true }));
+      changes.push(count[1] + " travellers");
+    }
+    const departureISO = raw.match(/\b(20\d{2}-\d{2}-\d{2})\b/);
+    if (departureISO && $("travelDate")) {
+      $("travelDate").value = departureISO[1];
+      $("travelDate").dispatchEvent(new Event("change", { bubbles: true }));
+      changes.push("departure date " + departureISO[1]);
+    }
+    const returnISO = raw.match(/\b(?:return|back)\s*(?:date)?\s*(?:is|on)?\s*(20\d{2}-\d{2}-\d{2})\b/i);
+    if (returnISO && $("returnDate")) {
+      $("returnDate").value = returnISO[1];
+      $("returnDate").dispatchEvent(new Event("change", { bubbles: true }));
+      changes.push("return date " + returnISO[1]);
+    }
+    const from = query.match(/\bfrom ([a-z][a-z -]{1,35}?)(?= budget| with| for| on| by| and|,|$)/);
+    if (from && $("originCity")) {
+      $("originCity").value = from[1].trim().replace(/\b\w/g, function (letter) { return letter.toUpperCase(); });
+      changes.push("departure city " + $("originCity").value);
+    }
+    const food = /vegetarian|veg\b/.test(query) ? "Vegetarian"
+      : /vegan/.test(query) ? "Vegan"
+      : /jain/.test(query) ? "Jain"
+      : /non.?vegetarian|nonveg/.test(query) ? "Non-vegetarian" : "";
+    if (food && setSelectValue("foodPreference", [food])) changes.push(food + " food");
+    const transport = /train/.test(query) ? "Train" : /flight|plane/.test(query) ? "Flight"
+      : /bus/.test(query) ? "Bus" : /cab|car|drive/.test(query) ? "Private cab or car"
+      : /mixed transport/.test(query) ? "Mixed transport" : "";
+    if (transport && setSelectValue("transportPreference", [transport])) changes.push(transport.toLowerCase());
+    const stay = /homestay|home stay/.test(query) ? "Homestay"
+      : /premium|resort/.test(query) ? "Premium hotel or resort"
+      : /budget hotel|budget stay|hostel/.test(query) ? "Budget stay"
+      : /standard hotel/.test(query) ? "Standard hotel" : "";
+    if (stay && setSelectValue("stayPreference", [stay])) changes.push(stay.toLowerCase());
+    const purpose = /\bfamily\b/.test(query) ? "Family"
+      : /\bcouple\b/.test(query) ? "Couple"
+      : /\bsolo\b/.test(query) ? "Solo" : /\bfriends|group\b/.test(query) ? "Friends" : "";
+    if (purpose && setSelectValue("tripPurpose", [purpose])) changes.push(purpose.toLowerCase() + " trip");
+    let budget = "";
+    const value = query.match(/(?:budget|under|below|upto|up to)\s*₹?\s*(\d{1,2})(?:\s*(k|thousand))?\b/);
+    if (value) {
+      const amount = Number(value[1]) * (value[2] || Number(value[1]) < 100 ? 1000 : 1);
+      budget = amount < 5000 ? "Under ₹5,000" : amount < 10000 ? "₹5,000–₹10,000"
+        : amount < 20000 ? "₹10,000–₹20,000" : "Above ₹20,000";
+    }
+    if (/under 5000|below 5000|low budget/.test(query)) budget = "Under ₹5,000";
+    if (/5000 to 10000|5000-10000/.test(query)) budget = "₹5,000–₹10,000";
+    if (/10000 to 20000|10000-20000/.test(query)) budget = "₹10,000–₹20,000";
+    if (budget && setSelectValue("budgetRange", [budget])) changes.push("budget " + budget);
+
+    if (!changes.length) return false;
+    goToSection("registration");
+    addMessage("bot", "I've updated the registration form: " + changes.join(", ") +
+      ". Please review the fields and complete anything still missing. I have not submitted the form.");
+    recordAction("Bharat AI action", "Prefilled trip enquiry form: " + changes.join(", ") + ".");
+    return true;
+  }
+  function runPlannerFromMessage(query) {
+    const budget = $("tripBudget"), duration = $("tripDuration"), style = $("tripStyle");
+    let changed = false;
+    if (budget) {
+      if (/under 5000|below 5000|low budget/.test(query)) { budget.value = "low"; changed = true; }
+      else if (/5000 to 10000|5000-10000|medium budget/.test(query)) { budget.value = "medium"; changed = true; }
+      else if (/10000 to 20000|10000-20000/.test(query)) { budget.value = "high"; changed = true; }
+      else if (/premium|above 20000|over 20000/.test(query)) { budget.value = "premium"; changed = true; }
+    }
+    if (duration) {
+      if (/weekend|1 2 days|two days/.test(query)) { duration.value = "weekend"; changed = true; }
+      else if (/3 5 days|three to five days|five days/.test(query)) { duration.value = "short"; changed = true; }
+      else if (/6 days|7 days|one week|long trip/.test(query)) { duration.value = "long"; changed = true; }
+    }
+    if (style) {
+      const selected = /adventure|mountain|trek/.test(query) ? "adventure"
+        : /nature|wildlife|forest/.test(query) ? "nature"
+        : /heritage|history|fort/.test(query) ? "heritage"
+        : /beach|coast/.test(query) ? "beach"
+        : /spiritual|temple|pilgrim/.test(query) ? "spiritual"
+        : /family|children|kids/.test(query) ? "family" : "";
+      if (selected) { style.value = selected; changed = true; }
+    }
+    if (changed) {
+      const cards = document.querySelectorAll(".travel-style-card");
+      cards.forEach(function (card) {
+        const active = card.dataset.style === style?.value;
+        card.classList.toggle("selected", active);
+        card.setAttribute("aria-pressed", String(active));
+      });
+    }
+    goToSection("trip-planner");
+    if (budget?.value && duration?.value && style?.value) {
+      $("findTripBtn")?.click();
+      addMessage("bot", "I've filled your budget, duration and travel style, and generated a trip suggestion below. Review it before continuing.");
+    } else {
+      const missing = [];
+      if (!budget?.value) missing.push("budget");
+      if (!duration?.value) missing.push("duration");
+      if (!style?.value) missing.push("travel style");
+      addMessage("bot", (changed ? "I've filled the preferences I could identify. " : "Let's build your trip. ") +
+        "Please select " + missing.join(", ") + " in the planner.");
+    }
+    recordAction("Bharat AI action", "Updated custom trip planner preferences.");
+    return true;
+  }
+  function openSectionIntent(query) {
+    const mappings = [
+      { re: /\b(packages?|tours?)\b/, id: "packages", name: "tour packages" },
+      { re: /\b(registration|register|enquiry form)\b/, id: "registration", name: "registration" },
+      { re: /\b(culture|traditions?)\b/, id: "culture", name: "culture" },
+      { re: /\b(destinations?|places)\b/, id: "destinations", name: "destinations" },
+      { re: /\b(planner|build.*trip|custom trip)\b/, id: "trip-planner", name: "trip planner" },
+      { re: /\b(home|homepage)\b/, id: "home", name: "homepage" }
+    ];
+    const target = mappings.find(function (item) { return item.re.test(query); });
+    if (!target) return false;
+    goToSection(target.id);
+    addMessage("bot", "I've opened the " + target.name + " section.");
+    setPanel(false);
+    return true;
   }
   function handleQuery(raw) {
     const query = normalize(raw);
@@ -350,14 +615,66 @@ document.addEventListener("DOMContentLoaded", function () {
     addMessage("user", raw.trim());
 
     if (/\b(hi|hello|hey|namaste|good morning|good evening)\b/.test(query)) {
-      addMessage("bot", "Namaste! Ask me about a destination, local food, places to visit, a culture tradition or one of the four sample tour packages. I can also add a package to your trip cart.");
+      addMessage("bot", "Namaste! I can take actions for you: add or remove tours, clear and inspect your cart, compare or recommend packages, fill trip preferences, update your registration form, and open destination or culture guides. Try “Add Kashmir to my cart” or “Set 4 travellers, vegetarian food and train travel”.");
       return;
     }
-    if (/\b(help|what can you do|how do i use|what to ask|what do you know)\b/.test(query)) {
-      addMessage("bot", "I can explain the destinations and attractions listed on this website, share regional cuisine and culture-card information, describe package highlights and sample itineraries, add packages to your cart, and take you to registration. Try “What should I see in Kerala?”, “Tell me about Lavani”, “What is included in Kashmir package?” or “Add the Rajasthan tour to my cart”.");
+    if (/\b(help|what can you do|how do i use|what to ask|what do you know|show commands)\b/.test(query)) {
+      addMessage("bot", "Here's what I can do on this website:\n\n• Cart: add Kashmir / Kerala / Rajasthan / Maharashtra, remove a tour, show the cart, or clear it.\n• Discover: open a destination, explain attractions, food and culture.\n• Plan: recommend tours, compare packages, or fill budget, duration and travel style in the planner.\n• Registration: set the destination, traveller count, date, departure city, budget, food, transport and accommodation preferences.\n• Navigation: open destinations, culture, packages, profile or registration.\n\nI will change the website fields when you ask, but I won't submit the enquiry or make a booking.");
       return;
     }
-    if (/\b(cart|my selected trips|selected packages|what did i add)\b/.test(query)) {
+
+    // Action intents must run before generic mentions of "cart", "package" or "registration".
+    const tour = findTour(query) || ((/\b(it|that one|the previous one)\b/.test(query) && lastTourResult) ? lastTourResult : null);
+    const isAdd = /\b(add|put|include|save|select|choose)\b/.test(query) ||
+      /\bto (?:my )?cart\b/.test(query) || /\bin (?:my )?cart\b/.test(query);
+    const isRemove = /\b(remove|delete|take out|drop|unselect)\b/.test(query);
+    const isClear = /\b(clear|empty|remove all|delete all)\b/.test(query) && /\b(cart|trips|packages)\b/.test(query);
+    const namedTours = mentionedTours(query);
+    const cartActionContext = /\b(cart|package|tour|trip)\b/.test(query);
+
+    if (isClear) {
+      window.ExploreBharatCart?.clear?.();
+      addMessage("bot", "Done — I've cleared all packages from your trip cart.");
+      return;
+    }
+    if (isRemove && cartActionContext) {
+      const item = namedTours[0] || tour;
+      if (item) { removeTourFromCart(item); return; }
+      if (/\b(all|everything)\b/.test(query)) {
+        window.ExploreBharatCart?.clear?.();
+        addMessage("bot", "I've cleared every package from your cart.");
+      } else {
+        addMessage("bot", "Which package should I remove? You can say “Remove Kashmir from my cart” or ask me to show your cart.");
+      }
+      return;
+    }
+    if (isAdd && cartActionContext) {
+      const items = namedTours.length ? namedTours : (tour ? [tour] : []);
+      if (/\b(all|every|all four)\b/.test(query)) {
+        tours().forEach(function (item) { window.ExploreBharatCart?.add?.(item.id); });
+        addMessage("bot", "I've added all four sample tour packages to your cart. You can now review or remove individual packages.");
+        return;
+      }
+      if (items.length) {
+        items.forEach(function (item) { window.ExploreBharatCart?.add?.(item.id); });
+        addMessage("bot", items.map(function (item) { return item.title; }).join(" and ") +
+          (items.length === 1 ? " has" : " have") + " been added to your cart. Their details are ready in registration.", [
+            { label: "View cart", run: showCart },
+            { label: "Go to registration", run: openRegistration }
+          ]);
+        return;
+      }
+    }
+
+    if (/\b(compare|comparison|difference between|versus|vs)\b/.test(query)) {
+      compareTours(namedTours.length >= 2 ? namedTours : tours());
+      return;
+    }
+    if (/\b(recommend|suggest|best package|best tour|which package|which tour|find me a tour|suitable tour)\b/.test(query)) {
+      recommendTours(query);
+      return;
+    }
+    if (/\b(cart|my selected trips|selected packages|what did i add|show.*cart|view.*cart)\b/.test(query)) {
       showCart();
       return;
     }
@@ -366,49 +683,49 @@ document.addEventListener("DOMContentLoaded", function () {
       window.setTimeout(function () { $("profileOpen")?.click(); setPanel(false); }, 250);
       return;
     }
-    if (/\b(register|registration|enquiry form|sign up|signup|trip form)\b/.test(query)) {
+    if (/\b(register|registration|enquiry form|fill.*form|complete.*form|sign up|signup|trip form)\b/.test(query)) {
+      if (fillRegistrationFromMessage(raw, query)) return;
       openRegistration();
       return;
     }
+    if (/\b(set|update|change|make it|i want|we are|travellers?|people|vegetarian|vegan|jain|train|flight|homestay|budget)\b/.test(query) &&
+        /\b(form|registration|trip|travel|travellers?|people|date|from|vegetarian|vegan|jain|train|flight|homestay|budget)\b/.test(query)) {
+      if (fillRegistrationFromMessage(raw, query)) return;
+    }
     if (/\b(book|booking|payment|pay online|confirm my trip|reservation)\b/.test(query)) {
-      addMessage("bot", "Explore Bharat is currently a front-end student demo. I can help you shortlist sample tours and prepare an enquiry, but this site does not check availability, confirm reservations, accept payments or send bookings to a travel operator.");
+      addMessage("bot", "I can prepare your trip enquiry, but Explore Bharat is currently a front-end demo. It does not check live availability, confirm reservations, accept payments or send bookings to a travel operator.");
       return;
     }
 
-    const tour = findTour(query);
-    const cartIntent = /\b(add|put|select|choose|include)\b/.test(query) && /\b(cart|package|tour|trip)\b/.test(query);
-    const tourIntent = /\b(package|packages|tour|itinerary|sample price|price|cost|estimate|included|cart|trip|holiday|escape|retreat)\b/.test(query);
-    if (tour && cartIntent) {
-      const added = window.ExploreBharatCart?.add?.(tour.id);
-      addMessage("bot", added
-        ? tour.title + " has been added to your trip cart. The package details are loaded into registration. You can review travellers, dates and preferences before submitting an enquiry."
-        : "The trip cart is unavailable right now. Use the Add to cart button on the tour package card.");
-      return;
-    }
-    if (tour && tourIntent) {
-      showTourAnswer(tour);
-      return;
-    }
+    const mentioned = namedTours[0] || tour;
+    const asksTour = /\b(package|packages|tour|itinerary|sample price|price|cost|estimate|included|holiday|escape|retreat)\b/.test(query);
+    if (mentioned && asksTour) { showTourAnswer(mentioned); return; }
     if (/\b(package|tour packages|holiday packages|travel packages|sample tours|show me tours)\b/.test(query)) {
       showPackageList();
       return;
     }
 
-    const category = findCategory(query);
-    if (category) {
-      showCultureAnswer(query, category);
+    if (/\b(open|go to|navigate|take me|show me the)\b/.test(query)) {
+      const foundToOpen = findDestination(query);
+      if (foundToOpen) { openDestinationPage(foundToOpen); return; }
+      const categoryToOpen = findCategory(query);
+      if (categoryToOpen) { openCulturePage(categoryToOpen); return; }
+      if (openSectionIntent(query)) return;
+    }
+    if (/\b(plan|planner|build.*trip|custom trip|my own trip|find.*trip|itinerary|budget)\b/.test(query) &&
+        /\b(plan|planner|build|find|custom|budget|adventure|nature|heritage|beach|spiritual|family|weekend|days)\b/.test(query)) {
+      runPlannerFromMessage(query);
       return;
     }
+
+    const category = findCategory(query);
+    if (category) { showCultureAnswer(query, category); return; }
     if (/\b(culture|cultures|tradition|traditions|arts and crafts|heritage collections)\b/.test(query)) {
       showGeneralCultureAnswer(query);
       return;
     }
-
     const found = findDestination(query);
-    if (found) {
-      showDestinationAnswer(found, query);
-      return;
-    }
+    if (found) { showDestinationAnswer(found, query); return; }
 
     if (/\b(destination|destinations|places to visit|where should i go|places in bharat|explore bharat|explore india)\b/.test(query)) {
       const data = destinations();
@@ -416,21 +733,6 @@ document.addEventListener("DOMContentLoaded", function () {
       addMessage("bot", "Explore Bharat currently features these destination guides:\n\n" + names.join(" · ") +
         "\n\nAsk about any one for its highlights, places to visit, experiences, cuisine and suggested duration.",
         [{ label: "Open destinations", run: function () { goToSection("destinations"); setPanel(false); } }]);
-      return;
-    }
-    if (/\b(plan|planner|build.*trip|custom trip|my own trip|itinerary|budget)\b/.test(query)) {
-      const budget = $("tripBudget"), duration = $("tripDuration"), style = $("tripStyle");
-      if (budget && /under|below|low budget|5000/.test(query)) budget.value = "low";
-      if (budget && /premium|above 20000/.test(query)) budget.value = "premium";
-      if (duration && /weekend|1 2 days|two days/.test(query)) duration.value = "weekend";
-      if (duration && /3 5 days|five days|three days/.test(query)) duration.value = "short";
-      if (style) {
-        const option = Array.from(style.options).find(function (item) { return includesTerm(query, item.textContent); });
-        if (option) style.value = option.value;
-      }
-      addMessage("bot", "I've opened the trip planner. Choose your budget, duration and travel style, then select “Find My Trip”. The result is a travel suggestion, not a confirmed itinerary.");
-      goToSection("trip-planner");
-      setPanel(false);
       return;
     }
     if (/\b(home|homepage|start page)\b/.test(query)) {
@@ -443,9 +745,8 @@ document.addEventListener("DOMContentLoaded", function () {
       addMessage("bot", "The website currently contains curated destination descriptions and sample tour plans, but it does not connect to live weather, transport schedules, hotel inventory, permit notices or current prices. Please verify those details using official and up-to-date sources before making travel arrangements.");
       return;
     }
-    addMessage("bot", "I couldn't find that topic in the current Explore Bharat content. I can answer about the 12 destination guides, the eight culture collections and four sample tour packages. Try “Tell me about Kashmir”, “What food is famous in Assam?”, “Explain Ganesh Chaturthi” or “Show my cart”.");
+    addMessage("bot", "I couldn't match that action yet. Try adding or removing a tour, comparing or recommending packages, setting your trip preferences, filling your registration form, or opening a destination or culture collection.");
   }
-
   toggle.addEventListener("click", function () { setPanel(panel.hidden); });
   close.addEventListener("click", function () { setPanel(false); });
   document.addEventListener("keydown", function (event) {
