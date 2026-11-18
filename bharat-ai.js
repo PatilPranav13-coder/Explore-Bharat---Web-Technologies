@@ -377,6 +377,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const tour = findTour(query);
     const cartIntent = /\b(add|put|select|choose|include)\b/.test(query) && /\b(cart|package|tour|trip)\b/.test(query);
+    const tourIntent = /\b(package|packages|tour|itinerary|sample price|price|cost|estimate|included|cart|trip|holiday|escape|retreat)\b/.test(query);
     if (tour && cartIntent) {
       const added = window.ExploreBharatCart?.add?.(tour.id);
       addMessage("bot", added
@@ -384,7 +385,7 @@ document.addEventListener("DOMContentLoaded", function () {
         : "The trip cart is unavailable right now. Use the Add to cart button on the tour package card.");
       return;
     }
-    if (tour) {
+    if (tour && tourIntent) {
       showTourAnswer(tour);
       return;
     }
