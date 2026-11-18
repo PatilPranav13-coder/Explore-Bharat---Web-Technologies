@@ -1,9 +1,10 @@
-const CACHE_NAME = "bharat-veya-shell-v4";
+const CACHE_NAME = "bharat-veya-shell-v5";
 const BASE_URL = new URL(".", self.registration.scope);
 const API_PATH = new URL("api/", BASE_URL).pathname;
 const APP_SHELL = [
   "./", "index.html", "style.css", "script.js", "explore-effects.js", "profile-log.js",
   "site-motion.css", "site-motion.js", "site-motion-plus.js", "bharat-ai.css", "bharat-ai.js",
+  "trip-commerce.js", "booking-cart.css",
   "architecture-modal.css", "architecture-modal.js", "bharat-features.css", "bharat-features.js",
   "pwa-init.js", "pwa-status.css", "image-credits.html", "privacy.html", "terms.html",
   "explore-bharat.webmanifest", "manifest.webmanifest",
