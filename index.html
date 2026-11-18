@@ -133,35 +133,39 @@
         <div class="bharat-ai-avatar" aria-hidden="true"><span>✦</span></div>
         <div class="bharat-ai-heading">
             <h2 id="bharatAiTitle">Bharat AI</h2>
-            <p><span class="bharat-ai-status-dot"></span> Site knowledge · trip guide</p>
+            <p><span class="bharat-ai-status-dot"></span> Trip copilot · site knowledge</p>
         </div>
         <button class="bharat-ai-close" id="bharatAiClose" type="button" aria-label="Close Bharat AI">×</button>
     </header>
     <div class="bharat-ai-intro">
         <span class="bharat-ai-intro-kicker">YOUR PERSONAL GUIDE TO BHARAT</span>
-        <p>Ask about destinations, local food, culture, attractions or tour packages. I can explain the website content, add tours to your cart and prepare your trip enquiry.</p>
+        <p>Ask about destinations, local food, culture, attractions or tour packages. I can answer questions and take actions: manage your cart, compare tours, plan a trip, fill your enquiry and open website sections.</p>
     </div>
     <div class="bharat-ai-messages" id="bharatAiMessages" role="log" aria-live="polite" aria-relevant="additions text">
         <div class="bharat-ai-message bharat-ai-bot">
             <span class="bharat-ai-message-avatar" aria-hidden="true">✦</span>
             <div class="bharat-ai-bubble">
                 <p>Namaste! Ask me anything about the destinations, culture and tour ideas featured here. I can also help you shortlist a package.</p>
-                <span class="bharat-ai-message-meta">Bharat AI · Explore Bharat knowledge</span>
+                <span class="bharat-ai-message-meta">Bharat AI · Trip copilot</span>
             </div>
         </div>
     </div>
     <div class="bharat-ai-suggestions" id="bharatAiSuggestions">
         <button type="button" data-prompt="Tell me about Bharat culture">Explore culture</button>
         <button type="button" data-prompt="Tell me about Kashmir">Kashmir guide</button>
-        <button type="button" data-prompt="Show me tour packages">Tour packages</button>
-        <button type="button" data-prompt="Add Kashmir package to cart">Add Kashmir to cart</button>
+        <button type="button" data-prompt="Add Kashmir to my cart">Add Kashmir</button>
+        <button type="button" data-prompt="Show my cart">My cart</button>
+        <button type="button" data-prompt="Compare all tour packages">Compare tours</button>
+        <button type="button" data-prompt="Recommend a nature package under 15000">Recommend a tour</button>
+        <button type="button" data-prompt="Set 2 travellers, vegetarian food and train travel in my registration form">Set preferences</button>
+        <button type="button" data-prompt="Open registration">Registration</button>
     </div>
     <form class="bharat-ai-form" id="bharatAiForm">
         <label class="visually-hidden" for="bharatAiInput">Ask Bharat AI to navigate Explore Bharat</label>
         <input id="bharatAiInput" type="text" maxlength="280" autocomplete="off" placeholder="Ask about a place, culture, itinerary or package..." required>
         <button type="submit" aria-label="Send message"><span aria-hidden="true">➤</span></button>
     </form>
-    <p class="bharat-ai-footnote">Answers use the curated information on this website. No live AI model, travel inventory or booking backend is connected.</p>
+    <p class="bharat-ai-footnote">I use this website’s curated information and can update its cart and forms. Live bookings, payments and live travel data are not connected.</p>
 </section>
 
 <main>
@@ -900,7 +904,7 @@
 <script src="profile-log.js?v=20261118-profile-booking"></script>
     <script src="site-motion.js?v=20261117-sitewide"></script>
 <script src="site-motion-plus.js?v=20261117-immersive"></script>
-<script src="bharat-ai.js?v=20261118-informed-guide"></script>
+<script src="bharat-ai.js?v=20261118-actions"></script>
 <script src="architecture-modal.js?v=20261118-architecture-features"></script>
 <script src="bharat-features.js?v=20261118-command"></script>
 <script src="pwa-init.js?v=20261118-pwa"></script>
