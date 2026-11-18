@@ -421,7 +421,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function recommendTours(query) {
     const lower = normalize(query);
     let ceiling = Infinity;
-    const amount = lower.match(/(?:under|below|upto|up to|max(?:imum)?|budget of)\s*₹?\s*(\d{1,6})(?:\s*(?:k|thousand))?\b/);
+    const amount = lower.match(/(?:under|below|within|upto|up to|max(?:imum)?|budget of)\s*₹?\s*(\d{1,6})(?:\s*(?:k|thousand))?\b/);
     if (amount) ceiling = Number(amount[1]) * (/k|thousand/.test(amount[0]) || Number(amount[1]) < 100 ? 1000 : 1);
     if (/under 5000|below 5000|low budget/.test(lower)) ceiling = Math.min(ceiling, 5000);
     if (/under 10000|below 10000/.test(lower)) ceiling = Math.min(ceiling, 10000);
@@ -442,7 +442,9 @@ document.addEventListener("DOMContentLoaded", function () {
       kerala: { nature: 5, family: 4, coast: 2 },
       maharashtra: { heritage: 4, short: 5, family: 3 }
     };
-    const candidates = tours().filter(function (item) { return item.price <= ceiling; })
+    const requested = mentionedTours(lower);
+    const sourceTours = requested.length ? requested : tours();
+    const candidates = sourceTours.filter(function (item) { return item.price <= ceiling; })
       .map(function (item) {
         let score = (scores[item.id] && style ? (scores[item.id][style] || 0) : 1);
         if (length === "short" && item.id === "maharashtra") score += 3;
@@ -528,7 +530,7 @@ document.addEventListener("DOMContentLoaded", function () {
       $("returnDate").dispatchEvent(new Event("change", { bubbles: true }));
       changes.push("return date " + returnISO[1]);
     }
-    const from = query.match(/\bfrom ([a-z][a-z -]{1,35}?)(?= budget| with| for| on| by| and|,|$)/);
+    const from = query.match(/\bfrom ([a-z][a-z -]{1,35}?)(?= budget| with| for| on| by| and| from| to | date| travel|$)/);
     if (from && $("originCity")) {
       $("originCity").value = from[1].trim().replace(/\b\w/g, function (letter) { return letter.toUpperCase(); });
       changes.push("departure city " + $("originCity").value);
@@ -654,7 +656,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Action intents must run before generic mentions of "cart", "package" or "registration".
     const tour = findTour(query) || ((/\b(it|that one|the previous one)\b/.test(query) && lastTourResult) ? lastTourResult : null);
-    const isAdd = /\b(add|put|include|save|select|choose)\b/.test(query) ||
+    const isAdd = /\b(add|put|include|save|select|choose|shortlist)\b/.test(query) ||
       /\bto (?:my )?cart\b/.test(query) || /\bin (?:my )?cart\b/.test(query);
     const isRemove = /\b(remove|delete|take out|drop|unselect)\b/.test(query);
     const isClear = /\b(clear|empty|remove all|delete all)\b/.test(query) && /\b(cart|trips|packages)\b/.test(query);
@@ -685,14 +687,22 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
       if (items.length) {
+        if (/\b(instead|replace|swap)\b/.test(query)) window.ExploreBharatCart?.clear?.();
         items.forEach(function (item) { window.ExploreBharatCart?.add?.(item.id); });
+        const bookedRequest = /\b(book|reserve|booking)\b/.test(query);
         addMessage("bot", items.map(function (item) { return item.title; }).join(" and ") +
-          (items.length === 1 ? " has" : " have") + " been added to your cart. Their details are ready in registration.", [
+          (items.length === 1 ? " has" : " have") + " been added to your trip cart. Their details are ready in registration." +
+          (bookedRequest ? " This is a shortlist only; no reservation has been made." : ""), [
             { label: "View cart", run: showCart },
             { label: "Go to registration", run: openRegistration }
           ]);
         return;
       }
+    }
+    if (/\b(book|reserve|booking)\b/.test(query) && tour) {
+      addTourToCart(tour);
+      addMessage("bot", "I've added it to your trip cart as an enquiry shortlist. Explore Bharat is a demo and cannot confirm a reservation or payment.");
+      return;
     }
 
     if (/\b(compare|comparison|difference between|versus|vs)\b/.test(query)) {
