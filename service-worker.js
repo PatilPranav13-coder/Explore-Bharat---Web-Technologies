@@ -1,4 +1,4 @@
-const CACHE_NAME = "bharat-veya-shell-v5";
+const CACHE_NAME = "bharat-veya-shell-v6";
 const BASE_URL = new URL(".", self.registration.scope);
 const API_PATH = new URL("api/", BASE_URL).pathname;
 const APP_SHELL = [
