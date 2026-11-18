@@ -331,7 +331,12 @@ document.addEventListener("DOMContentLoaded", function () {
         return item.title + " — " + item.duration + " · " + formatPrice(item.price) + " per traveller (sample)";
       }).join("\n\n") +
       "\n\nSelect a package to see its highlights and day-by-day sample plan. These are not live bookable offers.";
-    addMessage("bot", answer, [{ label: "Open tour packages", run: openTourSection }]);
+    const actions = list.map(function (item) {
+      return { label: "Add " + item.destination, run: function () { addTourToCart(item); } };
+    });
+    actions.push({ label: "Compare these tours", run: function () { compareTours(list); } });
+    actions.push({ label: "Open tour packages", run: openTourSection });
+    addMessage("bot", answer, actions);
   }
   function currentCart() {
     return window.ExploreBharatCart?.getItems?.() || [];
@@ -415,7 +420,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function recommendTours(query) {
     const lower = normalize(query);
     let ceiling = Infinity;
-    const amount = lower.match(/(?:under|below|upto|up to|max(?:imum)?|budget of)\s*₹?\s*(\d{1,2})(?:\s*(?:k|thousand))?\b/);
+    const amount = lower.match(/(?:under|below|upto|up to|max(?:imum)?|budget of)\s*₹?\s*(\d{1,6})(?:\s*(?:k|thousand))?\b/);
     if (amount) ceiling = Number(amount[1]) * (/k|thousand/.test(amount[0]) || Number(amount[1]) < 100 ? 1000 : 1);
     if (/under 5000|below 5000|low budget/.test(lower)) ceiling = Math.min(ceiling, 5000);
     if (/under 10000|below 10000/.test(lower)) ceiling = Math.min(ceiling, 10000);
@@ -530,7 +535,7 @@ document.addEventListener("DOMContentLoaded", function () {
       : /\bsolo\b/.test(query) ? "Solo" : /\bfriends|group\b/.test(query) ? "Friends" : "";
     if (purpose && setSelectValue("tripPurpose", [purpose])) changes.push(purpose.toLowerCase() + " trip");
     let budget = "";
-    const value = query.match(/(?:budget|under|below|upto|up to)\s*₹?\s*(\d{1,2})(?:\s*(k|thousand))?\b/);
+    const value = query.match(/(?:budget|under|below|upto|up to)\s*₹?\s*(\d{1,6})(?:\s*(k|thousand))?\b/);
     if (value) {
       const amount = Number(value[1]) * (value[2] || Number(value[1]) < 100 ? 1000 : 1);
       budget = amount < 5000 ? "Under ₹5,000" : amount < 10000 ? "₹5,000–₹10,000"
