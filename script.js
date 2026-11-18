@@ -194,6 +194,10 @@ const destinationData = {
     }
 };
 
+// Shared, read-only website knowledge for Bharat AI and other site features.
+window.ExploreBharatKnowledge = window.ExploreBharatKnowledge || { culture: {} };
+window.ExploreBharatKnowledge.destinations = destinationData;
+
 
 /* DESTINATION CAROUSEL */
 
@@ -570,6 +574,13 @@ function showCulture(category) {
             introduction = "Choose a category to discover traditions from across Bharat.";
             items = [];
     }
+
+    // Expose the same curated culture cards that visitors can see on the page.
+    window.ExploreBharatKnowledge = window.ExploreBharatKnowledge || { destinations: destinationData, culture: {} };
+    window.ExploreBharatKnowledge.culture = window.ExploreBharatKnowledge.culture || {};
+    window.ExploreBharatKnowledge.culture[category] = items.map(function (item) {
+        return { name: item[0], region: item[1], description: item[2] };
+    });
 
 
     /* UPDATE CULTURE HEADING */
