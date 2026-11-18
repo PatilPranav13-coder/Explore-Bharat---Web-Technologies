@@ -275,6 +275,30 @@ document.addEventListener("DOMContentLoaded", function () {
     ]);
     recordAction("Bharat AI information", "Explored the " + categoryNames[selected] + " collection.");
   }
+
+  function showGeneralCultureAnswer(query) {
+    const keys = Object.keys(categoryAliases);
+    const foundDestination = findDestination(query);
+    const region = foundDestination?.data.name || "";
+    const results = [];
+    keys.forEach(function (category) {
+      categoryTab(category);
+      const entries = cultureIndex()[category] || [];
+      const regional = region ? entries.filter(function (item) {
+        return includesTerm(item.region, region) || includesTerm(region, item.region);
+      }) : entries.slice(0, 2);
+      if (regional.length) results.push(categoryNames[category] + ": " + regional.slice(0, 4).map(function (item) {
+        return item.name + " (" + item.region + ")";
+      }).join(", "));
+    });
+    categoryTab("dance");
+    let answer = region ? "Culture collections connected to " + region + " in the current website content:\n\n" : "Explore the culture collections currently featured on Explore Bharat:\n\n";
+    answer += results.length ? results.join("\n\n") : "Dance, food, festivals, music, clothing, art and crafts, languages, and architecture.";
+    answer += "\n\nAsk me about a specific tradition or choose a collection to explore its descriptions.";
+    addMessage("bot", answer, [{ label: "Open culture collections", run: function () { goToSection("culture"); setPanel(false); } }]);
+    recordAction("Bharat AI information", "Explored the general culture collections" + (region ? " for " + region : "") + ".");
+  }
+
   function showTourAnswer(item) {
     const answer = item.title + "\n" + item.destination + " · " + item.duration +
       "\nSample price: " + formatPrice(item.price) + " per traveller\n\n" + item.overview +
@@ -369,15 +393,19 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const found = findDestination(query);
-    if (found) {
-      showDestinationAnswer(found, query);
+    const category = findCategory(query);
+    if (category) {
+      showCultureAnswer(query, category);
+      return;
+    }
+    if (/\b(culture|cultures|tradition|traditions|arts and crafts|heritage collections)\b/.test(query)) {
+      showGeneralCultureAnswer(query);
       return;
     }
 
-    const category = findCategory(query);
-    if (category || /\b(culture|cultures|tradition|traditions|arts and crafts|heritage collections)\b/.test(query)) {
-      showCultureAnswer(query, category || "dance");
+    const found = findDestination(query);
+    if (found) {
+      showDestinationAnswer(found, query);
       return;
     }
 
