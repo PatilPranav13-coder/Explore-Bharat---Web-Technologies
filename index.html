@@ -10,9 +10,10 @@
     <link rel="stylesheet" href="style.css?v=20261117-home-pro">
     <link rel="stylesheet" href="site-motion.css?v=20261117-immersive">
     <link rel="stylesheet" href="bharat-ai.css?v=20261117-guide">
-    <link rel="stylesheet" href="architecture-modal.css?v=20261118-architecture-features>
+    <link rel="stylesheet" href="architecture-modal.css?v=20261118-architecture-features">
     <link rel="stylesheet" href="bharat-features.css?v=20261118-command">
     <link rel="stylesheet" href="pwa-status.css?v=20261118-pwa">
+    <link rel="stylesheet" href="booking-cart.css?v=20261118-cart">
 
     <script type="application/ld+json">
     {
@@ -132,13 +133,13 @@
         <div class="bharat-ai-avatar" aria-hidden="true"><span>✦</span></div>
         <div class="bharat-ai-heading">
             <h2 id="bharatAiTitle">Bharat AI</h2>
-            <p><span class="bharat-ai-status-dot"></span> Explore Bharat website guide</p>
+            <p><span class="bharat-ai-status-dot"></span> Site knowledge · trip guide</p>
         </div>
         <button class="bharat-ai-close" id="bharatAiClose" type="button" aria-label="Close Bharat AI">×</button>
     </header>
     <div class="bharat-ai-intro">
         <span class="bharat-ai-intro-kicker">YOUR PERSONAL GUIDE TO BHARAT</span>
-        <p>Tell me what you want to explore. I can take you to destinations, culture, tour packages or the trip planner.</p>
+        <p>Ask about destinations, local food, culture, attractions or tour packages. I can explain the website content, add tours to your cart and prepare your trip enquiry.</p>
     </div>
     <div class="bharat-ai-messages" id="bharatAiMessages" role="log" aria-live="polite" aria-relevant="additions text">
         <div class="bharat-ai-message bharat-ai-bot">
@@ -150,17 +151,17 @@
         </div>
     </div>
     <div class="bharat-ai-suggestions" id="bharatAiSuggestions">
-        <button type="button" data-prompt="I want to explore Bharat's culture">Explore culture</button>
-        <button type="button" data-prompt="I want a Kashmir trip">Kashmir trip</button>
+        <button type="button" data-prompt="Tell me about Bharat culture">Explore culture</button>
+        <button type="button" data-prompt="Tell me about Kashmir">Kashmir guide</button>
         <button type="button" data-prompt="Show me tour packages">Tour packages</button>
-        <button type="button" data-prompt="Help me build my own trip">Build my trip</button>
+        <button type="button" data-prompt="Add Kashmir package to cart">Add Kashmir to cart</button>
     </div>
     <form class="bharat-ai-form" id="bharatAiForm">
         <label class="visually-hidden" for="bharatAiInput">Ask Bharat AI to navigate Explore Bharat</label>
-        <input id="bharatAiInput" type="text" maxlength="280" autocomplete="off" placeholder="Ask me where you want to go..." required>
+        <input id="bharatAiInput" type="text" maxlength="280" autocomplete="off" placeholder="Ask about a place, culture, itinerary or package..." required>
         <button type="submit" aria-label="Send message"><span aria-hidden="true">➤</span></button>
     </form>
-    <p class="bharat-ai-footnote">Uses Explore Bharat's built-in website content. No external AI service or API key is connected.</p>
+    <p class="bharat-ai-footnote">Uses Explore Bharat's built-in website content. Website knowledge guide · no live AI model or booking backend is connected.</p>
 </section>
 
 <main>
@@ -668,49 +669,174 @@
     </div>
 
     <form class="registration-form" id="registrationForm">
+        <h3>Register Your Travel Enquiry</h3>
+        <p>Share a few details so your journey can be planned around you.</p>
 
-        <h3>Register for Your Journey</h3>
-        <p>Discover India with Explore Bharat!</p>
+        <h4 class="registration-section-title">01 · Traveller information</h4>
+        <div class="registration-grid">
+            <div class="registration-field">
+                <label for="fullName">Full Name *</label>
+                <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" autocomplete="name" maxlength="100" required>
+            </div>
+            <div class="registration-field">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" autocomplete="email" maxlength="254" required>
+            </div>
+            <div class="registration-field">
+                <label for="phone">Mobile Number *</label>
+                <input type="tel" id="phone" name="phone" placeholder="10-digit mobile number"
+                       pattern="[6-9][0-9]{9}" maxlength="10" autocomplete="tel" required>
+            </div>
+            <div class="registration-field">
+                <label for="originCity">Your departure city</label>
+                <input type="text" id="originCity" name="originCity" placeholder="e.g. Pune, Mumbai, Delhi" maxlength="80" autocomplete="address-level2">
+            </div>
+        </div>
 
-        <label for="fullName">Full Name</label>
-        <input type="text" id="fullName" placeholder="Enter your full name" required>
+        <h4 class="registration-section-title">02 · Selected trip</h4>
+        <p class="registration-help">When you add a tour package to your cart, its selection and sample estimate appear here automatically. You can also enquire about a custom trip.</p>
+        <div class="selected-trip-summary" id="selectedTripSummary" hidden>
+            <strong>Your trip cart has been added to this enquiry</strong>
+            <p id="selectedTripSummaryText">Your selected package details will appear here.</p>
+        </div>
+        <input type="hidden" id="selectedTripPackages" name="selectedTripPackages">
+        <div class="registration-grid">
+            <div class="registration-field">
+                <label for="selectedTripNames">Selected package(s)</label>
+                <input type="text" id="selectedTripNames" name="selectedTripNames" placeholder="No tour package selected" readonly>
+            </div>
+            <div class="registration-field">
+                <label for="selectedTripDuration">Package duration</label>
+                <input type="text" id="selectedTripDuration" name="selectedTripDuration" placeholder="Shown when you add a package" readonly>
+            </div>
+            <div class="registration-field">
+                <label for="registrationDestination">Main destination *</label>
+                <select id="registrationDestination" name="destination" required>
+                    <option value="">Select a destination</option>
+                    <option value="Kashmir">Kashmir</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Kerala">Kerala</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Ladakh">Ladakh</option>
+                    <option value="Goa">Goa</option>
+                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                    <option value="Uttarakhand">Uttarakhand</option>
+                    <option value="Agra">Agra</option>
+                    <option value="Varanasi">Varanasi</option>
+                    <option value="Assam">Assam</option>
+                    <option value="Tamil Nadu">Tamil Nadu</option>
+                </select>
+            </div>
+            <div class="registration-field">
+                <label for="selectedTripEstimate">Sample estimate</label>
+                <input type="text" id="selectedTripEstimate" name="selectedTripEstimate" placeholder="No estimate yet" readonly>
+            </div>
+        </div>
 
-        <label for="email">Email Address</label>
-        <input type="email" id="email" placeholder="Enter your email" required>
+        <h4 class="registration-section-title">03 · Dates and travellers</h4>
+        <div class="registration-grid">
+            <div class="registration-field">
+                <label for="travelDate">Preferred departure date *</label>
+                <input type="date" id="travelDate" name="travelDate" required>
+            </div>
+            <div class="registration-field">
+                <label for="returnDate">Preferred return date</label>
+                <input type="date" id="returnDate" name="returnDate">
+            </div>
+            <div class="registration-field">
+                <label for="travellerCount">Number of travellers *</label>
+                <select id="travellerCount" name="travellerCount" required>
+                    <option value="1">1 traveller</option>
+                    <option value="2">2 travellers</option>
+                    <option value="3">3 travellers</option>
+                    <option value="4">4 travellers</option>
+                    <option value="5">5 travellers</option>
+                    <option value="6">6 travellers</option>
+                    <option value="7">7 travellers</option>
+                    <option value="8">8 travellers</option>
+                    <option value="9">9 travellers</option>
+                    <option value="10">10 travellers</option>
+                </select>
+            </div>
+            <div class="registration-field">
+                <label for="tripPurpose">Who is travelling?</label>
+                <select id="tripPurpose" name="tripPurpose">
+                    <option value="">Select traveller type</option>
+                    <option value="Solo">Solo traveller</option>
+                    <option value="Couple">Couple</option>
+                    <option value="Family">Family</option>
+                    <option value="Friends">Friends / group</option>
+                    <option value="Corporate">Corporate / team</option>
+                </select>
+            </div>
+        </div>
 
-        <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" placeholder="10-digit mobile number"
-               pattern="[6-9][0-9]{9}" maxlength="10" required>
+        <h4 class="registration-section-title">04 · Travel preferences</h4>
+        <div class="registration-grid">
+            <div class="registration-field">
+                <label for="budgetRange">Approximate budget per person</label>
+                <select id="budgetRange" name="budgetRange">
+                    <option value="">Not decided yet</option>
+                    <option value="Under ₹5,000">Under ₹5,000</option>
+                    <option value="₹5,000–₹10,000">₹5,000–₹10,000</option>
+                    <option value="₹10,000–₹20,000">₹10,000–₹20,000</option>
+                    <option value="Above ₹20,000">Above ₹20,000</option>
+                </select>
+            </div>
+            <div class="registration-field">
+                <label for="stayPreference">Accommodation preference</label>
+                <select id="stayPreference" name="stayPreference">
+                    <option value="">No preference yet</option>
+                    <option value="Budget stay">Budget stay</option>
+                    <option value="Standard hotel">Standard hotel</option>
+                    <option value="Premium hotel or resort">Premium hotel / resort</option>
+                    <option value="Homestay">Homestay</option>
+                    <option value="Mix of stays">Mix of stays</option>
+                </select>
+            </div>
+            <div class="registration-field">
+                <label for="transportPreference">Preferred transport</label>
+                <select id="transportPreference" name="transportPreference">
+                    <option value="">Need suggestions</option>
+                    <option value="Flight">Flight</option>
+                    <option value="Train">Train</option>
+                    <option value="Bus">Bus</option>
+                    <option value="Private cab or car">Private cab / car</option>
+                    <option value="Mixed transport">Combination of transport</option>
+                </select>
+            </div>
+            <div class="registration-field">
+                <label for="foodPreference">Food preference</label>
+                <select id="foodPreference" name="foodPreference">
+                    <option value="">No preference</option>
+                    <option value="Vegetarian">Vegetarian</option>
+                    <option value="Vegan">Vegan</option>
+                    <option value="Jain">Jain</option>
+                    <option value="Non-vegetarian">Non-vegetarian</option>
+                    <option value="Other dietary needs">Other dietary needs</option>
+                </select>
+            </div>
+        </div>
+        <div class="registration-field">
+            <label for="specialRequests">Special requests or accessibility needs</label>
+            <textarea id="specialRequests" name="specialRequests" maxlength="1000" placeholder="Share interests, pace of travel, accessibility requirements or anything else we should know."></textarea>
+        </div>
 
-        <label for="registrationDestination">Choose Destination</label>
-        <select id="registrationDestination" required>
-            <option value="">Select a destination</option>
-            <option>Kashmir</option>
-            <option>Rajasthan</option>
-            <option>Kerala</option>
-            <option>Maharashtra</option>
-            <option>Ladakh</option>
-            <option>Goa</option>
-            <option>Himachal Pradesh</option>
-            <option>Uttarakhand</option>
-            <option>Agra</option>
-            <option>Varanasi</option>
-            <option>Assam</option>
-            <option>Tamil Nadu</option>
-        </select>
-
-        <label for="travelDate">Travel Date</label>
-        <input type="date" id="travelDate" required>
-
+        <h4 class="registration-section-title">05 · Privacy and enquiry</h4>
         <label class="registration-profile-consent" for="saveRegistrationToProfile">
             <input type="checkbox" id="saveRegistrationToProfile">
-            <span>Save these details and my trip activity to My Profile on this device. <small>Stored only in this browser. You can delete them from your profile.</small></span>
+            <span>Save these details and my trip activity to My Profile on this device.
+                <small>Stored only in this browser. You can delete them from your profile.</small>
+            </span>
+        </label>
+        <label class="demo-consent" for="bookingAcknowledgement">
+            <input type="checkbox" id="bookingAcknowledgement" required>
+            <span>I understand this is a website demo enquiry. It does not confirm a reservation or make a payment. *</span>
         </label>
 
-
-        <button type="submit" class="register-button">Register Now →</button>
-
-        <p id="registrationMessage" class="registration-message" role="status"></p>
+        <button type="submit" class="register-button">Submit Travel Enquiry →</button>
+        <p id="registrationMessage" class="registration-message" role="status" aria-live="polite"></p>
+        <p class="registration-help">Please do not enter payment-card, passport or other sensitive identity details. This demonstration does not submit information to a travel operator.</p>
     </form>
 </section>
 
@@ -768,13 +894,14 @@
 </footer>
 
 
-<script src="script.js?v=20261118-architecture-features"></script>
+<script src="script.js?v=20261118-ai-commerce"></script>
+<script src="trip-commerce.js?v=20261118-cart"></script>
 <script src="explore-effects.js?v=20261117-home-pro"></script>
-<script src="profile-log.js?v=20261117-profile"></script>
+<script src="profile-log.js?v=20261118-profile-booking"></script>
     <script src="site-motion.js?v=20261117-sitewide"></script>
 <script src="site-motion-plus.js?v=20261117-immersive"></script>
-<script src="bharat-ai.js?v=20261118-stream"></script>
-<script src="architecture-modal.js?v=20261118-architecture-features></script>
+<script src="bharat-ai.js?v=20261118-informed-guide"></script>
+<script src="architecture-modal.js?v=20261118-architecture-features"></script>
 <script src="bharat-features.js?v=20261118-command"></script>
 <script src="pwa-init.js?v=20261118-pwa"></script>
 
