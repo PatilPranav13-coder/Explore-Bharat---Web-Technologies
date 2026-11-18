@@ -480,10 +480,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const changes = [];
     const found = findDestination(query);
     const selectedTour = findTour(query);
-    if (selectedTour) {
+    if (selectedTour && /\b(add|put|cart|package|tour)\b/.test(query)) {
       window.ExploreBharatCart?.add?.(selectedTour.id);
       changes.push(selectedTour.title + " added to the trip cart");
-    } else if (found && /registration|register|form|enquiry|trip|travel date|travellers/.test(query)) {
+    }
+    if (found && /registration|register|form|enquiry|trip|travel date|travellers|people/.test(query)) {
       if (setSelectValue("registrationDestination", [found.data.name])) changes.push("destination set to " + found.data.name);
     }
 
@@ -637,7 +638,7 @@ document.addEventListener("DOMContentLoaded", function () {
       addMessage("bot", "Done — I've cleared all packages from your trip cart.");
       return;
     }
-    if (isRemove && cartActionContext) {
+    if (isRemove && (cartActionContext || Boolean(tour))) {
       const item = namedTours[0] || tour;
       if (item) { removeTourFromCart(item); return; }
       if (/\b(all|everything)\b/.test(query)) {
@@ -648,7 +649,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       return;
     }
-    if (isAdd && cartActionContext) {
+    if (isAdd && (cartActionContext || Boolean(tour))) {
       const items = namedTours.length ? namedTours : (tour ? [tour] : []);
       if (/\b(all|every|all four)\b/.test(query)) {
         tours().forEach(function (item) { window.ExploreBharatCart?.add?.(item.id); });
