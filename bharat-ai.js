@@ -490,7 +490,7 @@ document.addEventListener("DOMContentLoaded", function () {
       window.ExploreBharatCart?.add?.(selectedTour.id);
       changes.push(selectedTour.title + " added to the trip cart");
     }
-    if (found && /registration|register|form|enquiry|trip|travel date|travellers|people/.test(query)) {
+    if (found && /registration|register|form|enquiry|trip|travel|travel date|travellers|people|from|going|want|plan/.test(query)) {
       if (setSelectValue("registrationDestination", [found.data.name])) changes.push("destination set to " + found.data.name);
     }
 
@@ -500,11 +500,27 @@ document.addEventListener("DOMContentLoaded", function () {
       $("travellerCount").dispatchEvent(new Event("change", { bubbles: true }));
       changes.push(count[1] + " travellers");
     }
-    const departureISO = raw.match(/\b(20\d{2}-\d{2}-\d{2})\b/);
-    if (departureISO && $("travelDate")) {
-      $("travelDate").value = departureISO[1];
+    let departureValue = (raw.match(/\b(20\d{2}-\d{2}-\d{2})\b/) || [])[1] || "";
+    if (!departureValue) {
+      const monthNames = "january february march april may june july august september october november december".split(" ");
+      const monthPattern = monthNames.join("|");
+      const monthFirst = raw.match(new RegExp("\\b(" + monthPattern + ")\\s+(\\d{1,2})(?:st|nd|rd|th)?[,]?\\s+(20\\d{2})\\b", "i"));
+      const dayFirst = raw.match(new RegExp("\\b(\\d{1,2})(?:st|nd|rd|th)?\\s+(" + monthPattern + ")[,]?\\s+(20\\d{2})\\b", "i"));
+      const match = monthFirst || dayFirst;
+      if (match) {
+        const month = monthNames.indexOf((monthFirst ? match[1] : match[2]).toLowerCase());
+        const day = Number(monthFirst ? match[2] : match[1]);
+        const year = Number(match[3]);
+        const date = new Date(year, month, day);
+        if (date.getFullYear() === year && date.getMonth() === month && date.getDate() === day) {
+          departureValue = year + "-" + String(month + 1).padStart(2, "0") + "-" + String(day).padStart(2, "0");
+        }
+      }
+    }
+    if (departureValue && $("travelDate")) {
+      $("travelDate").value = departureValue;
       $("travelDate").dispatchEvent(new Event("change", { bubbles: true }));
-      changes.push("departure date " + departureISO[1]);
+      changes.push("departure date " + departureValue);
     }
     const returnISO = raw.match(/\b(?:return|back)\s*(?:date)?\s*(?:is|on)?\s*(20\d{2}-\d{2}-\d{2})\b/i);
     if (returnISO && $("returnDate")) {
