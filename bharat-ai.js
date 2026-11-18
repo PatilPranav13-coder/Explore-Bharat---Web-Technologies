@@ -49,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return String(value || "").toLocaleLowerCase("en-IN")
       .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
       .replace(/[’']/g, "").replace(/[^a-z0-9₹\s-]/g, " ")
+      .replace(/(\d)\s+(?=\d{3}\b)/g, "$1")
       .replace(/\s+/g, " ").trim();
   }
   function includesTerm(query, term) {
@@ -535,7 +536,7 @@ document.addEventListener("DOMContentLoaded", function () {
       : /\bsolo\b/.test(query) ? "Solo" : /\bfriends|group\b/.test(query) ? "Friends" : "";
     if (purpose && setSelectValue("tripPurpose", [purpose])) changes.push(purpose.toLowerCase() + " trip");
     let budget = "";
-    const value = query.match(/(?:budget|under|below|upto|up to)\s*₹?\s*(\d{1,6})(?:\s*(k|thousand))?\b/);
+    const value = query.match(/(?:budget|under|below|upto|up to)(?:\s+(?:to|of))?\s*₹?\s*(\d{1,6})(?:\s*(k|thousand))?\b/);
     if (value) {
       const amount = Number(value[1]) * (value[2] || Number(value[1]) < 100 ? 1000 : 1);
       budget = amount < 5000 ? "Under ₹5,000" : amount < 10000 ? "₹5,000–₹10,000"
@@ -557,10 +558,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const budget = $("tripBudget"), duration = $("tripDuration"), style = $("tripStyle");
     let changed = false;
     if (budget) {
+      const amount = query.match(/(?:under|below|budget(?: of| to)?|upto|up to)\s*₹?\s*(\d{1,6})(?:\s*(k|thousand))?\b/);
       if (/under 5000|below 5000|low budget/.test(query)) { budget.value = "low"; changed = true; }
       else if (/5000 to 10000|5000-10000|medium budget/.test(query)) { budget.value = "medium"; changed = true; }
       else if (/10000 to 20000|10000-20000/.test(query)) { budget.value = "high"; changed = true; }
       else if (/premium|above 20000|over 20000/.test(query)) { budget.value = "premium"; changed = true; }
+      else if (amount) {
+        const max = Number(amount[1]) * (amount[2] || Number(amount[1]) < 100 ? 1000 : 1);
+        budget.value = max <= 5000 ? "low" : max <= 10000 ? "medium" : max <= 20000 ? "high" : "premium";
+        changed = true;
+      }
     }
     if (duration) {
       if (/weekend|1 2 days|two days/.test(query)) { duration.value = "weekend"; changed = true; }
